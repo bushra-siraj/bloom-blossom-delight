@@ -68,13 +68,7 @@ const Index = () => {
           <FloatingPetals count={10} />
 
           {/* Sidebar trigger */}
-          <button
-            className="fixed top-4 right-4 z-50 glass-card p-2 rounded-full text-foreground/50 hover:text-primary transition-colors"
-            onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'b', metaKey: true }))}
-            aria-label="Open sidebar"
-          >
-            <PanelRight className="w-4 h-4" />
-          </button>
+          <SidebarTrigger className="fixed top-4 right-4 z-50 glass-card p-2 rounded-full text-foreground/50 hover:text-primary transition-colors h-8 w-8" />
 
           <div className="relative z-10 w-full">
             <motion.div
