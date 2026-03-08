@@ -178,36 +178,33 @@ const BouquetSmall = ({ type, c, leafStyle, customColor }: {
   type: FlowerType; c: typeof colorMap.rose; leafStyle: LeafStyle; customColor?: string;
 }) => (
   <g>
-    {/* Stems converging */}
-    <path d="M35 55 Q42 80 50 105" stroke="#4a8c5c" strokeWidth="2" fill="none" />
-    <path d="M50 50 Q50 78 50 105" stroke="#4a8c5c" strokeWidth="2.5" fill="none" />
-    <path d="M65 55 Q58 80 50 105" stroke="#4a8c5c" strokeWidth="2" fill="none" />
+    {/* Stems converging to focal point */}
+    <path d="M32 52 Q40 78 50 105" stroke="#4a8c5c" strokeWidth="2" fill="none" />
+    <path d="M50 46 Q50 76 50 105" stroke="#4a8c5c" strokeWidth="2.5" fill="none" />
+    <path d="M68 52 Q60 78 50 105" stroke="#4a8c5c" strokeWidth="2" fill="none" />
 
-    {/* Large leaves behind bouquet */}
-    {renderLeaf(leafStyle, 30, 72, false, 1.3)}
-    {renderLeaf(leafStyle, 70, 72, true, 1.3)}
-    {renderLeaf(leafStyle, 38, 85, false, 1)}
-    {renderLeaf(leafStyle, 62, 85, true, 1)}
+    {/* Leaves */}
+    {renderLeaf(leafStyle, 28, 70, false, 1.3)}
+    {renderLeaf(leafStyle, 72, 70, true, 1.3)}
+    {renderLeaf(leafStyle, 36, 84, false, 1)}
+    {renderLeaf(leafStyle, 64, 84, true, 1)}
 
     {/* Ribbon tie */}
-    <ellipse cx="50" cy="98" rx="10" ry="4" fill="#FF8FAB" opacity="0.8" />
-    <path d="M44 98 Q50 104 56 98" stroke="#FF6B8A" strokeWidth="2" fill="none" strokeLinecap="round" />
-    <path d="M42 100 Q36 108 33 114" stroke="#FF8FAB" strokeWidth="2" fill="none" strokeLinecap="round" />
-    <path d="M58 100 Q64 108 67 114" stroke="#FF8FAB" strokeWidth="2" fill="none" strokeLinecap="round" />
-    {/* Ribbon ends */}
-    <path d="M33 114 Q30 116 28 114" stroke="#FF8FAB" strokeWidth="1.5" fill="none" />
-    <path d="M67 114 Q70 116 72 114" stroke="#FF8FAB" strokeWidth="1.5" fill="none" />
+    <ellipse cx="50" cy="98" rx="11" ry="4" fill="#FF8FAB" opacity="0.85" />
+    <path d="M43 98 Q50 105 57 98" stroke="#FF6B8A" strokeWidth="2" fill="none" strokeLinecap="round" />
+    <path d="M41 100 Q34 109 30 115" stroke="#FF8FAB" strokeWidth="2" fill="none" strokeLinecap="round" />
+    <path d="M59 100 Q66 109 70 115" stroke="#FF8FAB" strokeWidth="2" fill="none" strokeLinecap="round" />
 
-    {/* Back row: 2 flowers (slightly up and apart, smaller) */}
-    <g transform="translate(-15, 4) scale(0.75)" opacity="0.9">
+    {/* Back row: 2 flowers */}
+    <g transform="translate(-14, 6) scale(0.68) rotate(-10 50 46)" opacity="0.85">
       <FlowerHead type={type} c={c} customColor={customColor} />
     </g>
-    <g transform="translate(15, 4) scale(0.75)" opacity="0.9">
+    <g transform="translate(14, 6) scale(0.68) rotate(8 50 46)" opacity="0.85">
       <FlowerHead type={type} c={c} customColor={customColor} />
     </g>
 
-    {/* Front center: main flower (largest, on top) */}
-    <g transform="translate(0, 2) scale(0.9)">
+    {/* Front center: hero flower */}
+    <g transform="translate(0, 0) scale(0.88) rotate(-3 50 46)">
       <FlowerHead type={type} c={c} customColor={customColor} />
     </g>
   </g>
