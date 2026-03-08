@@ -6,197 +6,228 @@ import { colorMap } from './colorMap';
 
 type C = typeof colorMap.rose;
 
-/* ── Single flower on a stem ── */
+/* ══════════════════════════════════════════════════════════════
+   SINGLE FLOWER — Clean centered bloom, long stem, 2 symmetrical leaves
+   ══════════════════════════════════════════════════════════════ */
 export const BouquetSingle = ({ type, c, leafStyle, customColor }: {
   type: FlowerType; c: C; leafStyle: LeafStyle; customColor?: string;
 }) => (
   <g>
-    {/* Stem with slight curve */}
-    <path d="M50 62 Q47 78 49 95 Q50 108 50 120" stroke="#4A7A52" strokeWidth="2.8" fill="none" strokeLinecap="round" />
-    {/* Leaves on stem */}
-    {renderLeaf(leafStyle, 47, 78, false, 1.2, 'dark')}
-    {renderLeaf(leafStyle, 53, 92, true, 1.1, 'medium')}
-    {/* Bloom with elastic spring */}
+    {/* Long straight stem */}
+    <path d="M50 62 Q48 80 49 100 Q50 112 50 125"
+      stroke="#41545E" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+
+    {/* Left leaf — symmetrical, angled out */}
+    <g transform="translate(46, 82) rotate(-30)">
+      <path d="M0 0 Q-8 -6 -12 -18 Q-10 -26 -4 -28 Q2 -26 4 -16 Q4 -6 0 0Z"
+        fill="#5A8A9A" stroke="#2A3A40" strokeWidth="1.2" strokeLinejoin="round" />
+      <line x1="0" y1="-2" x2="-3" y2="-22" stroke="#3A6070" strokeWidth="0.8" opacity="0.6" />
+      <line x1="-1" y1="-8" x2="-8" y2="-14" stroke="#3A6070" strokeWidth="0.4" opacity="0.4" />
+      <line x1="-1" y1="-14" x2="-6" y2="-22" stroke="#3A6070" strokeWidth="0.4" opacity="0.4" />
+    </g>
+
+    {/* Right leaf — symmetrical, angled out */}
+    <g transform="translate(54, 95) rotate(25) scale(-1,1)">
+      <path d="M0 0 Q-8 -6 -12 -18 Q-10 -26 -4 -28 Q2 -26 4 -16 Q4 -6 0 0Z"
+        fill="#6A9AAA" stroke="#2A3A40" strokeWidth="1.2" strokeLinejoin="round" />
+      <line x1="0" y1="-2" x2="-3" y2="-22" stroke="#3A6070" strokeWidth="0.8" opacity="0.6" />
+      <line x1="-1" y1="-8" x2="-8" y2="-14" stroke="#3A6070" strokeWidth="0.4" opacity="0.4" />
+      <line x1="-1" y1="-14" x2="-6" y2="-22" stroke="#3A6070" strokeWidth="0.4" opacity="0.4" />
+    </g>
+
+    {/* The bloom */}
     <AnimatedFlower delay={0.15} cx={50} cy={46}>
       <FlowerHead type={type} c={c} customColor={customColor} />
     </AnimatedFlower>
+
     <FloatingPetalParticles color={customColor || c.petal} count={3} delay={1} />
   </g>
 );
 
-/* ── 3-flower bouquet — kraft paper cone with ribbon (valentine reference style) ── */
+/* ══════════════════════════════════════════════════════════════
+   3-FLOWER BOUQUET — Ribbon Tie style
+   Stems converge at a single point, tied with a prominent red ribbon bow
+   ══════════════════════════════════════════════════════════════ */
 export const BouquetSmall = ({ type, c, leafStyle, customColor }: {
   type: FlowerType; c: C; leafStyle: LeafStyle; customColor?: string;
 }) => (
   <g>
     <defs>
-      <filter id="sh-sm-back"><feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#00000020" /></filter>
-      <filter id="sh-sm-hero"><feDropShadow dx="0" dy="2.5" stdDeviation="2.5" floodColor="#00000030" /></filter>
+      <filter id="sh-sm-back"><feDropShadow dx="0" dy="1" stdDeviation="1.5" floodColor="#00000025" /></filter>
+      <filter id="sh-sm-hero"><feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#00000030" /></filter>
     </defs>
 
-    {/* === LAYER 0: Kraft paper diamond cone (valentine reference) === */}
-    <path d="M14 74 Q8 56 26 40 Q50 24 74 40 Q92 56 86 74 L92 126 Q86 140 68 142 Q50 144 32 142 Q14 140 8 126Z"
-      fill="#D4B896" stroke="#B89A72" strokeWidth="1.2" strokeLinejoin="round" />
-    {/* Paper texture - speckle dots */}
-    <path d="M14 74 Q8 56 26 40 Q50 24 74 40 Q92 56 86 74 L92 126 Q86 140 68 142 Q50 144 32 142 Q14 140 8 126Z"
-      fill="#C8A880" opacity="0.25" />
-    {[{x:22,y:82},{x:60,y:76},{x:38,y:98},{x:68,y:108},{x:28,y:116},{x:52,y:90},{x:74,y:92},{x:40,y:120},{x:62,y:124}].map((p,i) => (
-      <circle key={`dot${i}`} cx={p.x} cy={p.y} r="0.9" fill="#B89A72" opacity="0.3" />
-    ))}
-    {/* Paper fold accent lines */}
-    <path d="M18 68 Q50 38 82 68" stroke="#C0A478" strokeWidth="0.7" fill="none" opacity="0.4" />
-    <path d="M14 74 Q50 48 86 74" stroke="#C0A478" strokeWidth="0.5" fill="none" opacity="0.3" />
+    {/* === STEMS — all converge to tie point at 50,112 === */}
+    <path d="M30 50 C34 68 42 90 50 112" stroke="#41545E" strokeWidth="2" fill="none" strokeLinecap="round" />
+    <path d="M50 36 C50 60 50 85 50 112" stroke="#41545E" strokeWidth="2.4" fill="none" strokeLinecap="round" />
+    <path d="M70 50 C66 68 58 90 50 112" stroke="#41545E" strokeWidth="2" fill="none" strokeLinecap="round" />
+    {/* Stems continue below tie */}
+    <path d="M50 112 Q44 126 38 140" stroke="#41545E" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+    <path d="M50 112 Q50 126 50 140" stroke="#41545E" strokeWidth="2" fill="none" strokeLinecap="round" />
+    <path d="M50 112 Q56 126 62 140" stroke="#41545E" strokeWidth="1.8" fill="none" strokeLinecap="round" />
 
-    {/* === LAYER 1: Stems converging at bottom === */}
-    <path d="M30 48 C36 66 44 88 50 122" stroke="#4A7A52" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-    <path d="M50 36 C50 58 50 84 50 122" stroke="#4A7A52" strokeWidth="2.2" fill="none" strokeLinecap="round" />
-    <path d="M70 48 C64 66 56 88 50 122" stroke="#4A7A52" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+    {/* === TEAL LEAVES — behind flowers, visible veins, black outlines === */}
+    {renderLeaf(leafStyle, 12, 54, false, 2.2, 'dark')}
+    {renderLeaf(leafStyle, 88, 54, true, 2.2, 'dark')}
+    {renderLeaf(leafStyle, 20, 68, false, 1.8, 'medium')}
+    {renderLeaf(leafStyle, 80, 68, true, 1.8, 'medium')}
+    {renderLeaf(leafStyle, 32, 78, false, 1.4, 'light')}
+    {renderLeaf(leafStyle, 68, 78, true, 1.4, 'light')}
+    {/* Top peeking leaves */}
+    {renderLeaf(leafStyle, 22, 40, false, 1.6, 'dark')}
+    {renderLeaf(leafStyle, 78, 40, true, 1.6, 'dark')}
 
-    {/* === LAYER 2: Teal leaves behind flowers (reference style) === */}
-    {renderLeaf(leafStyle, 8, 56, false, 2.0, 'dark')}
-    {renderLeaf(leafStyle, 92, 56, true, 2.0, 'dark')}
-    {renderLeaf(leafStyle, 18, 70, false, 1.6, 'medium')}
-    {renderLeaf(leafStyle, 82, 70, true, 1.6, 'medium')}
-    {renderLeaf(leafStyle, 30, 82, false, 1.2, 'light')}
-    {renderLeaf(leafStyle, 70, 82, true, 1.2, 'light')}
-    {/* Extra top leaves poking out */}
-    {renderLeaf(leafStyle, 20, 42, false, 1.4, 'dark')}
-    {renderLeaf(leafStyle, 80, 42, true, 1.4, 'dark')}
+    {/* === RED BERRY CLUSTERS — between blooms === */}
+    {renderBerryCluster(14, 42, false)}
+    {renderBerryCluster(86, 42, true)}
+    {renderBerryCluster(26, 60, false, '#E8A060')}
+    {renderBerryCluster(74, 60, true, '#E8A060')}
 
-    {/* === LAYER 2.5: Berry accents (red like reference) === */}
-    {renderBerryCluster(12, 44, false)}
-    {renderBerryCluster(88, 44, true)}
-
-    {/* === LAYER 3: Back side flowers at 68% === */}
-    <AnimatedFlower delay={0.1} cx={28} cy={48}>
-      <g transform="translate(-20, 6) scale(0.68) rotate(-15 50 46)" opacity="0.82" filter="url(#sh-sm-back)">
+    {/* === BACK ROW — 2 side flowers, smaller & slightly darker === */}
+    <AnimatedFlower delay={0.1} cx={28} cy={50}>
+      <g transform="translate(-22, 8) scale(0.62) rotate(-12 50 46)" opacity="0.8" filter="url(#sh-sm-back)">
         <FlowerHead type={type} c={c} customColor={customColor} />
       </g>
     </AnimatedFlower>
-    <AnimatedFlower delay={0.22} cx={72} cy={48}>
-      <g transform="translate(20, 6) scale(0.68) rotate(12 50 46)" opacity="0.82" filter="url(#sh-sm-back)">
+    <AnimatedFlower delay={0.2} cx={72} cy={50}>
+      <g transform="translate(22, 8) scale(0.62) rotate(10 50 46)" opacity="0.8" filter="url(#sh-sm-back)">
         <FlowerHead type={type} c={c} customColor={customColor} />
       </g>
     </AnimatedFlower>
 
-    {/* === LAYER 4: Ribbon band + bow (red like reference) === */}
-    <rect x="30" y="106" width="40" height="7" rx="3.5" fill="#CC2244" opacity="0.92" />
-    {/* Bow loops */}
-    <path d="M38 108 Q26 94 30 100 Q20 84 38 108Z" fill="#DD3355" opacity="0.8" />
-    <path d="M62 108 Q74 94 70 100 Q80 84 62 108Z" fill="#DD3355" opacity="0.8" />
-    <ellipse cx="50" cy="109" rx="10" ry="4" fill="#DD3355" opacity="0.88" />
-    <circle cx="50" cy="109" r="3" fill="#AA1838" />
-    <SwayingRibbon x={36} y={112} side="left" />
-    <SwayingRibbon x={64} y={112} side="right" />
-
-    {/* === LAYER 5: Hero flower — front center === */}
-    <AnimatedFlower delay={0.4} cx={50} cy={40}>
-      <g transform="translate(0, -4) scale(0.9) rotate(-2 50 46)" filter="url(#sh-sm-hero)">
+    {/* === FRONT ROW — hero center flower, largest & brightest === */}
+    <AnimatedFlower delay={0.4} cx={50} cy={38}>
+      <g transform="translate(0, -6) scale(0.88) rotate(-2 50 46)" filter="url(#sh-sm-hero)">
         <FlowerHead type={type} c={c} customColor={customColor} />
       </g>
     </AnimatedFlower>
+
+    {/* === RIBBON BOW — prominent red, at the tie point === */}
+    {/* Ribbon band */}
+    <rect x="36" y="108" width="28" height="8" rx="4" fill="#CC2244" stroke="#8A1430" strokeWidth="0.8" />
+    {/* Left bow loop */}
+    <path d="M42 112 Q28 96 34 102 Q22 88 42 112Z" fill="#DD3355" stroke="#8A1430" strokeWidth="0.7" />
+    {/* Right bow loop */}
+    <path d="M58 112 Q72 96 66 102 Q78 88 58 112Z" fill="#DD3355" stroke="#8A1430" strokeWidth="0.7" />
+    {/* Bow center knot */}
+    <ellipse cx="50" cy="112" rx="8" ry="4" fill="#DD3355" stroke="#8A1430" strokeWidth="0.6" />
+    <circle cx="50" cy="112" r="3" fill="#AA1838" stroke="#8A1430" strokeWidth="0.5" />
+    {/* Swaying ribbon tails */}
+    <SwayingRibbon x={38} y={116} side="left" />
+    <SwayingRibbon x={62} y={116} side="right" />
 
     <FloatingPetalParticles color={customColor || c.petal} count={4} delay={0.9} />
   </g>
 );
 
-/* ── 5-flower tissue/kraft wrap bouquet (full reference style) ── */
+/* ══════════════════════════════════════════════════════════════
+   5-FLOWER BOUQUET — Full Diamond Kraft Paper Wrap
+   Wide flared polygon cradling the flowers, matching valentine reference
+   ══════════════════════════════════════════════════════════════ */
 export const BouquetLarge = ({ type, c, leafStyle, customColor }: {
   type: FlowerType; c: C; leafStyle: LeafStyle; customColor?: string;
 }) => {
-  const rotations = [-14, 13, -10, 12, -3];
-
   return (
     <g>
       <defs>
-        <filter id="sh-lg-back"><feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#00000018" /></filter>
-        <filter id="sh-lg-mid"><feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#00000025" /></filter>
-        <filter id="sh-lg-hero"><feDropShadow dx="0" dy="4" stdDeviation="4.5" floodColor="#00000035" /></filter>
+        <filter id="sh-lg-back"><feDropShadow dx="0" dy="1" stdDeviation="1.5" floodColor="#00000020" /></filter>
+        <filter id="sh-lg-mid"><feDropShadow dx="0" dy="2" stdDeviation="2.5" floodColor="#00000028" /></filter>
+        <filter id="sh-lg-hero"><feDropShadow dx="0" dy="3" stdDeviation="3.5" floodColor="#00000035" /></filter>
       </defs>
 
-      {/* === LAYER 0: Kraft paper diamond wrap (valentine reference) === */}
-      <path d="M0 84 Q-6 64 14 46 Q36 26 57 22 Q78 26 100 46 Q120 64 114 84 L120 134 Q112 150 90 154 Q57 158 24 154 Q2 150 -6 134Z"
-        fill="#D4B896" stroke="#B89A72" strokeWidth="1.3" strokeLinejoin="round" />
-      {/* Paper grain texture */}
-      <path d="M0 84 Q-6 64 14 46 Q36 26 57 22 Q78 26 100 46 Q120 64 114 84 L120 134 Q112 150 90 154 Q57 158 24 154 Q2 150 -6 134Z"
-        fill="#C8A880" opacity="0.22" />
-      {[{x:18,y:78},{x:58,y:70},{x:92,y:80},{x:32,y:102},{x:72,y:108},{x:48,y:120},{x:22,y:124},{x:82,y:118},{x:42,y:90},{x:68,y:94},{x:36,y:136},{x:78,y:132}].map((p,i) => (
-        <circle key={`dot${i}`} cx={p.x} cy={p.y} r="1" fill="#B89A72" opacity="0.28" />
+      {/* === KRAFT PAPER DIAMOND WRAP — wide flared polygon === */}
+      <path d="M-2 82 Q-8 60 16 42 Q38 22 57 18 Q76 22 98 42 Q122 60 116 82 L122 138 Q114 154 92 158 Q57 162 22 158 Q0 154 -8 138Z"
+        fill="#D4B896" stroke="#2A1E14" strokeWidth="1.5" strokeLinejoin="round" />
+      {/* Paper texture overlay */}
+      <path d="M-2 82 Q-8 60 16 42 Q38 22 57 18 Q76 22 98 42 Q122 60 116 82 L122 138 Q114 154 92 158 Q57 162 22 158 Q0 154 -8 138Z"
+        fill="#C8A880" opacity="0.2" />
+      {/* Speckle dots for paper texture */}
+      {[{x:20,y:80},{x:56,y:72},{x:90,y:82},{x:34,y:104},{x:74,y:110},{x:48,y:122},{x:24,y:126},{x:84,y:120},{x:42,y:92},{x:70,y:96},{x:38,y:138},{x:80,y:134},{x:58,y:100},{x:16,y:110},{x:100,y:106}].map((p,i) => (
+        <circle key={`dot${i}`} cx={p.x} cy={p.y} r="1" fill="#B89A72" opacity="0.3" />
       ))}
-      {/* Fold lines */}
-      <path d="M8 76 Q57 38 106 76" stroke="#C0A478" strokeWidth="0.8" fill="none" opacity="0.35" />
-      <path d="M2 84 Q57 50 112 84" stroke="#C0A478" strokeWidth="0.5" fill="none" opacity="0.25" />
+      {/* Paper fold accent lines */}
+      <path d="M6 76 Q57 36 108 76" stroke="#C0A478" strokeWidth="0.8" fill="none" opacity="0.35" />
+      <path d="M0 82 Q57 46 114 82" stroke="#C0A478" strokeWidth="0.5" fill="none" opacity="0.25" />
 
-      {/* === LAYER 1: S-curved stems converging at 57,134 === */}
-      <path d="M14 48 C22 66 38 94 57 134" stroke="#4A7A52" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      <path d="M30 38 C36 60 44 90 57 134" stroke="#4A7A52" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-      <path d="M57 28 C57 58 57 94 57 134" stroke="#4A7A52" strokeWidth="2.4" fill="none" strokeLinecap="round" />
-      <path d="M80 38 C74 60 66 90 57 134" stroke="#4A7A52" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-      <path d="M98 48 C90 66 74 94 57 134" stroke="#4A7A52" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      {/* === STEMS — S-curved, converging at 57,140 === */}
+      <path d="M16 48 C24 68 40 98 57 140" stroke="#41545E" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+      <path d="M32 38 C38 62 46 94 57 140" stroke="#41545E" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+      <path d="M57 26 C57 58 57 98 57 140" stroke="#41545E" strokeWidth="2.4" fill="none" strokeLinecap="round" />
+      <path d="M82 38 C76 62 68 94 57 140" stroke="#41545E" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+      <path d="M98 48 C90 68 74 98 57 140" stroke="#41545E" strokeWidth="1.6" fill="none" strokeLinecap="round" />
 
-      {/* === LAYER 2: Dense teal leaf backdrop (reference style) === */}
-      {renderLeaf(leafStyle, -2, 56, false, 2.4, 'dark')}
-      {renderLeaf(leafStyle, 116, 56, true, 2.4, 'dark')}
-      {renderLeaf(leafStyle, 10, 70, false, 2.0, 'dark')}
-      {renderLeaf(leafStyle, 104, 70, true, 2.0, 'dark')}
-      {renderLeaf(leafStyle, 22, 84, false, 1.6, 'medium')}
-      {renderLeaf(leafStyle, 92, 84, true, 1.6, 'medium')}
-      {renderLeaf(leafStyle, 34, 94, false, 1.2, 'light')}
-      {renderLeaf(leafStyle, 80, 94, true, 1.2, 'light')}
-      {/* Extra top leaves poking above wrap */}
-      {renderLeaf(leafStyle, 28, 40, false, 1.8, 'dark')}
-      {renderLeaf(leafStyle, 86, 40, true, 1.8, 'dark')}
-      {renderLeaf(leafStyle, 16, 48, false, 1.4, 'medium')}
-      {renderLeaf(leafStyle, 98, 48, true, 1.4, 'medium')}
+      {/* === TEAL LEAVES — dense backdrop behind flowers, black outlines === */}
+      {renderLeaf(leafStyle, 0, 56, false, 2.6, 'dark')}
+      {renderLeaf(leafStyle, 114, 56, true, 2.6, 'dark')}
+      {renderLeaf(leafStyle, 10, 70, false, 2.2, 'dark')}
+      {renderLeaf(leafStyle, 104, 70, true, 2.2, 'dark')}
+      {renderLeaf(leafStyle, 22, 84, false, 1.8, 'medium')}
+      {renderLeaf(leafStyle, 92, 84, true, 1.8, 'medium')}
+      {renderLeaf(leafStyle, 34, 94, false, 1.4, 'light')}
+      {renderLeaf(leafStyle, 80, 94, true, 1.4, 'light')}
+      {/* Top leaves poking above wrap */}
+      {renderLeaf(leafStyle, 28, 38, false, 2.0, 'dark')}
+      {renderLeaf(leafStyle, 86, 38, true, 2.0, 'dark')}
+      {renderLeaf(leafStyle, 14, 46, false, 1.6, 'medium')}
+      {renderLeaf(leafStyle, 100, 46, true, 1.6, 'medium')}
 
-      {/* === LAYER 2.5: Berry/bud clusters (red + orange like reference) === */}
-      {renderBerryCluster(4, 40, false)}
-      {renderBerryCluster(110, 40, true)}
-      {renderBerryCluster(18, 58, false, '#E8A060')}
-      {renderBerryCluster(96, 58, true, '#E8A060')}
-      {renderBerryCluster(36, 36, false, '#E84040')}
-      {renderBerryCluster(78, 36, true, '#E84040')}
+      {/* === RED BERRY CLUSTERS — fill gaps between flowers === */}
+      {renderBerryCluster(6, 40, false)}
+      {renderBerryCluster(108, 40, true)}
+      {renderBerryCluster(20, 58, false, '#E8A060')}
+      {renderBerryCluster(94, 58, true, '#E8A060')}
+      {renderBerryCluster(38, 34, false, '#E84040')}
+      {renderBerryCluster(76, 34, true, '#E84040')}
+      {renderBerryCluster(50, 58, false, '#E84040')}
 
-      {/* === LAYER 3: Back row — 2 flowers at 55% === */}
-      <AnimatedFlower delay={0.08} cx={22} cy={54}>
-        <g transform={`translate(-30, 14) scale(0.55) rotate(${rotations[0]} 50 46)`} opacity="0.75" filter="url(#sh-lg-back)">
+      {/* === BACK ROW — 2 flowers at 50% scale, smaller & slightly darker === */}
+      <AnimatedFlower delay={0.08} cx={22} cy={52}>
+        <g transform="translate(-32, 14) scale(0.5) rotate(-15 50 46)" opacity="0.72" filter="url(#sh-lg-back)">
           <FlowerHead type={type} c={c} customColor={customColor} />
         </g>
       </AnimatedFlower>
-      <AnimatedFlower delay={0.18} cx={92} cy={54}>
-        <g transform={`translate(30, 14) scale(0.55) rotate(${rotations[1]} 50 46)`} opacity="0.75" filter="url(#sh-lg-back)">
-          <FlowerHead type={type} c={c} customColor={customColor} />
-        </g>
-      </AnimatedFlower>
-
-      {/* === LAYER 4: Middle row — 2 flowers at 76% === */}
-      <AnimatedFlower delay={0.28} cx={34} cy={44}>
-        <g transform={`translate(-18, 2) scale(0.76) rotate(${rotations[2]} 50 46)`} opacity="0.9" filter="url(#sh-lg-mid)">
-          <FlowerHead type={type} c={c} customColor={customColor} />
-        </g>
-      </AnimatedFlower>
-      <AnimatedFlower delay={0.4} cx={80} cy={44}>
-        <g transform={`translate(18, 2) scale(0.76) rotate(${rotations[3]} 50 46)`} opacity="0.9" filter="url(#sh-lg-mid)">
+      <AnimatedFlower delay={0.16} cx={92} cy={52}>
+        <g transform="translate(32, 14) scale(0.5) rotate(12 50 46)" opacity="0.72" filter="url(#sh-lg-back)">
           <FlowerHead type={type} c={c} customColor={customColor} />
         </g>
       </AnimatedFlower>
 
-      {/* === LAYER 5: Ribbon band + bow (red like valentine reference) === */}
-      <rect x="26" y="120" width="62" height="8" rx="4" fill="#CC2244" opacity="0.92" />
-      {/* Bow loops */}
-      <path d="M38 122 Q22 106 28 112 Q16 94 38 122Z" fill="#DD3355" opacity="0.8" />
-      <path d="M76 122 Q92 106 86 112 Q98 94 76 122Z" fill="#DD3355" opacity="0.8" />
-      <ellipse cx="57" cy="123" rx="13" ry="5" fill="#DD3355" opacity="0.88" />
-      <circle cx="57" cy="123" r="3.5" fill="#AA1838" />
-      <SwayingRibbon x={34} y={126} side="left" />
-      <SwayingRibbon x={80} y={126} side="right" />
-
-      {/* === LAYER 6: Hero flower — front center, largest === */}
-      <AnimatedFlower delay={0.55} cx={57} cy={34}>
-        <g transform={`translate(7, -10) scale(0.95) rotate(${rotations[4]} 50 46)`} filter="url(#sh-lg-hero)">
+      {/* === MIDDLE ROW — 2 flowers at 72% scale === */}
+      <AnimatedFlower delay={0.28} cx={36} cy={42}>
+        <g transform="translate(-18, 2) scale(0.72) rotate(-10 50 46)" opacity="0.88" filter="url(#sh-lg-mid)">
           <FlowerHead type={type} c={c} customColor={customColor} />
         </g>
       </AnimatedFlower>
+      <AnimatedFlower delay={0.38} cx={78} cy={42}>
+        <g transform="translate(18, 2) scale(0.72) rotate(8 50 46)" opacity="0.88" filter="url(#sh-lg-mid)">
+          <FlowerHead type={type} c={c} customColor={customColor} />
+        </g>
+      </AnimatedFlower>
+
+      {/* === RIBBON BOW — prominent red, at wrap tie point === */}
+      <rect x="28" y="124" width="58" height="9" rx="4.5" fill="#CC2244" stroke="#2A1018" strokeWidth="0.9" />
+      {/* Left bow loop */}
+      <path d="M40 128 Q24 110 30 116 Q18 98 40 128Z" fill="#DD3355" stroke="#2A1018" strokeWidth="0.8" />
+      {/* Right bow loop */}
+      <path d="M74 128 Q90 110 84 116 Q96 98 74 128Z" fill="#DD3355" stroke="#2A1018" strokeWidth="0.8" />
+      {/* Bow center */}
+      <ellipse cx="57" cy="128" rx="12" ry="5" fill="#DD3355" stroke="#2A1018" strokeWidth="0.6" />
+      <circle cx="57" cy="128" r="4" fill="#AA1838" stroke="#2A1018" strokeWidth="0.5" />
+      {/* Swaying ribbon tails */}
+      <SwayingRibbon x={36} y={132} side="left" />
+      <SwayingRibbon x={78} y={132} side="right" />
+
+      {/* === HERO FLOWER — front center, largest & brightest === */}
+      <AnimatedFlower delay={0.5} cx={57} cy={32}>
+        <g transform="translate(7, -12) scale(0.92) rotate(-3 50 46)" filter="url(#sh-lg-hero)">
+          <FlowerHead type={type} c={c} customColor={customColor} />
+        </g>
+      </AnimatedFlower>
+
+      {/* === "Love" TAG hanging from ribbon (like valentine reference) === */}
+      <line x1="68" y1="132" x2="74" y2="144" stroke="#5A3A2A" strokeWidth="0.7" />
+      <rect x="66" y="144" width="20" height="12" rx="2" fill="#F0E8D8" stroke="#B89A72" strokeWidth="0.7" />
+      <text x="76" y="153" textAnchor="middle" fontSize="6" fill="#5A3A2A" fontFamily="serif" fontStyle="italic">Love</text>
 
       <FloatingPetalParticles color={customColor || c.petal} count={6} delay={1.1} />
     </g>
