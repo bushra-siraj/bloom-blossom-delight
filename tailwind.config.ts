@@ -47,6 +47,15 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        bloom: {
+          rose: "hsl(var(--bloom-rose))",
+          lavender: "hsl(var(--bloom-lavender))",
+          mint: "hsl(var(--bloom-mint))",
+          peach: "hsl(var(--bloom-peach))",
+          sky: "hsl(var(--bloom-sky))",
+          gold: "hsl(var(--bloom-gold))",
+          glow: "hsl(var(--bloom-glow))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -65,25 +74,48 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "petal-fall": {
+          "0%": { transform: "translateY(-10vh) rotate(0deg)", opacity: "1" },
+          "100%": { transform: "translateY(110vh) rotate(720deg)", opacity: "0" },
+        },
+        "bloom": {
+          "0%": { transform: "scale(0) rotate(-30deg)", opacity: "0" },
+          "60%": { transform: "scale(1.1) rotate(5deg)", opacity: "1" },
+          "100%": { transform: "scale(1) rotate(0deg)", opacity: "1" },
+        },
+        "glow-pulse": {
+          "0%, 100%": { boxShadow: "0 0 20px hsl(330 60% 65% / 0.3)" },
+          "50%": { boxShadow: "0 0 40px hsl(330 60% 65% / 0.6)" },
+        },
+        "walk": {
+          "0%": { transform: "translateX(-100px)" },
+          "100%": { transform: "translateX(0)" },
+        },
+        "sparkle": {
+          "0%, 100%": { opacity: "0", transform: "scale(0)" },
+          "50%": { opacity: "1", transform: "scale(1)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "float": "float 3s ease-in-out infinite",
+        "petal-fall": "petal-fall 6s linear infinite",
+        "bloom": "bloom 1.2s ease-out forwards",
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+        "walk": "walk 2s ease-out forwards",
+        "sparkle": "sparkle 1.5s ease-in-out infinite",
       },
     },
   },
