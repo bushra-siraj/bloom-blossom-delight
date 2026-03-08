@@ -170,21 +170,7 @@ export const FlowerCreator = ({ onComplete }: FlowerCreatorProps) => {
             <SectionTitle>Card style</SectionTitle>
             <div className="grid grid-cols-2 gap-2.5">
               {cardStyles.map(cs => (
-                <OptionButton key={cs} selected={card.cardStyle === cs} onClick={() => update({ cardStyle: cs })}>
-                  <div className={`h-16 rounded-lg flex items-center justify-center text-foreground/40 text-xs ${
-                    cs === 'glass' ? 'glass-card' :
-                    cs === 'polaroid' ? 'bg-foreground/5 border-4 border-foreground/10 border-b-8' :
-                    cs === 'envelope' ? 'bg-card relative overflow-hidden' :
-                    'bg-card'
-                  }`}>
-                    {cs === 'envelope' && (
-                      <div className="absolute top-0 left-0 right-0 h-1/2 bg-foreground/5" style={{
-                        clipPath: 'polygon(0 0, 50% 100%, 100% 0)',
-                      }} />
-                    )}
-                    <span className="z-10 capitalize">{cardStyleLabels[cs]}</span>
-                  </div>
-                </OptionButton>
+                <CardStylePreview key={cs} style={cs} selected={card.cardStyle === cs} onClick={() => update({ cardStyle: cs })} />
               ))}
             </div>
             <SectionTitle>Decoration</SectionTitle>
