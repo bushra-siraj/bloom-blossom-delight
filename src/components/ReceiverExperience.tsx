@@ -4,8 +4,8 @@ import { FlowerSVG } from './FlowerSVG';
 import { CharacterSVG } from './CharacterSVG';
 import { EnvironmentBg } from './EnvironmentBg';
 import { FloatingPetals } from './FloatingPetals';
-import { DecorationSVG } from './DecorationSVG';
-import type { BloomCard, CardStyle, FontStyle } from '@/types/bloom';
+import { MessageCardRenderer } from './cards/MessageCardRenderer';
+import type { BloomCard } from '@/types/bloom';
 
 type Phase = 'env' | 'intro' | 'walk' | 'pause' | 'action' | 'drop' | 'land' | 'bloom' | 'card';
 
