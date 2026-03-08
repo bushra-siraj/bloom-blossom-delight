@@ -376,19 +376,3 @@ export const FlowerCreator = ({ onComplete }: FlowerCreatorProps) => {
   );
 };
 
-function getCardStyleClasses(style: CardStyle): string {
-  switch (style) {
-    case 'glass': return 'glass-card rounded-xl';
-    case 'rounded': return 'rounded-2xl border border-foreground/10';
-    case 'polaroid': return 'rounded-sm bg-foreground/5 border-4 border-foreground/10 border-b-[16px]';
-    case 'envelope': return 'rounded-lg border border-foreground/10 relative';
-  }
-}
-
-function getFontClasses(font: FontStyle): string {
-  switch (font) {
-    case 'romantic': return 'font-display italic';
-    case 'handwritten': return 'font-body';
-    case 'modern': return 'font-body font-semibold tracking-wide';
-  }
-}
