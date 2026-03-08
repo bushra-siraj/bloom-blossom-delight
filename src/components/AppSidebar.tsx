@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Eye, BarChart3 } from 'lucide-react';
+import { X, Eye, BarChart3, Mail, Linkedin, Globe } from 'lucide-react';
 import type { BloomCard } from '@/types/bloom';
 import {
   Sidebar,
