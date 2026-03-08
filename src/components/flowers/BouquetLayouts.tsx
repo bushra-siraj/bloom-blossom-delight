@@ -1,6 +1,6 @@
 import type { FlowerType, LeafStyle } from '@/types/bloom';
 import { FlowerHead } from './FlowerHead';
-import { renderLeaf, renderBerryCluster } from './LeafSVG';
+import { renderLeafBranch, renderBerryCluster } from './LeafSVG';
 import { AnimatedFlower, FloatingPetalParticles, SwayingRibbon } from './Animations';
 import { colorMap } from './colorMap';
 
@@ -17,18 +17,9 @@ export const BouquetSingle = ({ type, c, leafStyle, customColor }: {
     {/* Stem */}
     <path d="M50 62 Q49 84 50 130" stroke="#41545E" strokeWidth="2.5" fill="none" strokeLinecap="round" />
 
-    {/* Left leaf */}
-    <g transform="translate(44,86) rotate(-30)">
-      <path d="M0 0 Q-10 -8 -14 -22 Q-11 -30 -5 -32 Q2 -30 4 -19 Q4 -8 0 0Z"
-        fill="#4A7C7C" stroke="#1E2024" strokeWidth="1.2" />
-      <line x1="0" y1="-2" x2="-3" y2="-24" stroke="#365E6A" strokeWidth="0.8" />
-    </g>
-    {/* Right leaf */}
-    <g transform="translate(56,96) rotate(28) scale(-1,1)">
-      <path d="M0 0 Q-10 -8 -14 -22 Q-11 -30 -5 -32 Q2 -30 4 -19 Q4 -8 0 0Z"
-        fill="#4A7C7C" stroke="#1E2024" strokeWidth="1.2" />
-      <line x1="0" y1="-2" x2="-3" y2="-24" stroke="#365E6A" strokeWidth="0.8" />
-    </g>
+    {/* Delicate leaf branches */}
+    {renderLeafBranch(42, 88, -40, 0.9, 'dark')}
+    {renderLeafBranch(58, 92, 35, 0.85, 'medium')}
 
     <AnimatedFlower delay={0.12} cx={50} cy={45}>
       <FlowerHead type={type} c={c} customColor={customColor} />
@@ -62,16 +53,20 @@ export const BouquetSmall = ({ type, c, leafStyle, customColor }: {
     <line x1={TIE3.x} y1={TIE3.y} x2="100" y2="252" stroke="#41545E" strokeWidth="3" strokeLinecap="round" />
     <line x1={TIE3.x} y1={TIE3.y} x2="122" y2="250" stroke="#41545E" strokeWidth="2.5" strokeLinecap="round" />
 
-    {/* ── 4 Teal leaves behind flowers ── */}
-    {renderLeaf(leafStyle, 36, 90, false, 3.2, 'dark')}
-    {renderLeaf(leafStyle, 164, 90, true, 3.2, 'dark')}
-    {renderLeaf(leafStyle, 60, 110, false, 2.6, 'medium')}
-    {renderLeaf(leafStyle, 140, 110, true, 2.6, 'medium')}
+    {/* ── 8 small fern-like leaf branches tucked behind flowers ── */}
+    {renderLeafBranch(30, 95, -50, 0.9, 'dark')}
+    {renderLeafBranch(170, 95, 50, 0.9, 'dark')}
+    {renderLeafBranch(48, 100, -35, 0.75, 'medium')}
+    {renderLeafBranch(152, 100, 35, 0.75, 'medium')}
+    {renderLeafBranch(72, 90, -20, 0.65, 'light')}
+    {renderLeafBranch(128, 90, 20, 0.65, 'light')}
+    {renderLeafBranch(38, 78, -60, 0.7, 'dark')}
+    {renderLeafBranch(162, 78, 60, 0.7, 'dark')}
 
     {/* ── 3 Red berry clusters in gaps ── */}
     {renderBerryCluster(44, 72, false)}
     {renderBerryCluster(156, 72, true)}
-    {renderBerryCluster(100, 95, false, '#E84040')}
+    {renderBerryCluster(100, 88, false, '#E84040')}
 
     {/* ── Back row: 2 side flowers at 0.8 scale ── */}
     <AnimatedFlower delay={0.08} cx={60} cy={72}>
@@ -145,16 +140,22 @@ export const BouquetLarge = ({ type, c, leafStyle, customColor }: {
     <line x1={FOCAL.x} y1={FOCAL.y} x2="130" y2="52"  stroke="#41545E" strokeWidth="2.8" strokeLinecap="round" />
     <line x1={FOCAL.x} y1={FOCAL.y} x2="160" y2="68"  stroke="#41545E" strokeWidth="2.5" strokeLinecap="round" />
 
-    {/* ── 4 Teal leaves (#4A7C7C) behind flower heads ── */}
-    {renderLeaf(leafStyle, 24, 80, false, 3.6, 'dark')}
-    {renderLeaf(leafStyle, 176, 80, true, 3.6, 'dark')}
-    {renderLeaf(leafStyle, 52, 100, false, 2.8, 'medium')}
-    {renderLeaf(leafStyle, 148, 100, true, 2.8, 'medium')}
+    {/* ── 10 small fern-like leaf branches tucked behind flowers ── */}
+    {renderLeafBranch(18, 82, -55, 1.0, 'dark')}
+    {renderLeafBranch(182, 82, 55, 1.0, 'dark')}
+    {renderLeafBranch(35, 95, -40, 0.85, 'medium')}
+    {renderLeafBranch(165, 95, 40, 0.85, 'medium')}
+    {renderLeafBranch(55, 85, -25, 0.7, 'light')}
+    {renderLeafBranch(145, 85, 25, 0.7, 'light')}
+    {renderLeafBranch(75, 75, -15, 0.6, 'medium')}
+    {renderLeafBranch(125, 75, 15, 0.6, 'medium')}
+    {renderLeafBranch(28, 70, -65, 0.75, 'dark')}
+    {renderLeafBranch(172, 70, 65, 0.75, 'dark')}
 
     {/* ── 3 Red berry clusters filling gaps ── */}
     {renderBerryCluster(30, 60, false)}
     {renderBerryCluster(170, 60, true)}
-    {renderBerryCluster(100, 85, false, '#E84040')}
+    {renderBerryCluster(100, 78, false, '#E84040')}
 
     {/* ── BACK ROW: 2 small flowers (scale 0.8) ── */}
     <AnimatedFlower delay={0.06} cx={44} cy={72}>
