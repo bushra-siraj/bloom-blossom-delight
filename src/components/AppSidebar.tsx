@@ -124,7 +124,7 @@ export function AppSidebar({ card }: AppSidebarProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-4 p-0"
             style={{ backdropFilter: 'blur(15px)', WebkitBackdropFilter: 'blur(15px)', background: 'hsl(var(--background) / 0.6)' }}
             onClick={() => setOverlay(null)}
           >
@@ -134,7 +134,7 @@ export function AppSidebar({ card }: AppSidebarProps) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.92 }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="relative w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl p-6 md:p-8 border border-border/30"
+              className="relative w-full max-w-lg h-full md:h-auto md:max-h-[85vh] rounded-none md:rounded-2xl border border-border/30 flex flex-col"
               style={{
                 background: 'hsl(var(--glass-bg))',
                 backdropFilter: 'blur(20px)',
