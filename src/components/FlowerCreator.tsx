@@ -33,7 +33,7 @@ const envLabels: Record<Environment, { icon: string; name: string }> = {
 };
 
 const cardStyleLabels: Record<CardStyle, string> = {
-  rounded: 'Rounded Card',
+  classic: 'Classic Card',
   polaroid: 'Polaroid',
   envelope: 'Envelope',
   glass: 'Glass Card',
