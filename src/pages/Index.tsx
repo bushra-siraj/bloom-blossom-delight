@@ -6,7 +6,6 @@ import { ReceiverExperience } from '@/components/ReceiverExperience';
 import { AppSidebar } from '@/components/AppSidebar';
 import { Watermark } from '@/components/Watermark';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { PanelRight } from 'lucide-react';
 import type { BloomCard } from '@/types/bloom';
 import { defaultCard } from '@/types/bloom';
 
@@ -27,7 +26,6 @@ const Index = () => {
   const [card, setCard] = useState<BloomCard | null>(null);
   const [liveCard, setLiveCard] = useState<BloomCard>(defaultCard);
 
-  // Check URL hash for shared card on mount
   useEffect(() => {
     const hash = window.location.hash.slice(1);
     if (hash) {
@@ -64,12 +62,11 @@ const Index = () => {
   return (
     <SidebarProvider defaultOpen={false}>
       <div className="min-h-screen flex w-full relative">
-
+        <AppSidebar card={liveCard} />
 
         <div className="flex-1 flex flex-col items-center justify-start relative overflow-hidden">
           <FloatingPetals count={10} />
 
-          {/* Sidebar trigger */}
           <SidebarTrigger className="fixed top-4 left-4 z-50 glass-card p-2 rounded-full text-foreground/50 hover:text-primary transition-colors h-8 w-8" />
 
           <div className="relative z-10 w-full">
@@ -92,8 +89,6 @@ const Index = () => {
 
           <Watermark />
         </div>
-
-        <AppSidebar card={liveCard} />
       </div>
     </SidebarProvider>
   );
