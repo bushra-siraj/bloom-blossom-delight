@@ -91,6 +91,27 @@ export function AppSidebar({ card }: AppSidebarProps) {
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarContent>
+
+          {/* Contact Section */}
+          <div className="mt-auto px-3 pb-6 pt-4 border-t border-border/20 flex flex-col items-center gap-2">
+            {!collapsed && (
+              <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-body mb-1">Connect</p>
+            )}
+            <div className={collapsed ? "flex flex-col gap-2" : "flex gap-3"}>
+              {contactLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target={link.target}
+                  rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-foreground/40 transition-all duration-300 hover:text-[hsl(var(--accent-leaf))] hover:shadow-[0_0_12px_hsl(var(--accent-leaf)/0.4)]"
+                  title={link.label}
+                >
+                  <link.icon className="h-3.5 w-3.5" />
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
       </Sidebar>
 
