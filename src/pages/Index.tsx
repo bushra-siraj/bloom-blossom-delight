@@ -64,11 +64,13 @@ const Index = () => {
   return (
     <SidebarProvider defaultOpen={false}>
       <div className="min-h-screen flex w-full relative">
+      <AppSidebar card={liveCard} />
+
         <div className="flex-1 flex flex-col items-center justify-start relative overflow-hidden">
           <FloatingPetals count={10} />
 
           {/* Sidebar trigger */}
-          <SidebarTrigger className="fixed top-4 right-4 z-50 glass-card p-2 rounded-full text-foreground/50 hover:text-primary transition-colors h-8 w-8" />
+          <SidebarTrigger className="fixed top-4 left-4 z-50 glass-card p-2 rounded-full text-foreground/50 hover:text-primary transition-colors h-8 w-8" />
 
           <div className="relative z-10 w-full">
             <motion.div
