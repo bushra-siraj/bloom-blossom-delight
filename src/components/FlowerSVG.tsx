@@ -26,24 +26,18 @@ export const FlowerSVG = ({
     transition: { duration: 1.2, ease: 'easeOut' },
   } : {};
 
-  const vb = bouquetSize === 'large' ? '-10 -10 130 170'
-    : bouquetSize === 'small' ? '0 -5 100 150'
-    : '0 0 100 130';
+  // Large uses a 200x300 canvas; small uses 200x260; single uses 100x140
+  const vb = bouquetSize === 'large' ? '0 0 200 300'
+    : bouquetSize === 'small' ? '0 0 200 260'
+    : '0 0 100 140';
 
-  const w = bouquetSize === 'large' ? size * 1.8 : bouquetSize === 'small' ? size * 1.4 : size;
-  const h = bouquetSize === 'large' ? size * 2 : bouquetSize === 'small' ? size * 1.5 : size + 20;
+  const w = bouquetSize === 'large' ? size * 2.2 : bouquetSize === 'small' ? size * 1.8 : size;
+  const h = bouquetSize === 'large' ? size * 3 : bouquetSize === 'small' ? size * 2.2 : size + 20;
 
   return (
     <Wrapper {...wrapperProps as any} style={{ width: w, height: h, background: 'transparent' }}
       className="relative flex items-center justify-center">
       <svg viewBox={vb} width={w} height={h} style={{ background: 'transparent', overflow: 'visible' }}>
-        <defs>
-          <radialGradient id={`glow-${color}-${bouquetSize}`} cx="50%" cy="40%" r="50%">
-            <stop offset="0%" stopColor={customPetalColor || c.petal} stopOpacity="0.2" />
-            <stop offset="100%" stopColor={customPetalColor || c.petal} stopOpacity="0" />
-          </radialGradient>
-        </defs>
-        <circle cx="50" cy="50" r={bouquetSize === 'large' ? 60 : 30} fill={`url(#glow-${color}-${bouquetSize})`} />
         {bouquetSize === 'single' && <BouquetSingle type={type} c={c} leafStyle={leafStyle} customColor={customPetalColor} />}
         {bouquetSize === 'small' && <BouquetSmall type={type} c={c} leafStyle={leafStyle} customColor={customPetalColor} />}
         {bouquetSize === 'large' && <BouquetLarge type={type} c={c} leafStyle={leafStyle} customColor={customPetalColor} />}
