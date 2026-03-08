@@ -60,6 +60,11 @@ export function AppSidebar({ card }: AppSidebarProps) {
                 B.S
               </span>
             </motion.div>
+            {!collapsed && (
+              <p className="text-[10px] text-muted-foreground font-body mt-1.5 tracking-widest uppercase">
+                BloomForYou
+              </p>
+            )}
           </SidebarHeader>
 
           <SidebarContent className="px-1 pt-4">
