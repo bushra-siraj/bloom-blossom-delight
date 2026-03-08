@@ -60,6 +60,11 @@ export function AppSidebar({ card }: AppSidebarProps) {
                 B.S
               </span>
             </motion.div>
+            {!collapsed && (
+              <p className="text-[10px] text-muted-foreground font-body mt-1.5 tracking-widest uppercase">
+                BloomForYou
+              </p>
+            )}
           </SidebarHeader>
 
           <SidebarContent className="px-1 pt-4">
@@ -71,7 +76,7 @@ export function AppSidebar({ card }: AppSidebarProps) {
                   className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-foreground/60 hover:text-primary hover:bg-primary/5 transition-colors cursor-pointer"
                 >
                   <Eye className="h-4 w-4 shrink-0" />
-                  {!collapsed && <span className="text-xs font-body tracking-wide">Our Vision</span>}
+                  <span className="text-xs font-body tracking-wide">About</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
@@ -81,7 +86,7 @@ export function AppSidebar({ card }: AppSidebarProps) {
                   className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-foreground/60 hover:text-primary hover:bg-primary/5 transition-colors cursor-pointer"
                 >
                   <BarChart3 className="h-4 w-4 shrink-0" />
-                  {!collapsed && <span className="text-xs font-body tracking-wide">Analytics</span>}
+                  <span className="text-xs font-body tracking-wide">Stats</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
