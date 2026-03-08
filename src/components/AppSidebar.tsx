@@ -166,6 +166,12 @@ export function AppSidebar({ card }: AppSidebarProps) {
   );
 }
 
+const contactLinks = [
+  { label: 'Email', icon: Mail, href: 'mailto:BushraSiraj586@gmail.com', target: '_self' as const },
+  { label: 'LinkedIn', icon: Linkedin, href: 'https://www.linkedin.com/in/bushrasiraj/', target: '_blank' as const },
+  { label: 'Portfolio', icon: Globe, href: 'https://bushrasiraj-portfolio.lovable.app/', target: '_blank' as const },
+];
+
 function VisionContent() {
   return (
     <div className="pr-6">
@@ -182,6 +188,25 @@ function VisionContent() {
         <p className="text-sm leading-relaxed text-foreground/70 font-body">
           Every petal, face, and leaf is a product of my journey in AI and digital design.
         </p>
+      </div>
+
+      {/* Let's Connect Footer */}
+      <div className="mt-8 pt-5 border-t border-border/20">
+        <p className="font-display text-sm text-primary mb-3 italic">Let's Connect</p>
+        <div className="flex gap-3">
+          {contactLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              target={link.target}
+              rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/20 text-foreground/50 text-xs font-display transition-all duration-300 hover:text-[hsl(var(--accent-leaf))] hover:border-[hsl(var(--accent-leaf)/0.3)] hover:shadow-[0_0_12px_hsl(var(--accent-leaf)/0.3)]"
+            >
+              <link.icon className="h-3 w-3" />
+              <span>{link.label}</span>
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   );
