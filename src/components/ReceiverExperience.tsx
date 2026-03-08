@@ -66,9 +66,6 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
 
   const phaseIndex = ['env', 'intro', 'walk', 'pause', 'action', 'drop', 'land', 'bloom', 'card'].indexOf(phase);
 
-  const cardStyleClasses = getCardStyleClasses(card.cardStyle);
-  const fontClasses = getFontClasses(card.fontStyle);
-
   return (
     <div className="fixed inset-0 overflow-hidden" ref={cardRef}>
       {/* Environment */}
