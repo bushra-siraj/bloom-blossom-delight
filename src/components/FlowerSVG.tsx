@@ -34,7 +34,7 @@ const FlowerHead = ({ type, c, customColor }: {
     case 'rose':
       return (
         <g>
-          {[−20, 20, 60, -60, 90].map((r, i) => (
+          {[-20, 20, 60, -60, 90].map((r, i) => (
             <ellipse key={i} cx="50" cy="48" rx="16" ry="12" fill={petal} opacity="0.75" transform={`rotate(${r} 50 48)`} />
           ))}
           {[15, -30, 60, -75].map((r, i) => (
