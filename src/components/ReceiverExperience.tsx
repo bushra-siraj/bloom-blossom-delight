@@ -5,6 +5,7 @@ import { CharacterSVG } from './CharacterSVG';
 import { EnvironmentBg } from './EnvironmentBg';
 import { FloatingPetals } from './FloatingPetals';
 import { MessageCardRenderer } from './cards/MessageCardRenderer';
+import { playBloomChime, playPaperUnfold } from '@/lib/sounds';
 import type { BloomCard } from '@/types/bloom';
 
 type Phase = 'env' | 'intro' | 'walk' | 'pause' | 'action' | 'drop' | 'land' | 'bloom' | 'card';
