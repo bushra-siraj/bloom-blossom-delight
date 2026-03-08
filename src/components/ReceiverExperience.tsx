@@ -101,21 +101,25 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
           )}
         </AnimatePresence>
 
-        {/* Character */}
+        {/* Character – walks in, performs action, then fades out */}
         <AnimatePresence>
-          {phaseIndex >= 2 && phaseIndex <= 6 && (
+          {phaseIndex >= 2 && phaseIndex <= 7 && (
             <motion.div
               initial={{ x: '-50vw', opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 1.8, ease: [0.25, 0.1, 0.25, 1] }}
+              animate={{
+                x: phaseIndex >= 3 ? 0 : '-20vw',
+                opacity: phaseIndex >= 7 ? 0 : 1,
+                scale: phaseIndex >= 7 ? 0.7 : 1,
+              }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
               className="absolute bottom-[24%]"
             >
               <CharacterSVG
                 character={card.character}
                 action={phaseIndex >= 4 ? card.animation : undefined}
                 size={130}
-                animate={phaseIndex >= 4 && phaseIndex <= 5}
+                animate={phaseIndex >= 4 && phaseIndex <= 6}
                 walking={phaseIndex <= 3}
               />
             </motion.div>
