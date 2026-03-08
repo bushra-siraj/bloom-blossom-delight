@@ -14,8 +14,13 @@ interface ReceiverExperienceProps {
   onReset: () => void;
 }
 
+function getShareUrl(): string {
+  return window.location.href;
+}
+
 export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) => {
   const [phase, setPhase] = useState<Phase>('env');
+  const [copied, setCopied] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -43,7 +48,6 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
       link.href = canvas.toDataURL();
       link.click();
     } catch {
-      // Fallback
       const text = `${card.message}${card.senderName ? ` — ${card.senderName}` : ''}`;
       navigator.clipboard.writeText(text);
       alert('Message copied to clipboard!');
@@ -51,13 +55,19 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
   };
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
+    navigator.clipboard.writeText(getShareUrl());
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const handleShare = async () => {
     if (navigator.share) {
       try {
-        await navigator.share({ title: 'BloomForYou', text: 'Someone sent you a flower!', url: window.location.href });
+        await navigator.share({
+          title: 'BloomForYou 🌸',
+          text: `${card.senderName ? card.senderName + ' sent' : 'Someone sent'} you a flower! 🌷`,
+          url: getShareUrl(),
+        });
       } catch { /* cancelled */ }
     } else {
       handleCopyLink();
@@ -68,23 +78,15 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
 
   return (
     <div className="fixed inset-0 overflow-hidden" ref={cardRef}>
-      {/* Environment */}
       <EnvironmentBg environment={card.environment} particleColor={card.particleColor} glowColor={card.glowColor} />
-
-      {/* Petals appear after bloom */}
       {phaseIndex >= 7 && <FloatingPetals count={20} color={card.petalColor} />}
 
       <div className="relative z-10 flex flex-col items-center justify-center h-full px-4">
         {/* "Someone sent you a flower" text */}
         <AnimatePresence>
           {phase === 'intro' && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.85 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.8 }}
-              className="text-center"
-            >
+            <motion.div initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.8 }} className="text-center">
               <motion.p className="text-2xl md:text-3xl font-display text-glow text-foreground leading-relaxed"
                 animate={{ opacity: [0.7, 1, 0.7] }} transition={{ duration: 3, repeat: Infinity }}>
                 Someone sent you a flower
@@ -101,7 +103,7 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
           )}
         </AnimatePresence>
 
-        {/* Character – walks in, performs action, then fades out */}
+        {/* Character */}
         <AnimatePresence>
           {phaseIndex >= 2 && phaseIndex <= 7 && (
             <motion.div
@@ -115,13 +117,10 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
               transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
               className="absolute bottom-[24%]"
             >
-              <CharacterSVG
-                character={card.character}
+              <CharacterSVG character={card.character}
                 action={phaseIndex >= 4 ? card.animation : undefined}
-                size={130}
-                animate={phaseIndex >= 4 && phaseIndex <= 6}
-                walking={phaseIndex <= 3}
-              />
+                size={130} animate={phaseIndex >= 4 && phaseIndex <= 6}
+                walking={phaseIndex <= 3} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -139,15 +138,10 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
               transition={{ duration: 0.8, type: 'spring', bounce: 0.3 }}
               className="absolute bottom-[20%]"
             >
-              <FlowerSVG
-                type={card.flowerType}
-                color={card.flowerColor}
-                leafStyle={card.leafStyle}
-                bouquetSize={card.bouquetSize}
-                size={phaseIndex >= 7 ? 130 : 70}
-                animate={phaseIndex === 7}
-                customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined}
-              />
+              <FlowerSVG type={card.flowerType} color={card.flowerColor}
+                leafStyle={card.leafStyle} bouquetSize={card.bouquetSize}
+                size={phaseIndex >= 7 ? 130 : 70} animate={phaseIndex === 7}
+                customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -155,46 +149,59 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
         {/* Message card */}
         <AnimatePresence>
           {phase === 'card' && (
-            <motion.div
-              initial={{ opacity: 0, y: 50, scale: 0.85 }}
+            <motion.div initial={{ opacity: 0, y: 50, scale: 0.85 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
-              className="w-full max-w-xs z-20"
-            >
+              className="w-full max-w-xs z-20">
               <MessageCardRenderer card={card} />
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Action buttons */}
+        {/* Share & Viral buttons */}
         <AnimatePresence>
           {phase === 'card' && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}
               className="flex gap-2.5 mt-5 z-20 flex-wrap justify-center">
-              {[
-                { label: 'Copy Link', icon: 'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71 M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71', onClick: handleCopyLink },
-                { label: 'Save Image', icon: 'M3 3h18v18H3z M8.5 8.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z M21 15l-5-5L5 21', onClick: handleSaveImage },
-                { label: 'Share', icon: 'M18 5a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M6 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M18 19a3 3 0 1 0 0-6 3 3 0 0 0 0 6z', onClick: handleShare },
-              ].map(btn => (
-                <button key={btn.label} onClick={btn.onClick}
-                  className="glass-card px-3.5 py-2 text-xs font-body text-foreground/60 hover:text-foreground transition-all flex items-center gap-1.5 hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)]">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d={btn.icon} />
-                  </svg>
-                  {btn.label}
-                </button>
-              ))}
+              <button onClick={handleCopyLink}
+                className="glass-card px-4 py-2.5 text-xs font-body text-foreground/70 hover:text-foreground transition-all flex items-center gap-1.5 hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)]">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                </svg>
+                {copied ? 'Copied!' : 'Copy Link'}
+              </button>
+              <button onClick={handleSaveImage}
+                className="glass-card px-4 py-2.5 text-xs font-body text-foreground/70 hover:text-foreground transition-all flex items-center gap-1.5 hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)]">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Save Image
+              </button>
+              <button onClick={handleShare}
+                className="glass-card px-4 py-2.5 text-xs font-body text-primary hover:text-primary/80 transition-all flex items-center gap-1.5 hover:shadow-[0_0_15px_hsl(330_60%_65%/0.2)] glow-border">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="18" cy="5" r="3" />
+                  <circle cx="6" cy="12" r="3" />
+                  <circle cx="18" cy="19" r="3" />
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                </svg>
+                Share
+              </button>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Create your own */}
+        {/* Create your own - viral loop CTA */}
         <AnimatePresence>
           {phase === 'card' && (
             <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
               onClick={onReset}
-              className="mt-4 glass-card px-5 py-2 text-xs font-body text-foreground/40 hover:text-primary transition-all z-20">
-              Create your own bloom ✨
+              className="mt-5 glass-card px-6 py-3 text-sm font-body text-primary transition-all z-20 glow-border hover:shadow-[0_0_25px_hsl(330_60%_65%/0.3)]">
+              🌸 Create your own bloom
             </motion.button>
           )}
         </AnimatePresence>
@@ -202,4 +209,3 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
     </div>
   );
 };
-
