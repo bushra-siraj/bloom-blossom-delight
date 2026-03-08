@@ -1,6 +1,6 @@
 import type { FlowerType, LeafStyle } from '@/types/bloom';
 import { FlowerHead } from './FlowerHead';
-import { renderLeafBranch, renderBerryCluster } from './LeafSVG';
+import { renderStyledLeaf, renderBerryCluster } from './LeafSVG';
 import { AnimatedFlower, FloatingPetalParticles, SwayingRibbon } from './Animations';
 import { colorMap } from './colorMap';
 
