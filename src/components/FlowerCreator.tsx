@@ -47,13 +47,18 @@ const colorPresets = [
 
 interface FlowerCreatorProps {
   onComplete: (card: BloomCard) => void;
+  onCardChange?: (card: BloomCard) => void;
 }
 
-export const FlowerCreator = ({ onComplete }: FlowerCreatorProps) => {
+export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) => {
   const [step, setStep] = useState(0);
   const [card, setCard] = useState<BloomCard>(defaultCard);
 
-  const update = (partial: Partial<BloomCard>) => setCard(prev => ({ ...prev, ...partial }));
+  const update = (partial: Partial<BloomCard>) => setCard(prev => {
+    const next = { ...prev, ...partial };
+    onCardChange?.(next);
+    return next;
+  });
 
   const OptionButton = ({ selected, onClick, children, className = '' }: {
     selected: boolean; onClick: () => void; children: React.ReactNode; className?: string;
