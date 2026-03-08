@@ -6,6 +6,7 @@ import { EnvironmentBg } from './EnvironmentBg';
 import { DecorationSVG } from './DecorationSVG';
 import { FloatingPetals } from './FloatingPetals';
 import { MessageCardRenderer, CardStylePreview } from './cards/MessageCardRenderer';
+import { LeafPreview } from './flowers/LeafSVG';
 import type {
   BloomCard, FlowerType, FlowerColor, LeafStyle, BouquetSize,
   Environment, CardStyle, FontStyle, Decoration, CharacterType, AnimationAction
