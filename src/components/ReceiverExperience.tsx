@@ -5,6 +5,7 @@ import { CharacterSVG } from './CharacterSVG';
 import { EnvironmentBg } from './EnvironmentBg';
 import { FloatingPetals } from './FloatingPetals';
 import { MessageCardRenderer } from './cards/MessageCardRenderer';
+import { playBloomChime, playPaperUnfold } from '@/lib/sounds';
 import type { BloomCard } from '@/types/bloom';
 
 type Phase = 'env' | 'intro' | 'walk' | 'pause' | 'action' | 'drop' | 'land' | 'bloom' | 'card';
@@ -31,8 +32,8 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
       setTimeout(() => setPhase('action'), 7000),
       setTimeout(() => setPhase('drop'), 8500),
       setTimeout(() => setPhase('land'), 9500),
-      setTimeout(() => setPhase('bloom'), 10500),
-      setTimeout(() => setPhase('card'), 18500),
+      setTimeout(() => { setPhase('bloom'); playBloomChime(); }, 10500),
+      setTimeout(() => { setPhase('card'); playPaperUnfold(); }, 18500),
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
