@@ -152,38 +152,12 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
         <AnimatePresence>
           {phase === 'card' && (
             <motion.div
-              initial={{ opacity: 0, y: 50, scale: 0.85, rotateX: 45 }}
-              animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+              initial={{ opacity: 0, y: 50, scale: 0.85 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
-              className={`p-5 w-full max-w-xs z-20 ${cardStyleClasses}`}
-              style={{ perspective: 1000, backgroundColor: `${card.cardColor}cc` }}
+              className="w-full max-w-xs z-20"
             >
-              {/* Envelope flap */}
-              {card.cardStyle === 'envelope' && (
-                <div className="absolute -top-4 left-0 right-0 h-8" style={{
-                  clipPath: 'polygon(0 100%, 50% 0, 100% 100%)',
-                  backgroundColor: `${card.cardColor}aa`,
-                }} />
-              )}
-              <div className="text-center space-y-2.5">
-                {card.decoration !== 'none' && (
-                  <motion.div className="flex justify-center"
-                    animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 3, repeat: Infinity }}>
-                    <DecorationSVG decoration={card.decoration} size={28} />
-                  </motion.div>
-                )}
-                <p className={`text-foreground/90 leading-relaxed text-sm ${fontClasses}`}>
-                  {card.message}
-                </p>
-                {card.senderName && (
-                  <p className="text-foreground/45 text-xs font-body">— {card.senderName}</p>
-                )}
-                {card.decoration !== 'none' && (
-                  <div className="flex justify-center pt-1">
-                    <DecorationSVG decoration={card.decoration} size={20} animate={false} />
-                  </div>
-                )}
-              </div>
+              <MessageCardRenderer card={card} />
             </motion.div>
           )}
         </AnimatePresence>
