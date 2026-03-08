@@ -195,7 +195,7 @@ function VisionContent() {
       {/* Let's Connect Footer */}
       <div className="mt-8 pt-5 border-t border-border/20">
         <p className="font-display text-sm text-primary mb-3 italic">Let's Connect</p>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-2.5 justify-center md:justify-start">
           {contactLinks.map((link) => (
             <a
               key={link.label}
