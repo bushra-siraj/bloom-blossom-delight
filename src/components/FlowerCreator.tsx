@@ -152,7 +152,7 @@ export const FlowerCreator = ({ onComplete }: FlowerCreatorProps) => {
               {bouquetSizes.map(b => (
                 <OptionButton key={b} selected={card.bouquetSize === b} onClick={() => update({ bouquetSize: b })}>
                   <div className="flex flex-col items-center gap-1">
-                    <span className="text-2xl">{b === 'single' ? '🌷' : b === 'small' ? '💐' : '🌺'}</span>
+                    <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} bouquetSize={b} size={36} />
                     <span className="text-[10px] text-foreground/60">{b === 'small' ? '3 flowers' : b === 'large' ? '5 flowers' : 'Single'}</span>
                   </div>
                 </OptionButton>

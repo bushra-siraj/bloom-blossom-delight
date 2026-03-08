@@ -1,22 +1,51 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FloatingPetals } from '@/components/FloatingPetals';
 import { FlowerCreator } from '@/components/FlowerCreator';
 import { ReceiverExperience } from '@/components/ReceiverExperience';
 import type { BloomCard } from '@/types/bloom';
+import { defaultCard } from '@/types/bloom';
+
+function encodeCard(card: BloomCard): string {
+  return btoa(encodeURIComponent(JSON.stringify(card)));
+}
+
+function decodeCard(hash: string): BloomCard | null {
+  try {
+    return JSON.parse(decodeURIComponent(atob(hash)));
+  } catch {
+    return null;
+  }
+}
 
 const Index = () => {
   const [mode, setMode] = useState<'create' | 'preview'>('create');
   const [card, setCard] = useState<BloomCard | null>(null);
 
+  // Check URL hash for shared card on mount
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+      const decoded = decodeCard(hash);
+      if (decoded) {
+        setCard(decoded);
+        setMode('preview');
+      }
+    }
+  }, []);
+
   const handleComplete = (c: BloomCard) => {
     setCard(c);
     setMode('preview');
+    // Set shareable URL
+    const encoded = encodeCard(c);
+    window.history.replaceState(null, '', `#${encoded}`);
   };
 
   const handleReset = () => {
     setCard(null);
     setMode('create');
+    window.history.replaceState(null, '', window.location.pathname);
   };
 
   if (mode === 'preview' && card) {
