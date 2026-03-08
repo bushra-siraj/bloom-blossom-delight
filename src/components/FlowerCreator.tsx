@@ -6,6 +6,7 @@ import { EnvironmentBg } from './EnvironmentBg';
 import { DecorationSVG } from './DecorationSVG';
 import { FloatingPetals } from './FloatingPetals';
 import { MessageCardRenderer, CardStylePreview } from './cards/MessageCardRenderer';
+import { LeafPreview } from './flowers/LeafSVG';
 import type {
   BloomCard, FlowerType, FlowerColor, LeafStyle, BouquetSize,
   Environment, CardStyle, FontStyle, Decoration, CharacterType, AnimationAction
@@ -132,7 +133,10 @@ export const FlowerCreator = ({ onComplete }: FlowerCreatorProps) => {
             <div className="grid grid-cols-2 gap-2.5">
               {leafStyles.map(l => (
                 <OptionButton key={l} selected={card.leafStyle === l} onClick={() => update({ leafStyle: l })}>
-                  <span className="capitalize text-foreground/70">{l}</span>
+                  <div className="flex flex-col items-center gap-1.5">
+                    <LeafPreview style={l} size={44} />
+                    <span className="capitalize text-foreground/70 text-xs">{l}</span>
+                  </div>
                 </OptionButton>
               ))}
             </div>
