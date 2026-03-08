@@ -110,23 +110,17 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
               {flowerTypes.map(f => (
                 <OptionButton key={f} selected={card.flowerType === f} onClick={() => update({ flowerType: f })}>
                   <div className="flex flex-col items-center gap-1.5">
-                    <FlowerSVG type={f} color={card.flowerColor} leafStyle="none" size={48} />
+                    <FlowerSVG type={f} color={card.flowerColor} leafStyle="none" size={48}
+                      customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
                     <span className="text-[10px] text-foreground/60 capitalize">{f === 'cherry-blossom' ? 'Sakura' : f}</span>
                   </div>
                 </OptionButton>
               ))}
             </div>
-            <SectionTitle>Petal color</SectionTitle>
-            <div className="flex gap-2.5 flex-wrap">
-              {flowerColors.map(c => (
-                <button key={c} onClick={() => update({ flowerColor: c })}
-                  className={`w-9 h-9 rounded-full transition-all duration-200 ${card.flowerColor === c ? 'ring-2 ring-primary scale-110 shadow-lg' : 'hover:scale-105'}`}
-                  style={{ background: `hsl(var(--bloom-${c}))` }}
-                />
-              ))}
-            </div>
+            <ColorPicker label="Petal color" value={card.petalColor} onChange={v => update({ petalColor: v })} />
             <div className="flex justify-center pt-1">
-              <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} size={90} />
+              <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} size={90}
+                customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
             </div>
           </div>
         );
