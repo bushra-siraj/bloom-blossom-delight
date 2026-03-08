@@ -20,10 +20,10 @@ interface FlowerSVGProps {
   customPetalColor?: string;
 }
 
-const SingleFlower = ({ type, c, leafStyle, customColor }: { 
-  type: FlowerType; 
-  c: { petal: string; center: string; petalDark: string }; 
-  leafStyle: LeafStyle;
+/* ── Single flower head (no stem) centered at 50,46 ── */
+const FlowerHead = ({ type, c, customColor }: {
+  type: FlowerType;
+  c: { petal: string; center: string; petalDark: string };
   customColor?: string;
 }) => {
   const petal = customColor || c.petal;
@@ -33,150 +33,94 @@ const SingleFlower = ({ type, c, leafStyle, customColor }: {
     case 'rose':
       return (
         <g>
-          {/* Stem */}
-          <path d="M50 62 Q48 85 50 120" stroke="#4a8c5c" strokeWidth="2.5" fill="none" />
-          {renderLeaves(leafStyle)}
-          {/* Outer petals */}
           <ellipse cx="50" cy="48" rx="16" ry="12" fill={petal} opacity="0.7" transform="rotate(-20 50 48)" />
           <ellipse cx="50" cy="48" rx="16" ry="12" fill={petal} opacity="0.7" transform="rotate(20 50 48)" />
           <ellipse cx="50" cy="48" rx="16" ry="12" fill={petal} opacity="0.7" transform="rotate(60 50 48)" />
           <ellipse cx="50" cy="48" rx="16" ry="12" fill={petal} opacity="0.7" transform="rotate(-60 50 48)" />
           <ellipse cx="50" cy="48" rx="16" ry="12" fill={petal} opacity="0.7" transform="rotate(90 50 48)" />
-          {/* Middle petals */}
           <ellipse cx="50" cy="46" rx="11" ry="8" fill={petal} transform="rotate(15 50 46)" />
           <ellipse cx="50" cy="46" rx="11" ry="8" fill={petal} transform="rotate(-30 50 46)" />
           <ellipse cx="50" cy="46" rx="11" ry="8" fill={petal} transform="rotate(60 50 46)" />
           <ellipse cx="50" cy="46" rx="11" ry="8" fill={petal} transform="rotate(-75 50 46)" />
-          {/* Inner petals - spiral effect */}
           <ellipse cx="50" cy="45" rx="7" ry="5" fill={petalDark} transform="rotate(10 50 45)" />
           <ellipse cx="50" cy="45" rx="7" ry="5" fill={petalDark} transform="rotate(80 50 45)" />
           <ellipse cx="50" cy="45" rx="7" ry="5" fill={petalDark} transform="rotate(-40 50 45)" />
-          {/* Center spiral */}
           <circle cx="50" cy="46" r="4" fill={petalDark} />
           <path d="M48 46 Q50 43 52 46 Q50 49 48 46" fill={petal} opacity="0.8" />
         </g>
       );
-
     case 'sunflower':
       return (
         <g>
-          <path d="M50 62 Q48 85 50 120" stroke="#4a8c5c" strokeWidth="3" fill="none" />
-          {renderLeaves(leafStyle)}
-          {/* Outer petals - long yellow */}
           {Array.from({ length: 16 }).map((_, i) => (
-            <ellipse key={i} cx="50" cy="30" rx="5" ry="16" fill={petal} transform={`rotate(${(360/16)*i} 50 48)`} />
+            <ellipse key={i} cx="50" cy="30" rx="5" ry="16" fill={petal} transform={`rotate(${(360 / 16) * i} 50 48)`} />
           ))}
-          {/* Inner petals */}
           {Array.from({ length: 12 }).map((_, i) => (
-            <ellipse key={`inner-${i}`} cx="50" cy="35" rx="4" ry="11" fill={petalDark} opacity="0.7" transform={`rotate(${(360/12)*i + 15} 50 48)`} />
+            <ellipse key={`i${i}`} cx="50" cy="35" rx="4" ry="11" fill={petalDark} opacity="0.7" transform={`rotate(${(360 / 12) * i + 15} 50 48)`} />
           ))}
-          {/* Large brown center */}
           <circle cx="50" cy="48" r="12" fill="#6B4226" />
           <circle cx="50" cy="48" r="10" fill="#8B5E3C" />
-          {/* Seed pattern */}
           {Array.from({ length: 8 }).map((_, i) => (
-            <circle key={`seed-${i}`} cx={50 + Math.cos(i*0.8)*5} cy={48 + Math.sin(i*0.8)*5} r="1.2" fill="#4A2E16" opacity="0.6" />
-          ))}
-          {Array.from({ length: 6 }).map((_, i) => (
-            <circle key={`seed2-${i}`} cx={50 + Math.cos(i*1.1)*3} cy={48 + Math.sin(i*1.1)*3} r="0.8" fill="#4A2E16" opacity="0.5" />
+            <circle key={`s${i}`} cx={50 + Math.cos(i * 0.8) * 5} cy={48 + Math.sin(i * 0.8) * 5} r="1.2" fill="#4A2E16" opacity="0.6" />
           ))}
         </g>
       );
-
     case 'cherry-blossom':
       return (
         <g>
-          <path d="M50 58 Q48 80 50 120" stroke="#7a5c5c" strokeWidth="2" fill="none" />
-          {renderLeaves(leafStyle)}
-          {/* Soft pink petals */}
-          {Array.from({ length: 5 }).map((_, i) => {
-            const angle = (360/5) * i - 90;
-            const rad = (angle * Math.PI) / 180;
-            return (
-              <g key={i} transform={`rotate(${(360/5)*i} 50 44)`}>
-                <ellipse cx="50" cy="30" rx="9" ry="14" fill={petal} opacity="0.8" />
-                <ellipse cx="50" cy="32" rx="6" ry="10" fill="white" opacity="0.2" />
-                {/* Notch at top */}
-                <circle cx="50" cy="22" r="2" fill="white" opacity="0.15" />
-              </g>
-            );
-          })}
-          {/* Center */}
+          {Array.from({ length: 5 }).map((_, i) => (
+            <g key={i} transform={`rotate(${(360 / 5) * i} 50 44)`}>
+              <ellipse cx="50" cy="30" rx="9" ry="14" fill={petal} opacity="0.8" />
+              <ellipse cx="50" cy="32" rx="6" ry="10" fill="white" opacity="0.2" />
+              <circle cx="50" cy="22" r="2" fill="white" opacity="0.15" />
+            </g>
+          ))}
           <circle cx="50" cy="44" r="5" fill="#FFE4E8" />
-          {/* Stamen */}
           {Array.from({ length: 5 }).map((_, i) => {
-            const angle = (360/5) * i;
-            const rad = (angle * Math.PI) / 180;
-            const ex = 50 + Math.cos(rad) * 4;
-            const ey = 44 + Math.sin(rad) * 4;
-            return <circle key={`s-${i}`} cx={ex} cy={ey} r="1" fill={c.center} />;
+            const rad = ((360 / 5) * i * Math.PI) / 180;
+            return <circle key={`s${i}`} cx={50 + Math.cos(rad) * 4} cy={44 + Math.sin(rad) * 4} r="1" fill={c.center} />;
           })}
         </g>
       );
-
     case 'tulip':
       return (
         <g>
-          <path d="M50 56 Q48 80 50 120" stroke="#4a8c5c" strokeWidth="2.5" fill="none" />
-          {renderLeaves(leafStyle)}
-          {/* Outer petals - closed elegant cup */}
           <path d={`M36 56 Q34 36 42 26 Q46 22 50 20 Q54 22 58 26 Q66 36 64 56 Q50 60 36 56Z`} fill={petal} />
-          {/* Inner shadow */}
           <path d={`M40 54 Q38 38 44 28 Q48 24 50 22 Q52 24 56 28 Q62 38 60 54 Q50 58 40 54Z`} fill={petalDark} opacity="0.4" />
-          {/* Left petal overlap */}
           <path d={`M36 56 Q34 40 44 28 Q46 32 48 38 Q44 48 36 56Z`} fill={petal} opacity="0.8" />
-          {/* Right petal overlap */}
           <path d={`M64 56 Q66 40 56 28 Q54 32 52 38 Q56 48 64 56Z`} fill={petal} opacity="0.8" />
-          {/* Highlight */}
           <path d={`M46 30 Q48 26 50 24 Q48 30 46 38Z`} fill="white" opacity="0.2" />
         </g>
       );
-
     case 'daisy':
       return (
         <g>
-          <path d="M50 58 Q48 80 50 120" stroke="#4a8c5c" strokeWidth="2" fill="none" />
-          {renderLeaves(leafStyle)}
-          {/* Thin white petals */}
           {Array.from({ length: 14 }).map((_, i) => (
-            <ellipse key={i} cx="50" cy="32" rx="3.5" ry="14" fill="white" opacity="0.9" transform={`rotate(${(360/14)*i} 50 46)`} />
+            <ellipse key={i} cx="50" cy="32" rx="3.5" ry="14" fill="white" opacity="0.9" transform={`rotate(${(360 / 14) * i} 50 46)`} />
           ))}
-          {/* Petal shadows */}
           {Array.from({ length: 14 }).map((_, i) => (
-            <ellipse key={`s-${i}`} cx="50" cy="34" rx="2.5" ry="10" fill="#E8E8E0" opacity="0.3" transform={`rotate(${(360/14)*i + 5} 50 46)`} />
+            <ellipse key={`s${i}`} cx="50" cy="34" rx="2.5" ry="10" fill="#E8E8E0" opacity="0.3" transform={`rotate(${(360 / 14) * i + 5} 50 46)`} />
           ))}
-          {/* Yellow center */}
           <circle cx="50" cy="46" r="8" fill="#F5D44A" />
           <circle cx="50" cy="46" r="6" fill="#EDCA38" />
-          {/* Center texture */}
-          {Array.from({ length: 6 }).map((_, i) => (
-            <circle key={`c-${i}`} cx={50 + Math.cos(i)*3} cy={46 + Math.sin(i)*3} r="0.8" fill="#D4B032" opacity="0.5" />
-          ))}
         </g>
       );
-
     case 'lily':
       return (
         <g>
-          <path d="M50 60 Q48 85 50 120" stroke="#4a8c5c" strokeWidth="2.5" fill="none" />
-          {renderLeaves(leafStyle)}
-          {/* 6 elegant curved petals */}
           {Array.from({ length: 6 }).map((_, i) => (
-            <g key={i} transform={`rotate(${(360/6)*i} 50 46)`}>
+            <g key={i} transform={`rotate(${(360 / 6) * i} 50 46)`}>
               <path d="M50 46 Q44 30 46 20 Q50 16 54 20 Q56 30 50 46Z" fill={petal} opacity="0.85" />
               <path d="M50 46 Q46 32 48 22 Q50 19 52 22 Q54 32 50 46Z" fill={petalDark} opacity="0.3" />
             </g>
           ))}
-          {/* Center */}
           <circle cx="50" cy="46" r="5" fill={c.center} opacity="0.8" />
-          {/* Stamens */}
           {Array.from({ length: 6 }).map((_, i) => {
-            const angle = (360/6) * i;
-            const rad = (angle * Math.PI) / 180;
+            const rad = ((360 / 6) * i * Math.PI) / 180;
             return (
-              <g key={`st-${i}`}>
-                <line x1="50" y1="46" x2={50 + Math.cos(rad)*8} y2={46 + Math.sin(rad)*8} stroke="#8a7a4a" strokeWidth="0.8" />
-                <circle cx={50 + Math.cos(rad)*8} cy={46 + Math.sin(rad)*8} r="1.2" fill="#c8a830" />
+              <g key={`st${i}`}>
+                <line x1="50" y1="46" x2={50 + Math.cos(rad) * 8} y2={46 + Math.sin(rad) * 8} stroke="#8a7a4a" strokeWidth="0.8" />
+                <circle cx={50 + Math.cos(rad) * 8} cy={46 + Math.sin(rad) * 8} r="1.2" fill="#c8a830" />
               </g>
             );
           })}
@@ -185,34 +129,144 @@ const SingleFlower = ({ type, c, leafStyle, customColor }: {
   }
 };
 
-function renderLeaves(leafStyle: LeafStyle) {
+/* ── Leaf shapes ── */
+function renderLeaf(leafStyle: LeafStyle, x: number, y: number, flipX: boolean, scale = 1) {
   if (leafStyle === 'none') return null;
+  const sx = flipX ? -scale : scale;
+  const d = leafStyle === 'round'
+    ? 'M0 0 Q-12 -10 -8 -20 Q0 -18 0 0 Z'
+    : leafStyle === 'pointed'
+    ? 'M0 0 L-16 -14 Q-6 -18 0 0 Z'
+    : 'M0 0 Q-14 -8 -10 -20 Q-2 -16 0 0 Z';
+
   return (
-    <>
-      <path
-        d={leafStyle === 'round'
-          ? 'M50 85 Q35 75 30 85 Q35 95 50 90'
-          : leafStyle === 'pointed'
-          ? 'M50 85 L28 72 Q35 88 50 90'
-          : 'M50 85 Q32 78 28 85 Q35 92 50 90'}
-        fill="#5aad6a"
-        opacity={0.85}
-      />
-      <path
-        d={leafStyle === 'round'
-          ? 'M50 100 Q65 90 70 100 Q65 110 50 105'
-          : leafStyle === 'pointed'
-          ? 'M50 100 L72 87 Q65 103 50 105'
-          : 'M50 100 Q68 93 72 100 Q65 107 50 105'}
-        fill="#5aad6a"
-        opacity={0.85}
-      />
-      {/* Leaf veins */}
-      <path d="M50 87 Q40 82 34 85" stroke="#4a9a5a" strokeWidth="0.5" fill="none" opacity="0.5" />
-      <path d="M50 102 Q60 96 66 100" stroke="#4a9a5a" strokeWidth="0.5" fill="none" opacity="0.5" />
-    </>
+    <g transform={`translate(${x},${y}) scale(${sx},${scale})`}>
+      <path d={d} fill="#5aad6a" opacity="0.85" />
+      <path d={d.replace(/-20/g, '-14').replace(/-16/g, '-10')} fill="#4a9a5a" opacity="0.3" />
+      {/* Vein */}
+      <line x1="0" y1="0" x2={flipX ? 8 : -8} y2="-12" stroke="#4a9a5a" strokeWidth="0.5" opacity="0.5" />
+    </g>
   );
 }
+
+/* ── Bouquet compositions ── */
+
+/*
+  Classic bouquet structure:
+       🌸          (back row: 2 flowers, slightly behind)
+     🌸   🌸      (middle row: 2 flowers)  
+       🌸          (front center: 1 flower, overlapping)
+  
+  With leaves, stems gathered, and ribbon tie.
+*/
+
+const BouquetSingle = ({ type, c, leafStyle, customColor }: {
+  type: FlowerType; c: typeof colorMap.rose; leafStyle: LeafStyle; customColor?: string;
+}) => (
+  <g>
+    {/* Stem */}
+    <path d="M50 62 Q48 85 50 120" stroke="#4a8c5c" strokeWidth="2.5" fill="none" />
+    {/* Leaves on stem */}
+    {renderLeaf(leafStyle, 48, 85, false)}
+    {renderLeaf(leafStyle, 52, 100, true)}
+    {/* Flower head */}
+    <FlowerHead type={type} c={c} customColor={customColor} />
+  </g>
+);
+
+const BouquetSmall = ({ type, c, leafStyle, customColor }: {
+  type: FlowerType; c: typeof colorMap.rose; leafStyle: LeafStyle; customColor?: string;
+}) => (
+  <g>
+    {/* Stems converging */}
+    <path d="M35 55 Q42 80 50 105" stroke="#4a8c5c" strokeWidth="2" fill="none" />
+    <path d="M50 50 Q50 78 50 105" stroke="#4a8c5c" strokeWidth="2.5" fill="none" />
+    <path d="M65 55 Q58 80 50 105" stroke="#4a8c5c" strokeWidth="2" fill="none" />
+
+    {/* Large leaves behind bouquet */}
+    {renderLeaf(leafStyle, 30, 72, false, 1.3)}
+    {renderLeaf(leafStyle, 70, 72, true, 1.3)}
+    {renderLeaf(leafStyle, 38, 85, false, 1)}
+    {renderLeaf(leafStyle, 62, 85, true, 1)}
+
+    {/* Ribbon tie */}
+    <ellipse cx="50" cy="98" rx="10" ry="4" fill="#FF8FAB" opacity="0.8" />
+    <path d="M44 98 Q50 104 56 98" stroke="#FF6B8A" strokeWidth="2" fill="none" strokeLinecap="round" />
+    <path d="M42 100 Q36 108 33 114" stroke="#FF8FAB" strokeWidth="2" fill="none" strokeLinecap="round" />
+    <path d="M58 100 Q64 108 67 114" stroke="#FF8FAB" strokeWidth="2" fill="none" strokeLinecap="round" />
+    {/* Ribbon ends */}
+    <path d="M33 114 Q30 116 28 114" stroke="#FF8FAB" strokeWidth="1.5" fill="none" />
+    <path d="M67 114 Q70 116 72 114" stroke="#FF8FAB" strokeWidth="1.5" fill="none" />
+
+    {/* Back row: 2 flowers (slightly up and apart, smaller) */}
+    <g transform="translate(-15, 4) scale(0.75)" opacity="0.9">
+      <FlowerHead type={type} c={c} customColor={customColor} />
+    </g>
+    <g transform="translate(15, 4) scale(0.75)" opacity="0.9">
+      <FlowerHead type={type} c={c} customColor={customColor} />
+    </g>
+
+    {/* Front center: main flower (largest, on top) */}
+    <g transform="translate(0, 2) scale(0.9)">
+      <FlowerHead type={type} c={c} customColor={customColor} />
+    </g>
+  </g>
+);
+
+const BouquetLarge = ({ type, c, leafStyle, customColor }: {
+  type: FlowerType; c: typeof colorMap.rose; leafStyle: LeafStyle; customColor?: string;
+}) => (
+  <g>
+    {/* Stems converging to center */}
+    <path d="M25 52 Q38 78 50 105" stroke="#4a8c5c" strokeWidth="1.8" fill="none" />
+    <path d="M38 48 Q44 76 50 105" stroke="#4a8c5c" strokeWidth="2" fill="none" />
+    <path d="M50 45 Q50 75 50 105" stroke="#4a8c5c" strokeWidth="2.5" fill="none" />
+    <path d="M62 48 Q56 76 50 105" stroke="#4a8c5c" strokeWidth="2" fill="none" />
+    <path d="M75 52 Q62 78 50 105" stroke="#4a8c5c" strokeWidth="1.8" fill="none" />
+
+    {/* Large backdrop leaves */}
+    {renderLeaf(leafStyle, 22, 65, false, 1.5)}
+    {renderLeaf(leafStyle, 78, 65, true, 1.5)}
+    {renderLeaf(leafStyle, 30, 80, false, 1.2)}
+    {renderLeaf(leafStyle, 70, 80, true, 1.2)}
+    {renderLeaf(leafStyle, 40, 90, false, 0.9)}
+    {renderLeaf(leafStyle, 60, 90, true, 0.9)}
+
+    {/* Wrapping paper / tissue */}
+    <path d="M28 90 Q50 82 72 90 L78 115 Q50 120 22 115Z" fill="#F0E0C8" opacity="0.4" />
+    <path d="M30 92 Q50 84 70 92 L75 113 Q50 118 25 113Z" fill="#F5EADC" opacity="0.35" />
+
+    {/* Ribbon tie */}
+    <ellipse cx="50" cy="102" rx="14" ry="5" fill="#FF8FAB" opacity="0.85" />
+    <path d="M41 102 Q50 110 59 102" stroke="#FF6B8A" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+    <path d="M38 104 Q30 114 26 120" stroke="#FF8FAB" strokeWidth="2" fill="none" strokeLinecap="round" />
+    <path d="M62 104 Q70 114 74 120" stroke="#FF8FAB" strokeWidth="2" fill="none" strokeLinecap="round" />
+    {/* Ribbon bow loops */}
+    <path d="M41 100 Q34 94 38 98 Q36 92 41 100Z" fill="#FF8FAB" opacity="0.6" />
+    <path d="M59 100 Q66 94 62 98 Q64 92 59 100Z" fill="#FF8FAB" opacity="0.6" />
+
+    {/* Back row: 2 flowers */}
+    <g transform="translate(-22, 6) scale(0.62)" opacity="0.85">
+      <FlowerHead type={type} c={c} customColor={customColor} />
+    </g>
+    <g transform="translate(22, 6) scale(0.62)" opacity="0.85">
+      <FlowerHead type={type} c={c} customColor={customColor} />
+    </g>
+
+    {/* Middle row: 2 flowers */}
+    <g transform="translate(-12, 0) scale(0.78)" opacity="0.92">
+      <FlowerHead type={type} c={c} customColor={customColor} />
+    </g>
+    <g transform="translate(12, 0) scale(0.78)" opacity="0.92">
+      <FlowerHead type={type} c={c} customColor={customColor} />
+    </g>
+
+    {/* Front center: hero flower */}
+    <g transform="translate(0, -2) scale(0.88)">
+      <FlowerHead type={type} c={c} customColor={customColor} />
+    </g>
+  </g>
+);
 
 function adjustColor(hex: string, amount: number): string {
   const num = parseInt(hex.replace('#', ''), 16);
@@ -224,62 +278,40 @@ function adjustColor(hex: string, amount: number): string {
 
 export const FlowerSVG = ({ type, color, leafStyle, size = 120, animate = false, bouquetSize = 'single', customPetalColor }: FlowerSVGProps) => {
   const c = colorMap[color];
-  const flowerCount = bouquetSize === 'large' ? 5 : bouquetSize === 'small' ? 3 : 1;
 
   const Wrapper = animate ? motion.div : 'div';
   const wrapperProps = animate ? {
-    initial: { scale: 0, rotate: -30, opacity: 0 },
+    initial: { scale: 0, rotate: -20, opacity: 0 },
     animate: { scale: 1, rotate: 0, opacity: 1 },
     transition: { duration: 1.2, ease: 'easeOut' },
   } : {};
 
-  if (flowerCount === 1) {
-    return (
-      <Wrapper {...wrapperProps as any} style={{ width: size, height: size + 40 }} className="relative">
-        <svg viewBox="0 0 100 140" width={size} height={size + 40}>
-          <defs>
-            <radialGradient id={`glow-${color}`} cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor={customPetalColor || c.petal} stopOpacity="0.3" />
-              <stop offset="100%" stopColor={customPetalColor || c.petal} stopOpacity="0" />
-            </radialGradient>
-          </defs>
-          <circle cx="50" cy="45" r="28" fill={`url(#glow-${color})`} />
-          <SingleFlower type={type} c={c} leafStyle={leafStyle} customColor={customPetalColor} />
-        </svg>
-      </Wrapper>
-    );
-  }
+  const vb = bouquetSize === 'large' ? '-5 -10 110 140'
+    : bouquetSize === 'small' ? '5 -5 90 130'
+    : '0 0 100 130';
 
-  // Bouquet layout
-  const offsets = flowerCount === 3
-    ? [{ x: -20, y: 5, s: 0.8 }, { x: 0, y: -5, s: 1 }, { x: 20, y: 5, s: 0.8 }]
-    : [{ x: -28, y: 8, s: 0.65 }, { x: -14, y: 0, s: 0.8 }, { x: 0, y: -5, s: 1 }, { x: 14, y: 0, s: 0.8 }, { x: 28, y: 8, s: 0.65 }];
-
-  const bouquetWidth = flowerCount === 3 ? size * 1.6 : size * 2;
-  const bouquetHeight = size + 50;
+  const w = bouquetSize === 'large' ? size * 1.8 : bouquetSize === 'small' ? size * 1.4 : size;
+  const h = bouquetSize === 'large' ? size * 1.6 : bouquetSize === 'small' ? size * 1.3 : size + 20;
 
   return (
-    <Wrapper {...wrapperProps as any} style={{ width: bouquetWidth, height: bouquetHeight }} className="relative">
-      <svg viewBox="-40 -10 180 160" width={bouquetWidth} height={bouquetHeight}>
+    <Wrapper {...wrapperProps as any} style={{ width: w, height: h }} className="relative flex items-center justify-center">
+      <svg viewBox={vb} width={w} height={h}>
         <defs>
-          <radialGradient id={`glow-bouquet-${color}`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor={customPetalColor || c.petal} stopOpacity="0.2" />
+          <radialGradient id={`glow-${color}-${bouquetSize}`} cx="50%" cy="40%" r="50%">
+            <stop offset="0%" stopColor={customPetalColor || c.petal} stopOpacity="0.25" />
             <stop offset="100%" stopColor={customPetalColor || c.petal} stopOpacity="0" />
           </radialGradient>
         </defs>
-        {/* Bouquet wrap */}
-        <path d="M30 100 Q50 85 70 100 L75 130 Q50 135 25 130Z" fill="#E8D5B8" opacity="0.6" />
-        <path d="M32 102 Q50 88 68 102 L72 128 Q50 132 28 128Z" fill="#F0E0C8" opacity="0.4" />
-        {/* Ribbon */}
-        <path d="M45 110 Q50 115 55 110" stroke="#FF8FAB" strokeWidth="2" fill="none" />
-        <path d="M42 112 Q38 120 35 124" stroke="#FF8FAB" strokeWidth="1.5" fill="none" />
-        <path d="M58 112 Q62 120 65 124" stroke="#FF8FAB" strokeWidth="1.5" fill="none" />
-        {offsets.map((off, i) => (
-          <g key={i} transform={`translate(${off.x} ${off.y}) scale(${off.s})`}>
-            <circle cx="50" cy="45" r="25" fill={`url(#glow-bouquet-${color})`} />
-            <SingleFlower type={type} c={c} leafStyle={i === Math.floor(flowerCount/2) ? leafStyle : 'none'} customColor={customPetalColor} />
-          </g>
-        ))}
+        <circle cx="50" cy="50" r={bouquetSize === 'large' ? 50 : 30} fill={`url(#glow-${color}-${bouquetSize})`} />
+        {bouquetSize === 'single' && (
+          <BouquetSingle type={type} c={c} leafStyle={leafStyle} customColor={customPetalColor} />
+        )}
+        {bouquetSize === 'small' && (
+          <BouquetSmall type={type} c={c} leafStyle={leafStyle} customColor={customPetalColor} />
+        )}
+        {bouquetSize === 'large' && (
+          <BouquetLarge type={type} c={c} leafStyle={leafStyle} customColor={customPetalColor} />
+        )}
       </svg>
     </Wrapper>
   );
