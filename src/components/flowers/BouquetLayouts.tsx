@@ -17,18 +17,9 @@ export const BouquetSingle = ({ type, c, leafStyle, customColor }: {
     {/* Stem */}
     <path d="M50 62 Q49 84 50 130" stroke="#41545E" strokeWidth="2.5" fill="none" strokeLinecap="round" />
 
-    {/* Left leaf */}
-    <g transform="translate(44,86) rotate(-30)">
-      <path d="M0 0 Q-10 -8 -14 -22 Q-11 -30 -5 -32 Q2 -30 4 -19 Q4 -8 0 0Z"
-        fill="#4A7C7C" stroke="#1E2024" strokeWidth="1.2" />
-      <line x1="0" y1="-2" x2="-3" y2="-24" stroke="#365E6A" strokeWidth="0.8" />
-    </g>
-    {/* Right leaf */}
-    <g transform="translate(56,96) rotate(28) scale(-1,1)">
-      <path d="M0 0 Q-10 -8 -14 -22 Q-11 -30 -5 -32 Q2 -30 4 -19 Q4 -8 0 0Z"
-        fill="#4A7C7C" stroke="#1E2024" strokeWidth="1.2" />
-      <line x1="0" y1="-2" x2="-3" y2="-24" stroke="#365E6A" strokeWidth="0.8" />
-    </g>
+    {/* Delicate leaf branches */}
+    {renderLeafBranch(42, 88, -40, 0.9, 'dark')}
+    {renderLeafBranch(58, 92, 35, 0.85, 'medium')}
 
     <AnimatedFlower delay={0.12} cx={50} cy={45}>
       <FlowerHead type={type} c={c} customColor={customColor} />
