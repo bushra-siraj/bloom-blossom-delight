@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Eye, BarChart3 } from 'lucide-react';
+import { X, Eye, BarChart3, Mail, Linkedin, Globe } from 'lucide-react';
 import type { BloomCard } from '@/types/bloom';
 import {
   Sidebar,
@@ -91,6 +91,27 @@ export function AppSidebar({ card }: AppSidebarProps) {
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarContent>
+
+          {/* Contact Section */}
+          <div className="mt-auto px-3 pb-6 pt-4 border-t border-border/20 flex flex-col items-center gap-2">
+            {!collapsed && (
+              <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-body mb-1">Connect</p>
+            )}
+            <div className={collapsed ? "flex flex-col gap-2" : "flex gap-3"}>
+              {contactLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target={link.target}
+                  rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-foreground/40 transition-all duration-300 hover:text-[hsl(var(--accent-leaf))] hover:shadow-[0_0_12px_hsl(var(--accent-leaf)/0.4)]"
+                  title={link.label}
+                >
+                  <link.icon className="h-3.5 w-3.5" />
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
       </Sidebar>
 
@@ -145,6 +166,12 @@ export function AppSidebar({ card }: AppSidebarProps) {
   );
 }
 
+const contactLinks = [
+  { label: 'Email', icon: Mail, href: 'mailto:BushraSiraj586@gmail.com', target: '_self' as const },
+  { label: 'LinkedIn', icon: Linkedin, href: 'https://www.linkedin.com/in/bushrasiraj/', target: '_blank' as const },
+  { label: 'Portfolio', icon: Globe, href: 'https://bushrasiraj-portfolio.lovable.app/', target: '_blank' as const },
+];
+
 function VisionContent() {
   return (
     <div className="pr-6">
@@ -161,6 +188,25 @@ function VisionContent() {
         <p className="text-sm leading-relaxed text-foreground/70 font-body">
           Every petal, face, and leaf is a product of my journey in AI and digital design.
         </p>
+      </div>
+
+      {/* Let's Connect Footer */}
+      <div className="mt-8 pt-5 border-t border-border/20">
+        <p className="font-display text-sm text-primary mb-3 italic">Let's Connect</p>
+        <div className="flex gap-3">
+          {contactLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              target={link.target}
+              rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/20 text-foreground/50 text-xs font-display transition-all duration-300 hover:text-[hsl(var(--accent-leaf))] hover:border-[hsl(var(--accent-leaf)/0.3)] hover:shadow-[0_0_12px_hsl(var(--accent-leaf)/0.3)]"
+            >
+              <link.icon className="h-3 w-3" />
+              <span>{link.label}</span>
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   );
