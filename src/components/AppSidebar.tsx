@@ -124,7 +124,7 @@ export function AppSidebar({ card }: AppSidebarProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-4 p-0"
             style={{ backdropFilter: 'blur(15px)', WebkitBackdropFilter: 'blur(15px)', background: 'hsl(var(--background) / 0.6)' }}
             onClick={() => setOverlay(null)}
           >
@@ -134,7 +134,7 @@ export function AppSidebar({ card }: AppSidebarProps) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.92 }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="relative w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl p-6 md:p-8 border border-border/30"
+              className="relative w-full max-w-lg h-full md:h-auto md:max-h-[85vh] rounded-none md:rounded-2xl border border-border/30 flex flex-col"
               style={{
                 background: 'hsl(var(--glass-bg))',
                 backdropFilter: 'blur(20px)',
@@ -145,19 +145,21 @@ export function AppSidebar({ card }: AppSidebarProps) {
               {/* Close button */}
               <button
                 onClick={() => setOverlay(null)}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-foreground/40 hover:text-foreground transition-colors hover:bg-foreground/5"
+                className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full flex items-center justify-center text-foreground/40 hover:text-foreground transition-colors hover:bg-foreground/5"
               >
                 <X className="h-4 w-4" />
               </button>
 
-              {overlay === 'vision' && <VisionContent />}
-              {overlay === 'analytics' && (
-                <AnalyticsContent
-                  flowerCount={flowerCount}
-                  flowerType={flowerType}
-                  bouquetStyle={bouquetStyle}
-                />
-              )}
+              <div className="overflow-y-auto flex-1 p-6 md:p-8">
+                {overlay === 'vision' && <VisionContent />}
+                {overlay === 'analytics' && (
+                  <AnalyticsContent
+                    flowerCount={flowerCount}
+                    flowerType={flowerType}
+                    bouquetStyle={bouquetStyle}
+                  />
+                )}
+              </div>
             </motion.div>
           </motion.div>
         )}
@@ -193,7 +195,7 @@ function VisionContent() {
       {/* Let's Connect Footer */}
       <div className="mt-8 pt-5 border-t border-border/20">
         <p className="font-display text-sm text-primary mb-3 italic">Let's Connect</p>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-2.5 justify-center md:justify-start">
           {contactLinks.map((link) => (
             <a
               key={link.label}
