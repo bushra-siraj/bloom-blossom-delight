@@ -32,7 +32,7 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
       setTimeout(() => setPhase('drop'), 8500),
       setTimeout(() => setPhase('land'), 9500),
       setTimeout(() => setPhase('bloom'), 10500),
-      setTimeout(() => setPhase('card'), 12500),
+      setTimeout(() => setPhase('card'), 18500),
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
