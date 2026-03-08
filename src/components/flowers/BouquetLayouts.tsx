@@ -140,17 +140,17 @@ export const BouquetLarge = ({ type, c, leafStyle, customColor }: {
     <line x1={FOCAL.x} y1={FOCAL.y} x2="130" y2="52"  stroke="#41545E" strokeWidth="2.8" strokeLinecap="round" />
     <line x1={FOCAL.x} y1={FOCAL.y} x2="160" y2="68"  stroke="#41545E" strokeWidth="2.5" strokeLinecap="round" />
 
-    {/* ── 10 small fern-like leaf branches tucked behind flowers ── */}
-    {renderLeafBranch(18, 82, -55, 1.0, 'dark')}
-    {renderLeafBranch(182, 82, 55, 1.0, 'dark')}
-    {renderLeafBranch(35, 95, -40, 0.85, 'medium')}
-    {renderLeafBranch(165, 95, 40, 0.85, 'medium')}
-    {renderLeafBranch(55, 85, -25, 0.7, 'light')}
-    {renderLeafBranch(145, 85, 25, 0.7, 'light')}
-    {renderLeafBranch(75, 75, -15, 0.6, 'medium')}
-    {renderLeafBranch(125, 75, 15, 0.6, 'medium')}
-    {renderLeafBranch(28, 70, -65, 0.75, 'dark')}
-    {renderLeafBranch(172, 70, 65, 0.75, 'dark')}
+    {/* ── 10 styled leaves tucked behind flowers ── */}
+    {renderStyledLeaf(leafStyle, 18, 82, -55, 1.0, 'dark')}
+    {renderStyledLeaf(leafStyle, 182, 82, 55, 1.0, 'dark')}
+    {renderStyledLeaf(leafStyle, 35, 95, -40, 0.85, 'medium')}
+    {renderStyledLeaf(leafStyle, 165, 95, 40, 0.85, 'medium')}
+    {renderStyledLeaf(leafStyle, 55, 85, -25, 0.7, 'light')}
+    {renderStyledLeaf(leafStyle, 145, 85, 25, 0.7, 'light')}
+    {renderStyledLeaf(leafStyle, 75, 75, -15, 0.6, 'medium')}
+    {renderStyledLeaf(leafStyle, 125, 75, 15, 0.6, 'medium')}
+    {renderStyledLeaf(leafStyle, 28, 70, -65, 0.75, 'dark')}
+    {renderStyledLeaf(leafStyle, 172, 70, 65, 0.75, 'dark')}
 
     {/* ── 3 Red berry clusters filling gaps ── */}
     {renderBerryCluster(30, 60, false)}
