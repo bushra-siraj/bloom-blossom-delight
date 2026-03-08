@@ -76,7 +76,7 @@ export function AppSidebar({ card }: AppSidebarProps) {
                   className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-foreground/60 hover:text-primary hover:bg-primary/5 transition-colors cursor-pointer"
                 >
                   <Eye className="h-4 w-4 shrink-0" />
-                  <span className="text-xs font-body tracking-wide">About</span>
+                  <span className="text-xs font-body tracking-wide">About Us</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
