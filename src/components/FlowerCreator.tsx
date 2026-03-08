@@ -139,7 +139,6 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
                 </OptionButton>
               ))}
             </div>
-            <ColorPicker label="Custom petal color" value={card.petalColor} onChange={v => update({ petalColor: v })} />
             <div className="flex justify-center pt-1">
               <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} size={100}
                 customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
