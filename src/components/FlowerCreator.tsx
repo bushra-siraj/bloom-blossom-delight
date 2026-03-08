@@ -292,19 +292,7 @@ export const FlowerCreator = ({ onComplete }: FlowerCreatorProps) => {
                 <CharacterSVG character={card.character} size={50} />
                 <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} bouquetSize={card.bouquetSize} size={60}
                   customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
-                {/* Mini card */}
-                <div className={`p-3 max-w-[200px] text-center ${getCardStyleClasses(card.cardStyle)}`}
-                  style={{ backgroundColor: `${card.cardColor}cc` }}>
-                  {card.decoration !== 'none' && (
-                    <div className="flex justify-center mb-1">
-                      <DecorationSVG decoration={card.decoration} size={16} animate={false} />
-                    </div>
-                  )}
-                  <p className={`text-foreground/90 text-xs leading-relaxed ${getFontClasses(card.fontStyle)}`}>
-                    {card.message || 'Your message...'}
-                  </p>
-                  {card.senderName && <p className="text-[10px] text-foreground/50 mt-1">— {card.senderName}</p>}
-                </div>
+                <MessageCardRenderer card={card} mini />
               </div>
             </div>
           </div>
