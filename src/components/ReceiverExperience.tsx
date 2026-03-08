@@ -33,7 +33,7 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
       setTimeout(() => setPhase('drop'), 8500),
       setTimeout(() => setPhase('land'), 9500),
       setTimeout(() => { setPhase('bloom'); playBloomChime(); }, 10500),
-      setTimeout(() => { setPhase('card'); playPaperUnfold(); }, 18500),
+      setTimeout(() => { setPhase('card'); playPaperUnfold(); }, 14500),
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
