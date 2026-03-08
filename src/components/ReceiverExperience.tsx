@@ -199,19 +199,3 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
   );
 };
 
-function getCardStyleClasses(style: CardStyle): string {
-  switch (style) {
-    case 'glass': return 'glass-card glow-border-lg rounded-xl';
-    case 'rounded': return 'rounded-2xl border border-foreground/10 glow-border';
-    case 'polaroid': return 'rounded-sm bg-foreground/5 border-4 border-foreground/10 border-b-[20px] shadow-xl';
-    case 'envelope': return 'rounded-lg border border-foreground/10 glow-border relative pt-6';
-  }
-}
-
-function getFontClasses(font: FontStyle): string {
-  switch (font) {
-    case 'romantic': return 'font-display italic text-base';
-    case 'handwritten': return 'font-body text-sm';
-    case 'modern': return 'font-body font-semibold tracking-wide text-sm';
-  }
-}
