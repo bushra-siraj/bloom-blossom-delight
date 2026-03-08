@@ -8,18 +8,9 @@ interface Petal {
   duration: number;
   size: number;
   rotation: number;
-  color: string;
 }
 
-const petalColors = [
-  'hsl(340, 70%, 65%)',
-  'hsl(280, 50%, 70%)',
-  'hsl(330, 60%, 75%)',
-  'hsl(20, 70%, 70%)',
-  'hsl(200, 60%, 65%)',
-];
-
-export const FloatingPetals = ({ count = 15 }: { count?: number }) => {
+export const FloatingPetals = ({ count = 15, color }: { count?: number; color?: string }) => {
   const [petals, setPetals] = useState<Petal[]>([]);
 
   useEffect(() => {
@@ -30,23 +21,22 @@ export const FloatingPetals = ({ count = 15 }: { count?: number }) => {
       duration: 5 + Math.random() * 6,
       size: 8 + Math.random() * 14,
       rotation: Math.random() * 360,
-      color: petalColors[Math.floor(Math.random() * petalColors.length)],
     }));
     setPetals(p);
   }, [count]);
 
+  const petalColor = color || 'hsl(340, 70%, 65%)';
+
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div className="absolute inset-0 pointer-events-none overflow-hidden z-[1]">
       {petals.map((petal) => (
         <motion.div
           key={petal.id}
-          className="absolute rounded-full opacity-40"
+          className="absolute opacity-40"
           style={{
             left: `${petal.x}%`,
             width: petal.size,
             height: petal.size * 1.4,
-            background: petal.color,
-            borderRadius: '50% 0 50% 50%',
             filter: 'blur(1px)',
           }}
           initial={{ y: -20, rotate: petal.rotation, opacity: 0 }}
@@ -62,10 +52,26 @@ export const FloatingPetals = ({ count = 15 }: { count?: number }) => {
             repeat: Infinity,
             ease: 'linear',
           }}
-        />
+        >
+          {/* SVG petal shape */}
+          <svg viewBox="0 0 20 28" width={petal.size} height={petal.size * 1.4}>
+            <path
+              d="M10 0 Q0 8 2 18 Q6 28 10 26 Q14 28 18 18 Q20 8 10 0Z"
+              fill={petalColor}
+              opacity="0.7"
+            />
+            <path
+              d="M10 2 Q5 10 8 20"
+              stroke={petalColor}
+              strokeWidth="0.5"
+              fill="none"
+              opacity="0.5"
+            />
+          </svg>
+        </motion.div>
       ))}
       {/* Sparkle particles */}
-      {Array.from({ length: 8 }).map((_, i) => (
+      {Array.from({ length: 6 }).map((_, i) => (
         <motion.div
           key={`sparkle-${i}`}
           className="absolute rounded-full"
@@ -74,8 +80,8 @@ export const FloatingPetals = ({ count = 15 }: { count?: number }) => {
             top: `${10 + Math.random() * 80}%`,
             width: 3,
             height: 3,
-            background: 'hsl(45, 80%, 80%)',
-            boxShadow: '0 0 6px hsl(45, 80%, 80%)',
+            background: color || 'hsl(45, 80%, 80%)',
+            boxShadow: `0 0 6px ${color || 'hsl(45, 80%, 80%)'}`,
           }}
           animate={{
             opacity: [0, 1, 0],
@@ -83,7 +89,7 @@ export const FloatingPetals = ({ count = 15 }: { count?: number }) => {
           }}
           transition={{
             duration: 2,
-            delay: i * 0.5,
+            delay: i * 0.7,
             repeat: Infinity,
           }}
         />
