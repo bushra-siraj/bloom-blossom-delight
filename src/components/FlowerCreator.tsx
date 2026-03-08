@@ -5,6 +5,7 @@ import { CharacterSVG } from './CharacterSVG';
 import { EnvironmentBg } from './EnvironmentBg';
 import { DecorationSVG } from './DecorationSVG';
 import { FloatingPetals } from './FloatingPetals';
+import { MessageCardRenderer, CardStylePreview } from './cards/MessageCardRenderer';
 import type {
   BloomCard, FlowerType, FlowerColor, LeafStyle, BouquetSize,
   Environment, CardStyle, FontStyle, Decoration, CharacterType, AnimationAction
@@ -18,7 +19,7 @@ const flowerColors: FlowerColor[] = ['rose', 'lavender', 'mint', 'peach', 'sky',
 const leafStyles: LeafStyle[] = ['classic', 'round', 'pointed', 'none'];
 const bouquetSizes: BouquetSize[] = ['single', 'small', 'large'];
 const environments: Environment[] = ['midnight', 'sunset', 'forest', 'clouds'];
-const cardStyles: CardStyle[] = ['rounded', 'polaroid', 'envelope', 'glass'];
+const cardStyles: CardStyle[] = ['classic', 'polaroid', 'envelope', 'glass'];
 const fontStyles: FontStyle[] = ['romantic', 'handwritten', 'modern'];
 const decorations: Decoration[] = ['bow', 'sparkles', 'hearts', 'butterflies', 'vines', 'none'];
 const characters: CharacterType[] = ['girl', 'boy', 'cat', 'robot', 'ghost', 'butterfly'];
@@ -32,7 +33,7 @@ const envLabels: Record<Environment, { icon: string; name: string }> = {
 };
 
 const cardStyleLabels: Record<CardStyle, string> = {
-  rounded: 'Rounded Card',
+  classic: 'Classic Card',
   polaroid: 'Polaroid',
   envelope: 'Envelope',
   glass: 'Glass Card',
@@ -169,21 +170,7 @@ export const FlowerCreator = ({ onComplete }: FlowerCreatorProps) => {
             <SectionTitle>Card style</SectionTitle>
             <div className="grid grid-cols-2 gap-2.5">
               {cardStyles.map(cs => (
-                <OptionButton key={cs} selected={card.cardStyle === cs} onClick={() => update({ cardStyle: cs })}>
-                  <div className={`h-16 rounded-lg flex items-center justify-center text-foreground/40 text-xs ${
-                    cs === 'glass' ? 'glass-card' :
-                    cs === 'polaroid' ? 'bg-foreground/5 border-4 border-foreground/10 border-b-8' :
-                    cs === 'envelope' ? 'bg-card relative overflow-hidden' :
-                    'bg-card'
-                  }`}>
-                    {cs === 'envelope' && (
-                      <div className="absolute top-0 left-0 right-0 h-1/2 bg-foreground/5" style={{
-                        clipPath: 'polygon(0 0, 50% 100%, 100% 0)',
-                      }} />
-                    )}
-                    <span className="z-10 capitalize">{cardStyleLabels[cs]}</span>
-                  </div>
-                </OptionButton>
+                <CardStylePreview key={cs} style={cs} selected={card.cardStyle === cs} onClick={() => update({ cardStyle: cs })} />
               ))}
             </div>
             <SectionTitle>Decoration</SectionTitle>
@@ -305,19 +292,7 @@ export const FlowerCreator = ({ onComplete }: FlowerCreatorProps) => {
                 <CharacterSVG character={card.character} size={50} />
                 <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} bouquetSize={card.bouquetSize} size={60}
                   customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
-                {/* Mini card */}
-                <div className={`p-3 max-w-[200px] text-center ${getCardStyleClasses(card.cardStyle)}`}
-                  style={{ backgroundColor: `${card.cardColor}cc` }}>
-                  {card.decoration !== 'none' && (
-                    <div className="flex justify-center mb-1">
-                      <DecorationSVG decoration={card.decoration} size={16} animate={false} />
-                    </div>
-                  )}
-                  <p className={`text-foreground/90 text-xs leading-relaxed ${getFontClasses(card.fontStyle)}`}>
-                    {card.message || 'Your message...'}
-                  </p>
-                  {card.senderName && <p className="text-[10px] text-foreground/50 mt-1">— {card.senderName}</p>}
-                </div>
+                <MessageCardRenderer card={card} mini />
               </div>
             </div>
           </div>
@@ -401,19 +376,3 @@ export const FlowerCreator = ({ onComplete }: FlowerCreatorProps) => {
   );
 };
 
-function getCardStyleClasses(style: CardStyle): string {
-  switch (style) {
-    case 'glass': return 'glass-card rounded-xl';
-    case 'rounded': return 'rounded-2xl border border-foreground/10';
-    case 'polaroid': return 'rounded-sm bg-foreground/5 border-4 border-foreground/10 border-b-[16px]';
-    case 'envelope': return 'rounded-lg border border-foreground/10 relative';
-  }
-}
-
-function getFontClasses(font: FontStyle): string {
-  switch (font) {
-    case 'romantic': return 'font-display italic';
-    case 'handwritten': return 'font-body';
-    case 'modern': return 'font-body font-semibold tracking-wide';
-  }
-}

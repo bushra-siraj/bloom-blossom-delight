@@ -4,8 +4,8 @@ import { FlowerSVG } from './FlowerSVG';
 import { CharacterSVG } from './CharacterSVG';
 import { EnvironmentBg } from './EnvironmentBg';
 import { FloatingPetals } from './FloatingPetals';
-import { DecorationSVG } from './DecorationSVG';
-import type { BloomCard, CardStyle, FontStyle } from '@/types/bloom';
+import { MessageCardRenderer } from './cards/MessageCardRenderer';
+import type { BloomCard } from '@/types/bloom';
 
 type Phase = 'env' | 'intro' | 'walk' | 'pause' | 'action' | 'drop' | 'land' | 'bloom' | 'card';
 
@@ -65,9 +65,6 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
   };
 
   const phaseIndex = ['env', 'intro', 'walk', 'pause', 'action', 'drop', 'land', 'bloom', 'card'].indexOf(phase);
-
-  const cardStyleClasses = getCardStyleClasses(card.cardStyle);
-  const fontClasses = getFontClasses(card.fontStyle);
 
   return (
     <div className="fixed inset-0 overflow-hidden" ref={cardRef}>
@@ -155,38 +152,12 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
         <AnimatePresence>
           {phase === 'card' && (
             <motion.div
-              initial={{ opacity: 0, y: 50, scale: 0.85, rotateX: 45 }}
-              animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+              initial={{ opacity: 0, y: 50, scale: 0.85 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
-              className={`p-5 w-full max-w-xs z-20 ${cardStyleClasses}`}
-              style={{ perspective: 1000, backgroundColor: `${card.cardColor}cc` }}
+              className="w-full max-w-xs z-20"
             >
-              {/* Envelope flap */}
-              {card.cardStyle === 'envelope' && (
-                <div className="absolute -top-4 left-0 right-0 h-8" style={{
-                  clipPath: 'polygon(0 100%, 50% 0, 100% 100%)',
-                  backgroundColor: `${card.cardColor}aa`,
-                }} />
-              )}
-              <div className="text-center space-y-2.5">
-                {card.decoration !== 'none' && (
-                  <motion.div className="flex justify-center"
-                    animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 3, repeat: Infinity }}>
-                    <DecorationSVG decoration={card.decoration} size={28} />
-                  </motion.div>
-                )}
-                <p className={`text-foreground/90 leading-relaxed text-sm ${fontClasses}`}>
-                  {card.message}
-                </p>
-                {card.senderName && (
-                  <p className="text-foreground/45 text-xs font-body">— {card.senderName}</p>
-                )}
-                {card.decoration !== 'none' && (
-                  <div className="flex justify-center pt-1">
-                    <DecorationSVG decoration={card.decoration} size={20} animate={false} />
-                  </div>
-                )}
-              </div>
+              <MessageCardRenderer card={card} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -228,19 +199,3 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
   );
 };
 
-function getCardStyleClasses(style: CardStyle): string {
-  switch (style) {
-    case 'glass': return 'glass-card glow-border-lg rounded-xl';
-    case 'rounded': return 'rounded-2xl border border-foreground/10 glow-border';
-    case 'polaroid': return 'rounded-sm bg-foreground/5 border-4 border-foreground/10 border-b-[20px] shadow-xl';
-    case 'envelope': return 'rounded-lg border border-foreground/10 glow-border relative pt-6';
-  }
-}
-
-function getFontClasses(font: FontStyle): string {
-  switch (font) {
-    case 'romantic': return 'font-display italic text-base';
-    case 'handwritten': return 'font-body text-sm';
-    case 'modern': return 'font-body font-semibold tracking-wide text-sm';
-  }
-}
