@@ -2,41 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
     --background: 270 20% 8%;
-    --foreground: 300 20% 90%;
+    --foreground: 300 15% 90%;
 
-    --card: 270 15% 14%;
-    --card-foreground: 300 20% 90%;
+    --card: 270 15% 12%;
+    --card-foreground: 300 15% 90%;
 
-    --popover: 270 15% 14%;
-    --popover-foreground: 300 20% 90%;
+    --popover: 270 15% 12%;
+    --popover-foreground: 300 15% 90%;
 
     --primary: 330 60% 65%;
     --primary-foreground: 270 20% 8%;
 
-    --secondary: 270 20% 18%;
-    --secondary-foreground: 300 20% 90%;
+    --secondary: 270 18% 16%;
+    --secondary-foreground: 300 15% 90%;
 
-    --muted: 270 15% 20%;
-    --muted-foreground: 270 10% 55%;
+    --muted: 270 12% 18%;
+    --muted-foreground: 270 8% 50%;
 
     --accent: 280 50% 60%;
     --accent-foreground: 270 20% 8%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 270 15% 22%;
-    --input: 270 15% 22%;
+    --border: 270 12% 20%;
+    --input: 270 12% 20%;
     --ring: 330 60% 65%;
 
-    --radius: 1rem;
+    --radius: 0.875rem;
 
-    /* Custom bloom tokens */
+    /* Bloom tokens */
     --bloom-rose: 340 70% 65%;
     --bloom-lavender: 280 50% 70%;
     --bloom-mint: 160 40% 60%;
@@ -45,23 +45,23 @@
     --bloom-gold: 45 80% 65%;
     --bloom-glow: 330 80% 70%;
 
-    --glass-bg: 270 15% 14% / 0.6;
-    --glass-border: 270 15% 30% / 0.3;
-    --glass-blur: 20px;
+    --glass-bg: 270 15% 12% / 0.55;
+    --glass-border: 270 15% 28% / 0.25;
+    --glass-blur: 24px;
 
     --font-display: 'Playfair Display', serif;
     --font-body: 'Quicksand', sans-serif;
 
-    --shadow-glow: 0 0 30px -5px hsl(330 60% 65% / 0.3);
-    --shadow-glow-lg: 0 0 60px -10px hsl(330 60% 65% / 0.4);
+    --shadow-glow: 0 0 25px -5px hsl(330 60% 65% / 0.25);
+    --shadow-glow-lg: 0 0 50px -10px hsl(330 60% 65% / 0.35);
 
     --sidebar-background: 270 20% 8%;
-    --sidebar-foreground: 300 20% 90%;
+    --sidebar-foreground: 300 15% 90%;
     --sidebar-primary: 330 60% 65%;
     --sidebar-primary-foreground: 270 20% 8%;
-    --sidebar-accent: 270 20% 18%;
-    --sidebar-accent-foreground: 300 20% 90%;
-    --sidebar-border: 270 15% 22%;
+    --sidebar-accent: 270 18% 16%;
+    --sidebar-accent-foreground: 300 15% 90%;
+    --sidebar-border: 270 12% 20%;
     --sidebar-ring: 330 60% 65%;
   }
 }
@@ -74,10 +74,24 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted));
+    border-radius: 4px;
   }
 }
 
@@ -103,7 +117,7 @@
   }
 
   .text-glow {
-    text-shadow: 0 0 20px hsl(var(--bloom-glow) / 0.5);
+    text-shadow: 0 0 25px hsl(var(--bloom-glow) / 0.4), 0 0 50px hsl(var(--bloom-glow) / 0.15);
   }
 }
 

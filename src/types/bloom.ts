@@ -2,10 +2,10 @@ export type FlowerType = 'rose' | 'tulip' | 'daisy' | 'lily' | 'sunflower' | 'ch
 export type FlowerColor = 'rose' | 'lavender' | 'mint' | 'peach' | 'sky' | 'gold';
 export type LeafStyle = 'classic' | 'round' | 'pointed' | 'none';
 export type BouquetSize = 'single' | 'small' | 'large';
-export type Environment = 'midnight' | 'sunset' | 'forest';
-export type CardBg = 'midnight' | 'aurora' | 'sunset' | 'ocean' | 'forest';
-export type FontStyle = 'elegant' | 'playful' | 'modern' | 'handwritten';
-export type Decoration = 'bow' | 'hearts' | 'sparkles' | 'stars' | 'none';
+export type Environment = 'midnight' | 'sunset' | 'forest' | 'clouds';
+export type CardStyle = 'rounded' | 'polaroid' | 'envelope' | 'glass';
+export type FontStyle = 'romantic' | 'handwritten' | 'modern';
+export type Decoration = 'bow' | 'sparkles' | 'hearts' | 'butterflies' | 'vines' | 'none';
 export type CharacterType = 'girl' | 'boy' | 'cat' | 'robot' | 'ghost' | 'butterfly';
 export type AnimationAction = 'wink' | 'wave' | 'drop-flower' | 'present-flower';
 
@@ -15,7 +15,7 @@ export interface BloomCard {
   leafStyle: LeafStyle;
   bouquetSize: BouquetSize;
   environment: Environment;
-  cardBg: CardBg;
+  cardStyle: CardStyle;
   fontStyle: FontStyle;
   decoration: Decoration;
   message: string;
@@ -34,8 +34,8 @@ export const defaultCard: BloomCard = {
   leafStyle: 'classic',
   bouquetSize: 'single',
   environment: 'midnight',
-  cardBg: 'midnight',
-  fontStyle: 'elegant',
+  cardStyle: 'glass',
+  fontStyle: 'romantic',
   decoration: 'sparkles',
   message: 'You are blooming wonderful!',
   senderName: '',
