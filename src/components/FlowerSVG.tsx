@@ -213,73 +213,81 @@ const BouquetSmall = ({ type, c, leafStyle, customColor }: {
 const BouquetLarge = ({ type, c, leafStyle, customColor }: {
   type: FlowerType; c: typeof colorMap.rose; leafStyle: LeafStyle; customColor?: string;
 }) => {
-  // Deterministic pseudo-random rotations for natural variation
-  const rotations = [-12, 8, -6, 14, -3];
+  const rot = [-13, 10, -7, 12, -2];
 
   return (
     <g>
       <defs>
-        <filter id="flower-shadow" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="2" stdDeviation="2.5" floodColor="#00000030" />
+        <filter id="shadow-back" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="1.5" stdDeviation="1.8" floodColor="#00000018" />
+        </filter>
+        <filter id="shadow-mid" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="2.5" stdDeviation="3" floodColor="#00000025" />
+        </filter>
+        <filter id="shadow-hero" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="3.5" stdDeviation="4" floodColor="#00000035" />
         </filter>
       </defs>
 
-      {/* Stems converging to single focal point at 50,108 — V shape */}
-      <path d="M22 48 Q36 78 50 108" stroke="#4a8c5c" strokeWidth="1.6" fill="none" />
-      <path d="M35 42 Q42 74 50 108" stroke="#4a8c5c" strokeWidth="1.8" fill="none" />
-      <path d="M50 38 Q50 72 50 108" stroke="#4a8c5c" strokeWidth="2.2" fill="none" />
-      <path d="M65 42 Q58 74 50 108" stroke="#4a8c5c" strokeWidth="1.8" fill="none" />
-      <path d="M78 48 Q64 78 50 108" stroke="#4a8c5c" strokeWidth="1.6" fill="none" />
+      {/* S-curved stems converging to focal point 50,110 */}
+      <path d="M20 50 C28 65 38 85 50 110" stroke="#4a8c5c" strokeWidth="1.5" fill="none" />
+      <path d="M34 44 C38 62 44 82 50 110" stroke="#4a8c5c" strokeWidth="1.8" fill="none" />
+      <path d="M50 38 C50 60 50 85 50 110" stroke="#4a8c5c" strokeWidth="2.2" fill="none" />
+      <path d="M66 44 C62 62 56 82 50 110" stroke="#4a8c5c" strokeWidth="1.8" fill="none" />
+      <path d="M80 50 C72 65 62 85 50 110" stroke="#4a8c5c" strokeWidth="1.5" fill="none" />
 
-      {/* Large backdrop leaves */}
-      {renderLeaf(leafStyle, 18, 62, false, 1.6)}
-      {renderLeaf(leafStyle, 82, 62, true, 1.6)}
-      {renderLeaf(leafStyle, 28, 78, false, 1.3)}
-      {renderLeaf(leafStyle, 72, 78, true, 1.3)}
-      {renderLeaf(leafStyle, 38, 88, false, 1)}
-      {renderLeaf(leafStyle, 62, 88, true, 1)}
+      {/* Backdrop leaves — behind everything */}
+      {renderLeaf(leafStyle, 16, 60, false, 1.7)}
+      {renderLeaf(leafStyle, 84, 60, true, 1.7)}
+      {renderLeaf(leafStyle, 26, 76, false, 1.3)}
+      {renderLeaf(leafStyle, 74, 76, true, 1.3)}
+      {renderLeaf(leafStyle, 36, 88, false, 1)}
+      {renderLeaf(leafStyle, 64, 88, true, 1)}
 
-      {/* Wrapping paper — wide flared organic shape cradling flowers */}
+      {/* === LAYER 1: Back row — 2 small flowers (80% scale) === */}
+      <g transform={`translate(-18, 10) scale(0.58) rotate(${rot[0]} 50 46)`} opacity="0.78" filter="url(#shadow-back)">
+        <FlowerHead type={type} c={c} customColor={customColor} />
+      </g>
+      <g transform={`translate(18, 10) scale(0.58) rotate(${rot[1]} 50 46)`} opacity="0.78" filter="url(#shadow-back)">
+        <FlowerHead type={type} c={c} customColor={customColor} />
+      </g>
+
+      {/* === LAYER 2: Middle row — 2 medium flowers === */}
+      <g transform={`translate(-12, 0) scale(0.76) rotate(${rot[2]} 50 46)`} opacity="0.92" filter="url(#shadow-mid)">
+        <FlowerHead type={type} c={c} customColor={customColor} />
+      </g>
+      <g transform={`translate(12, 0) scale(0.76) rotate(${rot[3]} 50 46)`} opacity="0.92" filter="url(#shadow-mid)">
+        <FlowerHead type={type} c={c} customColor={customColor} />
+      </g>
+
+      {/* Wrapping tissue — wide flared organic shape, ABOVE middle flowers */}
       <path
-        d="M14 86 Q10 82 16 76 Q30 70 50 68 Q70 70 84 76 Q90 82 86 86 L90 116 Q86 122 74 124 Q50 128 26 124 Q14 122 10 116Z"
-        fill="#F5EADC" opacity="0.45"
+        d="M10 88 C6 82 14 72 28 66 Q50 60 72 66 C86 72 94 82 90 88 L94 118 Q88 126 72 128 Q50 132 28 128 Q12 126 6 118Z"
+        fill="#F5EADC" opacity="0.5"
       />
       <path
-        d="M18 84 Q14 80 20 74 Q32 68 50 66 Q68 68 80 74 Q86 80 82 84 L86 114 Q82 120 72 122 Q50 126 28 122 Q18 120 14 114Z"
-        fill="#FFF5EB" opacity="0.35"
+        d="M16 86 C12 80 18 70 30 64 Q50 58 70 64 C82 70 88 80 84 86 L88 116 Q84 122 70 124 Q50 128 30 124 Q16 122 12 116Z"
+        fill="#FFF8F0" opacity="0.4"
       />
-      {/* Inner tissue fold lines */}
-      <path d="M24 82 Q50 72 76 82" stroke="#E8D5C0" strokeWidth="0.6" fill="none" opacity="0.5" />
-      <path d="M20 88 Q50 76 80 88" stroke="#E8D5C0" strokeWidth="0.5" fill="none" opacity="0.4" />
+      {/* Tissue fold accents */}
+      <path d="M22 80 Q50 68 78 80" stroke="#E8D5C0" strokeWidth="0.7" fill="none" opacity="0.5" />
+      <path d="M18 86 Q50 72 82 86" stroke="#E8D5C0" strokeWidth="0.5" fill="none" opacity="0.35" />
+      <path d="M26 76 Q38 70 50 68" stroke="#EDE0D0" strokeWidth="0.4" fill="none" opacity="0.3" />
 
-      {/* Ribbon tie */}
-      <ellipse cx="50" cy="104" rx="15" ry="5.5" fill="#FF8FAB" opacity="0.9" />
-      <path d="M40 104 Q50 112 60 104" stroke="#FF6B8A" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-      {/* Ribbon bow loops */}
-      <path d="M40 102 Q32 94 36 98 Q30 90 40 102Z" fill="#FF8FAB" opacity="0.65" />
-      <path d="M60 102 Q68 94 64 98 Q70 90 60 102Z" fill="#FF8FAB" opacity="0.65" />
-      {/* Ribbon tails */}
-      <path d="M37 106 Q28 116 24 122" stroke="#FF8FAB" strokeWidth="2" fill="none" strokeLinecap="round" />
-      <path d="M63 106 Q72 116 76 122" stroke="#FF8FAB" strokeWidth="2" fill="none" strokeLinecap="round" />
+      {/* Ribbon — on top of wrapping */}
+      <ellipse cx="50" cy="106" rx="16" ry="6" fill="#FF8FAB" opacity="0.92" />
+      <path d="M39 106 Q50 114 61 106" stroke="#FF6B8A" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      {/* Bow loops */}
+      <path d="M39 104 Q30 95 34 99 Q28 90 39 104Z" fill="#FF8FAB" opacity="0.7" />
+      <path d="M61 104 Q70 95 66 99 Q72 90 61 104Z" fill="#FF8FAB" opacity="0.7" />
+      {/* Bow center knot */}
+      <circle cx="50" cy="105" r="2.5" fill="#FF6B8A" opacity="0.8" />
+      {/* Tails */}
+      <path d="M36 108 C28 118 24 124 22 128" stroke="#FF8FAB" strokeWidth="2" fill="none" strokeLinecap="round" />
+      <path d="M64 108 C72 118 76 124 78 128" stroke="#FF8FAB" strokeWidth="2" fill="none" strokeLinecap="round" />
 
-      {/* === LAYER 1: Back row — 2 flowers, smaller, behind === */}
-      <g transform={`translate(-20, 8) scale(0.65) rotate(${rotations[0]} 50 46)`} opacity="0.82">
-        <FlowerHead type={type} c={c} customColor={customColor} />
-      </g>
-      <g transform={`translate(20, 8) scale(0.65) rotate(${rotations[1]} 50 46)`} opacity="0.82">
-        <FlowerHead type={type} c={c} customColor={customColor} />
-      </g>
-
-      {/* === LAYER 2: Middle row — 2 flowers, slightly higher === */}
-      <g transform={`translate(-11, -2) scale(0.8) rotate(${rotations[2]} 50 46)`} opacity="0.93" filter="url(#flower-shadow)">
-        <FlowerHead type={type} c={c} customColor={customColor} />
-      </g>
-      <g transform={`translate(11, -2) scale(0.8) rotate(${rotations[3]} 50 46)`} opacity="0.93" filter="url(#flower-shadow)">
-        <FlowerHead type={type} c={c} customColor={customColor} />
-      </g>
-
-      {/* === LAYER 3: Hero flower — front center, largest === */}
-      <g transform={`translate(0, -6) scale(0.92) rotate(${rotations[4]} 50 46)`} filter="url(#flower-shadow)">
+      {/* === LAYER 3: Hero flower — front center, largest, highest z === */}
+      <g transform={`translate(0, -8) scale(0.95) rotate(${rot[4]} 50 46)`} filter="url(#shadow-hero)">
         <FlowerHead type={type} c={c} customColor={customColor} />
       </g>
     </g>
