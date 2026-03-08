@@ -145,19 +145,21 @@ export function AppSidebar({ card }: AppSidebarProps) {
               {/* Close button */}
               <button
                 onClick={() => setOverlay(null)}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-foreground/40 hover:text-foreground transition-colors hover:bg-foreground/5"
+                className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full flex items-center justify-center text-foreground/40 hover:text-foreground transition-colors hover:bg-foreground/5"
               >
                 <X className="h-4 w-4" />
               </button>
 
-              {overlay === 'vision' && <VisionContent />}
-              {overlay === 'analytics' && (
-                <AnalyticsContent
-                  flowerCount={flowerCount}
-                  flowerType={flowerType}
-                  bouquetStyle={bouquetStyle}
-                />
-              )}
+              <div className="overflow-y-auto flex-1 p-6 md:p-8">
+                {overlay === 'vision' && <VisionContent />}
+                {overlay === 'analytics' && (
+                  <AnalyticsContent
+                    flowerCount={flowerCount}
+                    flowerType={flowerType}
+                    bouquetStyle={bouquetStyle}
+                  />
+                )}
+              </div>
             </motion.div>
           </motion.div>
         )}
