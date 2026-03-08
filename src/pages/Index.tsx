@@ -3,6 +3,10 @@ import { motion } from 'framer-motion';
 import { FloatingPetals } from '@/components/FloatingPetals';
 import { FlowerCreator } from '@/components/FlowerCreator';
 import { ReceiverExperience } from '@/components/ReceiverExperience';
+import { AppSidebar } from '@/components/AppSidebar';
+import { Watermark } from '@/components/Watermark';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { PanelRight } from 'lucide-react';
 import type { BloomCard } from '@/types/bloom';
 import { defaultCard } from '@/types/bloom';
 
