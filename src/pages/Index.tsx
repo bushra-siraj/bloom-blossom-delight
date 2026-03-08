@@ -25,6 +25,7 @@ function decodeCard(hash: string): BloomCard | null {
 const Index = () => {
   const [mode, setMode] = useState<'create' | 'preview'>('create');
   const [card, setCard] = useState<BloomCard | null>(null);
+  const [liveCard, setLiveCard] = useState<BloomCard>(defaultCard);
 
   // Check URL hash for shared card on mount
   useEffect(() => {
@@ -41,7 +42,6 @@ const Index = () => {
   const handleComplete = (c: BloomCard) => {
     setCard(c);
     setMode('preview');
-    // Set shareable URL
     const encoded = encodeCard(c);
     window.history.replaceState(null, '', `#${encoded}`);
   };
@@ -53,31 +53,53 @@ const Index = () => {
   };
 
   if (mode === 'preview' && card) {
-    return <ReceiverExperience card={card} onReset={handleReset} />;
+    return (
+      <>
+        <Watermark />
+        <ReceiverExperience card={card} onReset={handleReset} />
+      </>
+    );
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start relative overflow-hidden">
-      <FloatingPetals count={10} />
+    <SidebarProvider defaultOpen={false}>
+      <div className="min-h-screen flex w-full relative">
+        <div className="flex-1 flex flex-col items-center justify-start relative overflow-hidden">
+          <FloatingPetals count={10} />
 
-      <div className="relative z-10 w-full">
-        <motion.div
-          initial={{ opacity: 0, y: -15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center pt-8 pb-4 px-4"
-        >
-          <h1 className="text-3xl md:text-4xl font-display text-glow text-foreground tracking-tight">
-            BloomForYou
-          </h1>
-          <p className="text-foreground/40 text-xs font-body mt-1.5">
-            Design a digital flower & send it to someone special
-          </p>
-        </motion.div>
+          {/* Sidebar trigger */}
+          <button
+            className="fixed top-4 right-4 z-50 glass-card p-2 rounded-full text-foreground/50 hover:text-primary transition-colors"
+            onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'b', metaKey: true }))}
+            aria-label="Open sidebar"
+          >
+            <PanelRight className="w-4 h-4" />
+          </button>
 
-        <FlowerCreator onComplete={handleComplete} />
+          <div className="relative z-10 w-full">
+            <motion.div
+              initial={{ opacity: 0, y: -15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-center pt-8 pb-4 px-4"
+            >
+              <h1 className="text-3xl md:text-4xl font-display text-glow text-foreground tracking-tight">
+                BloomForYou
+              </h1>
+              <p className="text-foreground/40 text-xs font-body mt-1.5">
+                Design a digital flower & send it to someone special
+              </p>
+            </motion.div>
+
+            <FlowerCreator onComplete={handleComplete} onCardChange={setLiveCard} />
+          </div>
+
+          <Watermark />
+        </div>
+
+        <AppSidebar card={liveCard} />
       </div>
-    </div>
+    </SidebarProvider>
   );
 };
 
