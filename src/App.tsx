@@ -10,21 +10,32 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => {
+  // Use Vite's BASE_URL so routing works both in Lovable preview (/) and GitHub Pages (/bloom-blossom-delight/)
+  const rawBase = import.meta.env.BASE_URL || "/";
+  const trimmedBase = rawBase.replace(/\/$/, "");
+  const basename = trimmedBase === "" ? "/" : trimmedBase;
+
   // GitHub Pages SPA support - extract path from query string if redirected from 404.html
   React.useEffect(() => {
-    const query = window.location.search;
-    if (query.startsWith('/?/')) {
-      const path = query.slice(2).replace(/~and~/g, '&');
-      window.history.replaceState(null, '', path || '/');
-    }
-  }, []);
+    const search = window.location.search;
+    if (!search.startsWith("?/")) return;
+
+    const parts = search.slice(2).split("&");
+    const routePath = (parts.shift() || "").replace(/~and~/g, "&");
+    const restQuery = parts.length ? `?${parts.join("&").replace(/~and~/g, "&")}` : "";
+
+    const basePrefix = basename === "/" ? "" : basename;
+    const nextPath = `${basePrefix}/${routePath}`.replace(/\/{2,}/g, "/");
+
+    window.history.replaceState(null, "", `${nextPath}${restQuery}${window.location.hash}`);
+  }, [basename]);
 
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter basename="/bloom-blossom-delight">
+        <BrowserRouter basename={basename}>
           <Routes>
             <Route path="/" element={<Index />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
@@ -33,6 +44,8 @@ const App = () => {
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
+  );
+};
   );
 };
 
