@@ -31,21 +31,47 @@ export const FlowerHead = ({ type, c, customColor }: FlowerHeadProps) => {
     case 'rose':
       return (
         <g>
-          <path d="M50 56 Q30 48 26 34 Q24 22 36 18 Q44 16 50 26 Q56 16 64 18 Q76 22 74 34 Q70 48 50 56Z"
-            fill={petal} stroke={OUTLINE} strokeWidth="1.25" strokeLinejoin="round" />
-          <path d="M36 52 Q18 40 20 28 Q22 18 34 16 Q40 16 38 28 Q36 40 36 52Z"
-            fill={petalLight} stroke={OUTLINE} strokeWidth="1" />
-          <path d="M64 52 Q82 40 80 28 Q78 18 66 16 Q60 16 62 28 Q64 40 64 52Z"
-            fill={petalLight} stroke={OUTLINE} strokeWidth="1" />
-          <path d="M50 50 Q36 42 34 30 Q34 22 42 22 Q48 22 50 32Z"
-            fill={petal} stroke={OUTLINE} strokeWidth="0.8" opacity="0.9" />
-          <path d="M50 50 Q64 42 66 30 Q66 22 58 22 Q52 22 50 32Z"
-            fill={petal} stroke={OUTLINE} strokeWidth="0.8" opacity="0.9" />
-          <path d="M50 46 Q40 38 42 28 Q46 24 50 30Z"
-            fill={petalDark} stroke={OUTLINE} strokeWidth="0.7" opacity="0.85" />
-          <path d="M50 46 Q60 38 58 28 Q54 24 50 30Z"
-            fill={petalDark} stroke={OUTLINE} strokeWidth="0.7" opacity="0.85" />
-          <circle cx="50" cy="36" r="3" fill={petalDark} stroke={OUTLINE} strokeWidth="0.6" />
+          {/* Outer guard petals */}
+          <path d="M50 58 Q28 52 22 36 Q20 18 36 14 Q46 12 50 24 Q54 12 64 14 Q80 18 78 36 Q72 52 50 58Z"
+            fill={petalLight} stroke={OUTLINE} strokeWidth="1.2" strokeLinejoin="round" opacity="0.9" />
+          
+          {/* Left outer petal */}
+          <path d="M32 54 Q14 44 16 28 Q18 16 32 14 Q40 14 42 26 Q40 40 32 54Z"
+            fill={petal} stroke={OUTLINE} strokeWidth="1" strokeLinejoin="round" />
+          
+          {/* Right outer petal */}
+          <path d="M68 54 Q86 44 84 28 Q82 16 68 14 Q60 14 58 26 Q60 40 68 54Z"
+            fill={petal} stroke={OUTLINE} strokeWidth="1" strokeLinejoin="round" />
+          
+          {/* Left mid petal */}
+          <path d="M38 50 Q24 42 26 30 Q28 22 38 20 Q44 20 46 30 Q44 42 38 50Z"
+            fill={petalDark} stroke={OUTLINE} strokeWidth="0.9" strokeLinejoin="round" opacity="0.85" />
+          
+          {/* Right mid petal */}
+          <path d="M62 50 Q76 42 74 30 Q72 22 62 20 Q56 20 54 30 Q56 42 62 50Z"
+            fill={petalDark} stroke={OUTLINE} strokeWidth="0.9" strokeLinejoin="round" opacity="0.85" />
+          
+          {/* Inner left petal */}
+          <path d="M44 46 Q34 40 36 30 Q38 24 44 24 Q48 24 50 32 Q48 40 44 46Z"
+            fill={adjustColor(petal, -15)} stroke={OUTLINE} strokeWidth="0.8" strokeLinejoin="round" opacity="0.9" />
+          
+          {/* Inner right petal */}
+          <path d="M56 46 Q66 40 64 30 Q62 24 56 24 Q52 24 50 32 Q52 40 56 46Z"
+            fill={adjustColor(petal, -15)} stroke={OUTLINE} strokeWidth="0.8" strokeLinejoin="round" opacity="0.9" />
+          
+          {/* Center spiral petals */}
+          <path d="M50 42 Q42 38 44 32 Q46 28 50 30 Q52 32 50 36Z"
+            fill={petalDark} stroke={OUTLINE} strokeWidth="0.7" strokeLinejoin="round" opacity="0.7" />
+          
+          <path d="M50 42 Q58 38 56 32 Q54 28 50 30 Q48 32 50 36Z"
+            fill={petalDark} stroke={OUTLINE} strokeWidth="0.7" strokeLinejoin="round" opacity="0.7" />
+          
+          {/* Tight center bud */}
+          <path d="M50 38 Q47 35 48 32 Q49 30 50 32 Q51 35 50 38Z"
+            fill={adjustColor(petalDark, -25)} stroke={OUTLINE} strokeWidth="0.6" opacity="0.8" />
+          
+          {/* Center highlight */}
+          <circle cx="49" cy="34" r="1.5" fill={adjustColor(petalLight, 20)} opacity="0.6" />
         </g>
       );
 
