@@ -31,33 +31,43 @@ export const FlowerHead = ({ type, c, customColor }: FlowerHeadProps) => {
     case 'rose':
       return (
         <g>
-          {/* Outer guard petals */}
+          {/* Shadow effect */}
+          <ellipse cx="52" cy="60" rx="25" ry="8" fill="rgba(0,0,0,0.2)" opacity="0.6" />
+          
+          {/* Outer guard petals with enhanced shadow */}
           <path d="M50 58 Q28 52 22 36 Q20 18 36 14 Q46 12 50 24 Q54 12 64 14 Q80 18 78 36 Q72 52 50 58Z"
-            fill={petalLight} stroke={OUTLINE} strokeWidth="1.2" strokeLinejoin="round" opacity="0.9" />
+            fill={petalLight} stroke={OUTLINE} strokeWidth="1.2" strokeLinejoin="round" opacity="0.9"
+            filter="drop-shadow(2px 2px 4px rgba(0,0,0,0.3))" />
           
           {/* Left outer petal */}
           <path d="M32 54 Q14 44 16 28 Q18 16 32 14 Q40 14 42 26 Q40 40 32 54Z"
-            fill={petal} stroke={OUTLINE} strokeWidth="1" strokeLinejoin="round" />
+            fill={petal} stroke={OUTLINE} strokeWidth="1" strokeLinejoin="round"
+            filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))" />
           
           {/* Right outer petal */}
           <path d="M68 54 Q86 44 84 28 Q82 16 68 14 Q60 14 58 26 Q60 40 68 54Z"
-            fill={petal} stroke={OUTLINE} strokeWidth="1" strokeLinejoin="round" />
+            fill={petal} stroke={OUTLINE} strokeWidth="1" strokeLinejoin="round"
+            filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))" />
           
           {/* Left mid petal */}
           <path d="M38 50 Q24 42 26 30 Q28 22 38 20 Q44 20 46 30 Q44 42 38 50Z"
-            fill={petalDark} stroke={OUTLINE} strokeWidth="0.9" strokeLinejoin="round" opacity="0.85" />
+            fill={petalDark} stroke={OUTLINE} strokeWidth="0.9" strokeLinejoin="round" opacity="0.85"
+            filter="drop-shadow(1px 1px 2px rgba(0,0,0,0.2))" />
           
           {/* Right mid petal */}
           <path d="M62 50 Q76 42 74 30 Q72 22 62 20 Q56 20 54 30 Q56 42 62 50Z"
-            fill={petalDark} stroke={OUTLINE} strokeWidth="0.9" strokeLinejoin="round" opacity="0.85" />
+            fill={petalDark} stroke={OUTLINE} strokeWidth="0.9" strokeLinejoin="round" opacity="0.85"
+            filter="drop-shadow(1px 1px 2px rgba(0,0,0,0.2))" />
           
           {/* Inner left petal */}
           <path d="M44 46 Q34 40 36 30 Q38 24 44 24 Q48 24 50 32 Q48 40 44 46Z"
-            fill={adjustColor(petal, -15)} stroke={OUTLINE} strokeWidth="0.8" strokeLinejoin="round" opacity="0.9" />
+            fill={adjustColor(petal, -15)} stroke={OUTLINE} strokeWidth="0.8" strokeLinejoin="round" opacity="0.9"
+            filter="drop-shadow(0.5px 0.5px 1px rgba(0,0,0,0.15))" />
           
           {/* Inner right petal */}
           <path d="M56 46 Q66 40 64 30 Q62 24 56 24 Q52 24 50 32 Q52 40 56 46Z"
-            fill={adjustColor(petal, -15)} stroke={OUTLINE} strokeWidth="0.8" strokeLinejoin="round" opacity="0.9" />
+            fill={adjustColor(petal, -15)} stroke={OUTLINE} strokeWidth="0.8" strokeLinejoin="round" opacity="0.9"
+            filter="drop-shadow(0.5px 0.5px 1px rgba(0,0,0,0.15))" />
           
           {/* Center spiral petals */}
           <path d="M50 42 Q42 38 44 32 Q46 28 50 30 Q52 32 50 36Z"
@@ -70,8 +80,9 @@ export const FlowerHead = ({ type, c, customColor }: FlowerHeadProps) => {
           <path d="M50 38 Q47 35 48 32 Q49 30 50 32 Q51 35 50 38Z"
             fill={adjustColor(petalDark, -25)} stroke={OUTLINE} strokeWidth="0.6" opacity="0.8" />
           
-          {/* Center highlight */}
-          <circle cx="49" cy="34" r="1.5" fill={adjustColor(petalLight, 20)} opacity="0.6" />
+          {/* Center highlight with subtle glow */}
+          <circle cx="49" cy="34" r="1.5" fill={adjustColor(petalLight, 20)} opacity="0.8"
+            filter="drop-shadow(0 0 2px rgba(255,255,255,0.4))" />
         </g>
       );
 
