@@ -69,7 +69,7 @@ function pointedLeaf(x: number, y: number, angle: number, scale: number, cv: Col
 export function renderStyledLeaf(
   style: LeafStyle,
   x: number, y: number, angle: number,
-  scale = 1, cv: ColorVariant = 'medium'
+  scale = 1.2, cv: ColorVariant = 'medium'
 ) {
   if (style === 'none') return null;
   switch (style) {
