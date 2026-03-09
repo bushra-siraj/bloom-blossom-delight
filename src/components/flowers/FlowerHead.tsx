@@ -31,58 +31,87 @@ export const FlowerHead = ({ type, c, customColor }: FlowerHeadProps) => {
     case 'rose':
       return (
         <g>
-          {/* Shadow effect */}
-          <ellipse cx="52" cy="60" rx="25" ry="8" fill="rgba(0,0,0,0.2)" opacity="0.6" />
+          {/* Subtle ground shadow */}
+          <ellipse cx="50" cy="62" rx="28" ry="6" fill="rgba(0,0,0,0.15)" opacity="0.8" />
           
-          {/* Outer guard petals with enhanced shadow */}
-          <path d="M50 58 Q28 52 22 36 Q20 18 36 14 Q46 12 50 24 Q54 12 64 14 Q80 18 78 36 Q72 52 50 58Z"
-            fill={petalLight} stroke={OUTLINE} strokeWidth="1.2" strokeLinejoin="round" opacity="0.9"
-            filter="drop-shadow(2px 2px 4px rgba(0,0,0,0.3))" />
+          {/* Green sepals (realistic leaf-like structures at base) */}
+          <path d="M50 58 Q42 52 38 60 Q36 65 42 68 Q50 65 50 58Z"
+            fill="#2D5016" stroke={OUTLINE} strokeWidth="0.8" strokeLinejoin="round" />
+          <path d="M50 58 Q58 52 62 60 Q64 65 58 68 Q50 65 50 58Z"
+            fill="#2D5016" stroke={OUTLINE} strokeWidth="0.8" strokeLinejoin="round" />
+          <path d="M50 58 Q46 50 40 56 Q38 62 46 66 Q50 62 50 58Z"
+            fill="#3A6B1E" stroke={OUTLINE} strokeWidth="0.7" strokeLinejoin="round" opacity="0.9" />
+          <path d="M50 58 Q54 50 60 56 Q62 62 54 66 Q50 62 50 58Z"
+            fill="#3A6B1E" stroke={OUTLINE} strokeWidth="0.7" strokeLinejoin="round" opacity="0.9" />
           
-          {/* Left outer petal */}
-          <path d="M32 54 Q14 44 16 28 Q18 16 32 14 Q40 14 42 26 Q40 40 32 54Z"
-            fill={petal} stroke={OUTLINE} strokeWidth="1" strokeLinejoin="round"
-            filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))" />
+          {/* Outermost guard petals - large and protective */}
+          <path d="M50 56 Q25 50 18 32 Q16 12 32 8 Q42 6 50 20 Q58 6 68 8 Q84 12 82 32 Q75 50 50 56Z"
+            fill={adjustColor(petal, -5)} stroke={OUTLINE} strokeWidth="1.3" strokeLinejoin="round" 
+            filter="drop-shadow(3px 3px 6px rgba(0,0,0,0.25))" />
           
-          {/* Right outer petal */}
-          <path d="M68 54 Q86 44 84 28 Q82 16 68 14 Q60 14 58 26 Q60 40 68 54Z"
-            fill={petal} stroke={OUTLINE} strokeWidth="1" strokeLinejoin="round"
-            filter="drop-shadow(1px 1px 3px rgba(0,0,0,0.25))" />
+          {/* Petal texture lines on outer petals */}
+          <path d="M35 38 Q40 25 45 38" stroke={adjustColor(petalDark, -10)} strokeWidth="0.4" fill="none" opacity="0.4" />
+          <path d="M65 38 Q60 25 55 38" stroke={adjustColor(petalDark, -10)} strokeWidth="0.4" fill="none" opacity="0.4" />
+          <path d="M32 44 Q38 30 42 44" stroke={adjustColor(petalDark, -10)} strokeWidth="0.3" fill="none" opacity="0.3" />
+          <path d="M68 44 Q62 30 58 44" stroke={adjustColor(petalDark, -10)} strokeWidth="0.3" fill="none" opacity="0.3" />
           
-          {/* Left mid petal */}
-          <path d="M38 50 Q24 42 26 30 Q28 22 38 20 Q44 20 46 30 Q44 42 38 50Z"
-            fill={petalDark} stroke={OUTLINE} strokeWidth="0.9" strokeLinejoin="round" opacity="0.85"
-            filter="drop-shadow(1px 1px 2px rgba(0,0,0,0.2))" />
+          {/* Second layer - left and right outer petals */}
+          <path d="M35 52 Q12 42 15 26 Q18 14 34 12 Q42 12 45 26 Q42 40 35 52Z"
+            fill={petal} stroke={OUTLINE} strokeWidth="1.1" strokeLinejoin="round"
+            filter="drop-shadow(2px 2px 4px rgba(0,0,0,0.2))" />
+          <path d="M65 52 Q88 42 85 26 Q82 14 66 12 Q58 12 55 26 Q58 40 65 52Z"
+            fill={petal} stroke={OUTLINE} strokeWidth="1.1" strokeLinejoin="round"
+            filter="drop-shadow(2px 2px 4px rgba(0,0,0,0.2))" />
           
-          {/* Right mid petal */}
-          <path d="M62 50 Q76 42 74 30 Q72 22 62 20 Q56 20 54 30 Q56 42 62 50Z"
-            fill={petalDark} stroke={OUTLINE} strokeWidth="0.9" strokeLinejoin="round" opacity="0.85"
-            filter="drop-shadow(1px 1px 2px rgba(0,0,0,0.2))" />
+          {/* Third layer - mid petals with curved edges */}
+          <path d="M40 48 Q22 40 24 28 Q26 20 40 18 Q46 18 48 30 Q46 40 40 48Z"
+            fill={adjustColor(petal, 8)} stroke={OUTLINE} strokeWidth="1" strokeLinejoin="round" 
+            opacity="0.95" filter="drop-shadow(1.5px 1.5px 3px rgba(0,0,0,0.18))" />
+          <path d="M60 48 Q78 40 76 28 Q74 20 60 18 Q54 18 52 30 Q54 40 60 48Z"
+            fill={adjustColor(petal, 8)} stroke={OUTLINE} strokeWidth="1" strokeLinejoin="round" 
+            opacity="0.95" filter="drop-shadow(1.5px 1.5px 3px rgba(0,0,0,0.18))" />
           
-          {/* Inner left petal */}
-          <path d="M44 46 Q34 40 36 30 Q38 24 44 24 Q48 24 50 32 Q48 40 44 46Z"
-            fill={adjustColor(petal, -15)} stroke={OUTLINE} strokeWidth="0.8" strokeLinejoin="round" opacity="0.9"
-            filter="drop-shadow(0.5px 0.5px 1px rgba(0,0,0,0.15))" />
+          {/* Fourth layer - inner petals with ruffled edges */}
+          <path d="M42 44 Q30 38 32 28 Q34 22 42 22 Q47 22 49 30 Q47 36 42 44Z"
+            fill={adjustColor(petal, -8)} stroke={OUTLINE} strokeWidth="0.9" strokeLinejoin="round" 
+            opacity="0.92" />
+          <path d="M58 44 Q70 38 68 28 Q66 22 58 22 Q53 22 51 30 Q53 36 58 44Z"
+            fill={adjustColor(petal, -8)} stroke={OUTLINE} strokeWidth="0.9" strokeLinejoin="round" 
+            opacity="0.92" />
           
-          {/* Inner right petal */}
-          <path d="M56 46 Q66 40 64 30 Q62 24 56 24 Q52 24 50 32 Q52 40 56 46Z"
-            fill={adjustColor(petal, -15)} stroke={OUTLINE} strokeWidth="0.8" strokeLinejoin="round" opacity="0.9"
-            filter="drop-shadow(0.5px 0.5px 1px rgba(0,0,0,0.15))" />
+          {/* Fifth layer - tighter inner petals */}
+          <path d="M45 40 Q36 36 38 28 Q40 24 45 24 Q48 24 50 30 Q48 34 45 40Z"
+            fill={adjustColor(petal, -15)} stroke={OUTLINE} strokeWidth="0.8" strokeLinejoin="round" 
+            opacity="0.9" />
+          <path d="M55 40 Q64 36 62 28 Q60 24 55 24 Q52 24 50 30 Q52 34 55 40Z"
+            fill={adjustColor(petal, -15)} stroke={OUTLINE} strokeWidth="0.8" strokeLinejoin="round" 
+            opacity="0.9" />
           
-          {/* Center spiral petals */}
-          <path d="M50 42 Q42 38 44 32 Q46 28 50 30 Q52 32 50 36Z"
-            fill={petalDark} stroke={OUTLINE} strokeWidth="0.7" strokeLinejoin="round" opacity="0.7" />
+          {/* Center bud - tight spiral formation */}
+          <path d="M50 36 Q44 34 46 30 Q47 28 50 30 Q52 32 50 34Z"
+            fill={adjustColor(petalDark, -5)} stroke={OUTLINE} strokeWidth="0.7" strokeLinejoin="round" 
+            opacity="0.85" />
+          <path d="M50 36 Q56 34 54 30 Q53 28 50 30 Q48 32 50 34Z"
+            fill={adjustColor(petalDark, -5)} stroke={OUTLINE} strokeWidth="0.7" strokeLinejoin="round" 
+            opacity="0.85" />
           
-          <path d="M50 42 Q58 38 56 32 Q54 28 50 30 Q48 32 50 36Z"
-            fill={petalDark} stroke={OUTLINE} strokeWidth="0.7" strokeLinejoin="round" opacity="0.7" />
+          {/* Inner spiral - very tight center */}
+          <path d="M50 34 Q48 32 49 30 Q49.5 29 50 30 Q50.5 31 50 32Z"
+            fill={adjustColor(petalDark, -20)} stroke={OUTLINE} strokeWidth="0.6" opacity="0.8" />
           
-          {/* Tight center bud */}
-          <path d="M50 38 Q47 35 48 32 Q49 30 50 32 Q51 35 50 38Z"
-            fill={adjustColor(petalDark, -25)} stroke={OUTLINE} strokeWidth="0.6" opacity="0.8" />
+          {/* Highlights and depth */}
+          <ellipse cx="38" cy="35" rx="2" ry="4" fill={adjustColor(petalLight, 15)} opacity="0.3" 
+            transform="rotate(-25 38 35)" />
+          <ellipse cx="62" cy="35" rx="2" ry="4" fill={adjustColor(petalLight, 15)} opacity="0.3" 
+            transform="rotate(25 62 35)" />
+          <circle cx="49" cy="31" r="1.2" fill={adjustColor(petalLight, 25)} opacity="0.6"
+            filter="drop-shadow(0 0 2px rgba(255,255,255,0.3))" />
           
-          {/* Center highlight with subtle glow */}
-          <circle cx="49" cy="34" r="1.5" fill={adjustColor(petalLight, 20)} opacity="0.8"
-            filter="drop-shadow(0 0 2px rgba(255,255,255,0.4))" />
+          {/* Subtle petal edge highlights */}
+          <path d="M32 45 Q35 40 38 45" stroke={adjustColor(petalLight, 10)} strokeWidth="0.5" 
+            fill="none" opacity="0.4" strokeLinecap="round" />
+          <path d="M68 45 Q65 40 62 45" stroke={adjustColor(petalLight, 10)} strokeWidth="0.5" 
+            fill="none" opacity="0.4" strokeLinecap="round" />
         </g>
       );
 
