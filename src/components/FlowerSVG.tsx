@@ -37,7 +37,7 @@ export const FlowerSVG = ({
   return (
     <Wrapper {...wrapperProps as any} style={{ width: w, height: h, background: 'transparent' }}
       className="relative flex items-center justify-center">
-      <svg viewBox={vb} width={w} height={h} style={{ background: 'transparent', overflow: 'visible' }}>
+      <svg viewBox={vb} width={w} height={h} style={{ background: 'transparent', overflow: 'visible', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.15))' }}>
         {bouquetSize === 'single' && <BouquetSingle type={type} c={c} leafStyle={leafStyle} customColor={customPetalColor} />}
         {bouquetSize === 'small' && <BouquetSmall type={type} c={c} leafStyle={leafStyle} customColor={customPetalColor} />}
         {bouquetSize === 'large' && <BouquetLarge type={type} c={c} leafStyle={leafStyle} customColor={customPetalColor} />}
