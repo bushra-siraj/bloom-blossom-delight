@@ -213,10 +213,14 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
                         {copied ? 'Copied!' : 'Copy Link'}
                       </button>
                       <button onClick={() => {
-                        navigator.clipboard.writeText(getShareUrl());
+                        const shareUrl = getShareUrl();
+                        const text = `${card.senderName ? card.senderName + ' sent' : 'Someone sent'} you a flower! 🌷 ${shareUrl}`;
+                        navigator.clipboard.writeText(text);
                         setCopied(true);
                         setTimeout(() => setCopied(false), 2000);
-                        window.open('https://www.instagram.com/', '_blank');
+                        // Try Instagram app deep link first, fallback to web
+                        const igStoryUrl = `https://www.instagram.com/stories/create/?url=${encodeURIComponent(shareUrl)}`;
+                        window.open(igStoryUrl, '_blank');
                         setShareOpen(false);
                       }}
                         className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-body text-foreground/70 hover:text-foreground hover:bg-foreground/5 transition-all">

@@ -9,13 +9,33 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import type { BloomCard } from '@/types/bloom';
 import { defaultCard } from '@/types/bloom';
 
+// Short key map for compact URL encoding
+const KEY_MAP: Record<string, string> = {
+  flowerType: 'ft', flowerColor: 'fc', leafStyle: 'ls', bouquetSize: 'bs',
+  environment: 'ev', cardStyle: 'cs', fontStyle: 'fs', decoration: 'dc',
+  message: 'm', senderName: 'sn', character: 'ch', animation: 'an',
+  petalColor: 'pc', glowColor: 'gc', particleColor: 'xc', cardColor: 'cc',
+};
+const REV_KEY_MAP = Object.fromEntries(Object.entries(KEY_MAP).map(([k, v]) => [v, k]));
+
 function encodeCard(card: BloomCard): string {
-  return btoa(encodeURIComponent(JSON.stringify(card)));
+  const short: Record<string, string> = {};
+  for (const [key, val] of Object.entries(card)) {
+    const sk = KEY_MAP[key] || key;
+    if (val !== (defaultCard as any)[key]) short[sk] = val; // skip defaults
+  }
+  return btoa(encodeURIComponent(JSON.stringify(short)));
 }
 
 function decodeCard(hash: string): BloomCard | null {
   try {
-    return JSON.parse(decodeURIComponent(atob(hash)));
+    const short = JSON.parse(decodeURIComponent(atob(hash)));
+    const card: any = { ...defaultCard };
+    for (const [k, v] of Object.entries(short)) {
+      const fullKey = REV_KEY_MAP[k] || k;
+      card[fullKey] = v;
+    }
+    return card as BloomCard;
   } catch {
     return null;
   }
