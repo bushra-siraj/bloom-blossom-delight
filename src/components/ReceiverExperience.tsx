@@ -182,59 +182,6 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
                 </svg>
                 Save Image
               </button>
-              {/* Share button with dropdown */}
-              <div className="relative">
-                <button onClick={() => setShareOpen(prev => !prev)}
-                  className="glass-card px-4 py-2.5 text-xs font-body text-primary hover:text-primary/80 transition-all flex items-center gap-1.5 hover:shadow-[0_0_15px_hsl(330_60%_65%/0.2)] glow-border">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="18" cy="5" r="3" />
-                    <circle cx="6" cy="12" r="3" />
-                    <circle cx="18" cy="19" r="3" />
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-                  </svg>
-                  Share
-                </button>
-                <AnimatePresence>
-                  {shareOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 8, scale: 0.95 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute bottom-full mb-2 right-0 glass-card rounded-xl p-2 flex flex-col gap-1.5 min-w-[160px] shadow-xl"
-                    >
-                      <button onClick={() => { handleCopyLink(); setShareOpen(false); }}
-                        className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-body text-foreground/70 hover:text-foreground hover:bg-foreground/5 transition-all">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                        </svg>
-                        {copied ? 'Copied!' : 'Copy Link'}
-                      </button>
-                      <button onClick={() => {
-                        const shareUrl = getShareUrl();
-                        const text = `${card.senderName ? card.senderName + ' sent' : 'Someone sent'} you a flower! 🌷 ${shareUrl}`;
-                        navigator.clipboard.writeText(text);
-                        setCopied(true);
-                        setTimeout(() => setCopied(false), 2000);
-                        // Try Instagram app deep link first, fallback to web
-                        const igStoryUrl = `https://www.instagram.com/stories/create/?url=${encodeURIComponent(shareUrl)}`;
-                        window.open(igStoryUrl, '_blank');
-                        setShareOpen(false);
-                      }}
-                        className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-body text-foreground/70 hover:text-foreground hover:bg-foreground/5 transition-all">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E4405F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-                        </svg>
-                        Instagram
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
             </motion.div>
           )}
         </AnimatePresence>

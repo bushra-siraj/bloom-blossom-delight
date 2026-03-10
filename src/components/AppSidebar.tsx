@@ -93,11 +93,11 @@ export function AppSidebar({ card }: AppSidebarProps) {
           </SidebarContent>
 
           {/* Contact Section */}
-          <div className="mt-auto px-3 pb-6 pt-4 border-t border-border/20 flex flex-col items-center gap-2">
+          <div className="mt-auto px-2 pb-6 pt-4 border-t border-border/20 flex flex-col items-center gap-2 w-full">
             {!collapsed && (
               <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-body mb-1">Connect</p>
             )}
-            <div className={collapsed ? "flex flex-col gap-2" : "flex gap-3"}>
+            <div className={collapsed ? "flex flex-col items-center gap-2" : "flex items-center justify-center gap-3 w-full"}>
               {contactLinks.map((link) => (
                 <a
                   key={link.label}
