@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Eye, BarChart3, Mail, Linkedin, Globe } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import type { BloomCard } from '@/types/bloom';
 import {
   Sidebar,
@@ -97,7 +98,10 @@ export function AppSidebar({ card }: AppSidebarProps) {
             {!collapsed && (
               <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-body mb-1">Connect</p>
             )}
-            <div className={collapsed ? "flex flex-col items-center gap-2" : "flex items-center justify-center gap-3 w-full"}>
+            <div className={cn(
+              "flex items-center justify-center gap-3",
+              collapsed && "md:flex-col md:gap-2"
+            )}>
               {contactLinks.map((link) => (
                 <a
                   key={link.label}
