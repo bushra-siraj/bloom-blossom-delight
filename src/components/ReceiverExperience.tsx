@@ -61,19 +61,6 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'BloomForYou 🌸',
-          text: `${card.senderName ? card.senderName + ' sent' : 'Someone sent'} you a flower! 🌷`,
-          url: getShareUrl(),
-        });
-      } catch { /* cancelled */ }
-    } else {
-      handleCopyLink();
-    }
-  };
 
   const phaseIndex = ['env', 'intro', 'walk', 'pause', 'action', 'drop', 'land', 'bloom', 'card'].indexOf(phase);
 
