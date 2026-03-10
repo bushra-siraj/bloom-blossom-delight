@@ -22,7 +22,6 @@ function getShareUrl(): string {
 export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) => {
   const [phase, setPhase] = useState<Phase>('env');
   const [copied, setCopied] = useState(false);
-  const [shareOpen, setShareOpen] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
