@@ -95,7 +95,12 @@ export function AppSidebar({ card }: AppSidebarProps) {
 
           {/* Contact Section */}
           <div className="mt-auto px-2 pb-6 pt-4 border-t border-border/20 flex flex-col items-center gap-2 w-full">
-            <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-sans mb-1">Connect</p>
+            <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-sans mb-0.5">Connect</p>
+            {!collapsed && (
+              <p className="text-[8px] text-muted-foreground/70 font-sans text-center leading-relaxed mb-1.5 px-1">
+                For feedback, custom collaborations, or business queries, contact me at:
+              </p>
+            )}
             <div className={cn(
               "flex items-center justify-center gap-3",
               collapsed && "md:flex-col md:gap-2"
