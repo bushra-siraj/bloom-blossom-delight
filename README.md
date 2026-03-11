@@ -1,73 +1,64 @@
-# Welcome to your Lovable project
+# 🌸 BloomForYou — A Personalized Digital Floral Experience
 
-## Project info
+**BloomForYou** is an aesthetic, full-stack web application designed to bridge the gap between digital messaging and sentimental gift-giving. Built by a Data Science & AI student, this project combines complex state management with delightful micro-interactions to create a truly unique "unboxing" experience for digital bouquets.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+---
 
-## How can I edit this code?
+## ✨ Key Features
 
-There are several ways of editing your application.
+### 🛠️ High-Fidelity Customization
+Users can design a one-of-a-kind floral gift through a multi-step creative suite:
+* **The Bouquet:** Choose from 6 distinct flower species (Rose, Tulip, Daisy, Lily, Sunflower, Sakura) and various leaf arrangements.
+* **The Card:** Select from multiple card designs, elegant font families, and decorative elements to frame your message.
+* **Visual Themes:** 4 immersive, high-quality backgrounds:
+    * **Midnight Sky** 🌌
+    * **Sunset Field** 🌅
+    * **Dreamy Clouds** ☁️
+    * **Enchanted Forest** 🌲
 
-**Use Lovable**
+### 🦋 The Messenger System (Animated)
+The "Heart" of the app. Choose one of **6 unique animated messengers** to deliver your bouquet:
+* **The Butterfly:** A classic, graceful delivery.
+* **The Ghost:** A whimsical and charming surprise.
+* **The Girl:** A friendly, personalized touch.
+* **The Bot & The Robot:** For a sleek, tech-inspired vibe.
+* **The Cat:** A cozy, playful companion for animal lovers.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+### 📊 Real-Time Analytics Dashboard
+Leveraging **Supabase** and **PostgreSQL**, the app features a live "Bouquet Analytics" sidebar:
+* **Global Bloom Tracker:** A live counter of every flower sent across the world.
+* **User Persistence:** Using **Anonymous Authentication**, the app remembers your personal "Bloom Count" and past creations even if you refresh or return later.
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## 🛠️ Tech Stack
+* **Frontend:** React.js, Tailwind CSS, Framer Motion (for complex character animations).
+* **Backend/Database:** Supabase (Postgres Database & Real-time API).
+* **Auth:** Supabase Anonymous Auth (Zero-friction user persistence).
+* **Deployment:** GitHub Pages (Production) & Lovable Cloud (Development).
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 📸 Why I Built This
+As a student specializing in **Artificial Intelligence and Data Science**, I wanted to explore the intersection of **User Delight** and **Persistent Data Systems**. While the frontend is artistic and minimal, the backend is a robust implementation of real-time database syncing and anonymous session management.
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 📄 License
+This project is licensed under the **GNU General Public License v3.0**. 
+> This ensures that the code remains open-source. Anyone is free to study and build upon this work, provided that their derived projects are also shared openly under the same license.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+---
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 🤝 Contact & Feedback
+I'm always looking for ways to improve the "bloom" experience!
+* **LinkedIn:** [https://www.linkedin.com/in/bushrasiraj/]
+* **Portfolio:** [https://bushrasiraj-portfolio.lovable.app/]
+* **Email:** [BushraSiraj586@gmail.com]
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+---
+*Designed with ❤️ by **Bushra Siraj***
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+<img width="960" height="422" alt="2026-03-11 20_45_31-Settings" src="https://github.com/user-attachments/assets/8d9dce2f-a230-4d7a-899f-fa859f404057" />
+<img width="960" height="423" alt="2026-03-11 20_44_20-Settings" src="https://github.com/user-attachments/assets/bf8ea026-5431-4b3c-a6e0-1ebfee140bae" />
+<img width="960" height="417" alt="2026-03-11 20_43_24-Settings" src="https://github.com/user-attachments/assets/322687d1-30f2-4c08-9097-38a0f12560d2" />
