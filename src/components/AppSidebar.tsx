@@ -97,7 +97,7 @@ export function AppSidebar({ card, bloomVersion = 0 }: AppSidebarProps) {
           </SidebarContent>
 
           {/* Contact Section */}
-          <div className="mt-auto px-2 pb-6 pt-4 border-t border-border/20 flex flex-col items-center gap-2 w-full">
+          <div className="mt-auto px-2 pb-2 pt-4 border-t border-border/20 flex flex-col items-center gap-2 w-full">
             <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-sans mb-1">Connect</p>
             <p className={cn(
               "text-[10px] text-muted-foreground/80 font-sans text-center leading-relaxed mb-2 px-2",
@@ -123,6 +123,9 @@ export function AppSidebar({ card, bloomVersion = 0 }: AppSidebarProps) {
               ))}
             </div>
           </div>
+
+          {/* Live Global Blooms Counter */}
+          <LiveBloomCounter bloomVersion={bloomVersion} collapsed={collapsed} />
         </div>
       </Sidebar>
 
