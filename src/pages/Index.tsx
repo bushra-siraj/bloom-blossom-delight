@@ -113,7 +113,7 @@ const Index = () => {
   return (
     <SidebarProvider defaultOpen={false}>
       <div className="min-h-screen flex w-full relative">
-        <AppSidebar card={liveCard} />
+        <AppSidebar card={liveCard} bloomVersion={bloomVersion} />
 
         <div className="flex-1 flex flex-col items-center justify-start relative overflow-hidden">
           <FloatingPetals count={10} />
