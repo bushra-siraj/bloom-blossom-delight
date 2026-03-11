@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Eye, BarChart3, Mail, Linkedin, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -12,6 +12,7 @@ import {
   SidebarMenuButton,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { fetchGlobalBlooms, fetchMyBlooms } from '@/lib/bloomService';
 
 const bouquetSizeToCount: Record<string, number> = {
   single: 1,
@@ -27,11 +28,12 @@ const bouquetSizeToStyle: Record<string, string> = {
 
 interface AppSidebarProps {
   card?: BloomCard | null;
+  bloomVersion?: number;
 }
 
 type OverlayType = 'vision' | 'analytics' | null;
 
-export function AppSidebar({ card }: AppSidebarProps) {
+export function AppSidebar({ card, bloomVersion = 0 }: AppSidebarProps) {
   const { state } = useSidebar();
   const collapsed = state === 'collapsed';
   const [overlay, setOverlay] = useState<OverlayType>(null);
@@ -165,6 +167,7 @@ export function AppSidebar({ card }: AppSidebarProps) {
                     flowerCount={flowerCount}
                     flowerType={flowerType}
                     bouquetStyle={bouquetStyle}
+                    bloomVersion={bloomVersion}
                   />
                 )}
               </div>
@@ -226,13 +229,25 @@ function AnalyticsContent({
   flowerCount,
   flowerType,
   bouquetStyle,
+  bloomVersion,
 }: {
   flowerCount: number;
   flowerType: string;
   bouquetStyle: string;
+  bloomVersion: number;
 }) {
+  const [globalBlooms, setGlobalBlooms] = useState(0);
+  const [myBlooms, setMyBlooms] = useState(0);
+
+  useEffect(() => {
+    fetchGlobalBlooms().then(setGlobalBlooms);
+    fetchMyBlooms().then(setMyBlooms);
+  }, [bloomVersion]);
+
   const stats = [
-    { label: 'Total Flowers', value: flowerCount },
+    { label: 'Total Blooms Worldwide', value: globalBlooms.toLocaleString() },
+    { label: 'My Total Blooms', value: myBlooms.toLocaleString() },
+    { label: 'Current Flowers', value: flowerCount },
     { label: 'Flower Type', value: flowerType === 'cherry-blossom' ? 'Sakura' : flowerType },
     { label: 'Style', value: bouquetStyle },
   ];

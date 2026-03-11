@@ -8,6 +8,8 @@ import { Watermark } from '@/components/Watermark';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import type { BloomCard } from '@/types/bloom';
 import { defaultCard } from '@/types/bloom';
+import { useAnonAuth } from '@/hooks/useAnonAuth';
+import { recordBloom } from '@/lib/bloomService';
 
 // Compact encoding: pipe-delimited values with single-char enum codes
 const ENUM_CODES: Record<string, Record<string, string>> = {
@@ -68,6 +70,8 @@ const Index = () => {
   const [mode, setMode] = useState<'create' | 'preview'>('create');
   const [card, setCard] = useState<BloomCard | null>(null);
   const [liveCard, setLiveCard] = useState<BloomCard>(defaultCard);
+  const [bloomVersion, setBloomVersion] = useState(0);
+  const { ready } = useAnonAuth();
 
   useEffect(() => {
     const hash = window.location.hash.slice(1);
@@ -80,11 +84,15 @@ const Index = () => {
     }
   }, []);
 
-  const handleComplete = (c: BloomCard) => {
+  const handleComplete = async (c: BloomCard) => {
     setCard(c);
     setMode('preview');
     const encoded = encodeCard(c);
     window.history.replaceState(null, '', `#${encoded}`);
+    if (ready) {
+      await recordBloom(c.flowerType, c.flowerColor, c.message, c.senderName);
+      setBloomVersion(v => v + 1);
+    }
   };
 
   const handleReset = () => {
@@ -105,7 +113,7 @@ const Index = () => {
   return (
     <SidebarProvider defaultOpen={false}>
       <div className="min-h-screen flex w-full relative">
-        <AppSidebar card={liveCard} />
+        <AppSidebar card={liveCard} bloomVersion={bloomVersion} />
 
         <div className="flex-1 flex flex-col items-center justify-start relative overflow-hidden">
           <FloatingPetals count={10} />
