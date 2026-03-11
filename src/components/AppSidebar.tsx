@@ -28,6 +28,7 @@ const bouquetSizeToStyle: Record<string, string> = {
 
 interface AppSidebarProps {
   card?: BloomCard | null;
+  bloomVersion?: number;
 }
 
 type OverlayType = 'vision' | 'analytics' | null;
