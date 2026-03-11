@@ -38,6 +38,7 @@ export const FloatingPetals = ({ count = 15, color }: { count?: number; color?: 
             width: petal.size,
             height: petal.size * 1.4,
             filter: 'blur(1px)',
+            willChange: 'transform, opacity',
           }}
           initial={{ y: -20, rotate: petal.rotation, opacity: 0 }}
           animate={{
