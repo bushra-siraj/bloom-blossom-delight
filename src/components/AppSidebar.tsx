@@ -167,6 +167,7 @@ export function AppSidebar({ card, bloomVersion = 0 }: AppSidebarProps) {
                     flowerCount={flowerCount}
                     flowerType={flowerType}
                     bouquetStyle={bouquetStyle}
+                    bloomVersion={bloomVersion}
                   />
                 )}
               </div>
