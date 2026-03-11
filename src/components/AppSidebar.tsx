@@ -33,7 +33,7 @@ interface AppSidebarProps {
 
 type OverlayType = 'vision' | 'analytics' | null;
 
-export function AppSidebar({ card }: AppSidebarProps) {
+export function AppSidebar({ card, bloomVersion = 0 }: AppSidebarProps) {
   const { state } = useSidebar();
   const collapsed = state === 'collapsed';
   const [overlay, setOverlay] = useState<OverlayType>(null);
