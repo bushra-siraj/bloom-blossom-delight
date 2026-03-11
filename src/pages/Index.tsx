@@ -84,11 +84,15 @@ const Index = () => {
     }
   }, []);
 
-  const handleComplete = (c: BloomCard) => {
+  const handleComplete = async (c: BloomCard) => {
     setCard(c);
     setMode('preview');
     const encoded = encodeCard(c);
     window.history.replaceState(null, '', `#${encoded}`);
+    if (ready) {
+      await recordBloom(c.flowerType, c.flowerColor, c.message, c.senderName);
+      setBloomVersion(v => v + 1);
+    }
   };
 
   const handleReset = () => {
