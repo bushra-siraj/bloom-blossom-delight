@@ -228,13 +228,25 @@ function AnalyticsContent({
   flowerCount,
   flowerType,
   bouquetStyle,
+  bloomVersion,
 }: {
   flowerCount: number;
   flowerType: string;
   bouquetStyle: string;
+  bloomVersion: number;
 }) {
+  const [globalBlooms, setGlobalBlooms] = useState(0);
+  const [myBlooms, setMyBlooms] = useState(0);
+
+  useEffect(() => {
+    fetchGlobalBlooms().then(setGlobalBlooms);
+    fetchMyBlooms().then(setMyBlooms);
+  }, [bloomVersion]);
+
   const stats = [
-    { label: 'Total Flowers', value: flowerCount },
+    { label: 'Total Blooms Worldwide', value: globalBlooms.toLocaleString() },
+    { label: 'My Total Blooms', value: myBlooms.toLocaleString() },
+    { label: 'Current Flowers', value: flowerCount },
     { label: 'Flower Type', value: flowerType === 'cherry-blossom' ? 'Sakura' : flowerType },
     { label: 'Style', value: bouquetStyle },
   ];
