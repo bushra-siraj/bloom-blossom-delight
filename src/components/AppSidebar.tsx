@@ -64,11 +64,12 @@ export function AppSidebar({ card, bloomVersion = 0 }: AppSidebarProps) {
                 B.S
               </span>
             </motion.div>
-            {!collapsed && (
-              <p className="text-[10px] text-muted-foreground font-body mt-1.5 tracking-widest uppercase">
-                BloomForYou
-              </p>
-            )}
+            <p className={cn(
+              "text-[10px] text-muted-foreground font-sans mt-1.5 tracking-widest uppercase",
+              collapsed ? "md:hidden" : ""
+            )}>
+              BloomForYou
+            </p>
           </SidebarHeader>
 
           <SidebarContent className="px-1 pt-4">
