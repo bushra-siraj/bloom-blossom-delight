@@ -12,6 +12,7 @@ import {
   SidebarMenuButton,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { SidebarFooter } from '@/components/ui/sidebar';
 import { fetchGlobalBlooms, fetchMyBlooms } from '@/lib/bloomService';
 
 const bouquetSizeToCount: Record<string, number> = {
