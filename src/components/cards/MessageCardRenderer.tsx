@@ -42,11 +42,25 @@ const DecoRow = ({ card, size }: { card: BloomCard; size: number }) =>
 const Msg = ({ card, mini }: { card: BloomCard; mini: boolean }) => (
   <div className="text-center space-y-1.5">
     <DecoRow card={card} size={mini ? 16 : 26} />
-    <p className={`text-foreground/90 leading-relaxed ${mini ? 'text-[10px]' : 'text-sm'} ${fontClasses(card.fontStyle)}`}>
+    <p
+      className={`leading-relaxed ${mini ? 'text-[10px]' : 'text-sm'} ${fontClasses(card.fontStyle)}`}
+      style={{
+        color: 'hsl(0 0% 15%)',
+        textShadow: '0 1px 3px hsl(0 0% 100% / 0.5)',
+      }}
+    >
       {card.message || 'Your message...'}
     </p>
     {card.senderName && (
-      <p className={`text-foreground/45 font-body ${mini ? 'text-[8px]' : 'text-xs'}`}>— {card.senderName}</p>
+      <p
+        className={`font-body ${mini ? 'text-[8px]' : 'text-xs'}`}
+        style={{
+          color: 'hsl(0 0% 30%)',
+          textShadow: '0 1px 2px hsl(0 0% 100% / 0.4)',
+        }}
+      >
+        — {card.senderName}
+      </p>
     )}
     <DecoRow card={card} size={mini ? 12 : 18} />
   </div>

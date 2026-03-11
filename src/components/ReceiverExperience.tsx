@@ -69,7 +69,7 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
       <EnvironmentBg environment={card.environment} particleColor={card.particleColor} glowColor={card.glowColor} />
       {phaseIndex >= 7 && <FloatingPetals count={20} color={card.petalColor} />}
 
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 safe-area-inset">
         {/* "Someone sent you a flower" text */}
         <AnimatePresence>
           {phase === 'intro' && (
@@ -152,16 +152,16 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}
               className="flex gap-2.5 mt-5 z-20 flex-wrap justify-center">
               <button onClick={handleCopyLink}
-                className="glass-card px-4 py-2.5 text-xs font-body text-foreground/70 hover:text-foreground transition-all flex items-center gap-1.5 hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)]">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                className="glass-card px-5 py-3 min-h-[44px] text-xs font-body text-foreground/70 hover:text-foreground transition-all flex items-center gap-2 hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)] active:scale-95">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
                   <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
                 </svg>
                 {copied ? 'Copied!' : 'Copy Link'}
               </button>
               <button onClick={handleSaveImage}
-                className="glass-card px-4 py-2.5 text-xs font-body text-foreground/70 hover:text-foreground transition-all flex items-center gap-1.5 hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)]">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                className="glass-card px-5 py-3 min-h-[44px] text-xs font-body text-foreground/70 hover:text-foreground transition-all flex items-center gap-2 hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)] active:scale-95">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                   <polyline points="7 10 12 15 17 10" />
                   <line x1="12" y1="15" x2="12" y2="3" />
@@ -177,7 +177,7 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
           {phase === 'card' && (
             <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
               onClick={onReset}
-              className="mt-5 glass-card px-6 py-3 text-sm font-body text-primary transition-all z-20 glow-border hover:shadow-[0_0_25px_hsl(330_60%_65%/0.3)]">
+              className="mt-5 glass-card px-6 py-3 min-h-[44px] text-sm font-body text-primary transition-all z-20 glow-border hover:shadow-[0_0_25px_hsl(330_60%_65%/0.3)] active:scale-95">
               🌸 Create your own bloom
             </motion.button>
           )}
