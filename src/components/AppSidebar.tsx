@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Eye, BarChart3, Mail, Linkedin, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -12,6 +12,7 @@ import {
   SidebarMenuButton,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { SidebarFooter } from '@/components/ui/sidebar';
 import { fetchGlobalBlooms, fetchMyBlooms } from '@/lib/bloomService';
 
 const bouquetSizeToCount: Record<string, number> = {
@@ -63,11 +64,12 @@ export function AppSidebar({ card, bloomVersion = 0 }: AppSidebarProps) {
                 B.S
               </span>
             </motion.div>
-            {!collapsed && (
-              <p className="text-[10px] text-muted-foreground font-body mt-1.5 tracking-widest uppercase">
-                BloomForYou
-              </p>
-            )}
+            <p className={cn(
+              "text-[10px] text-muted-foreground font-sans mt-1.5 tracking-widest uppercase",
+              collapsed ? "md:hidden" : ""
+            )}>
+              BloomForYou
+            </p>
           </SidebarHeader>
 
           <SidebarContent className="px-1 pt-4">
@@ -96,7 +98,7 @@ export function AppSidebar({ card, bloomVersion = 0 }: AppSidebarProps) {
           </SidebarContent>
 
           {/* Contact Section */}
-          <div className="mt-auto px-2 pb-6 pt-4 border-t border-border/20 flex flex-col items-center gap-2 w-full">
+          <div className="mt-auto px-2 pb-2 pt-4 border-t border-border/20 flex flex-col items-center gap-2 w-full">
             <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-sans mb-1">Connect</p>
             <p className={cn(
               "text-[10px] text-muted-foreground/80 font-sans text-center leading-relaxed mb-2 px-2",
@@ -122,6 +124,9 @@ export function AppSidebar({ card, bloomVersion = 0 }: AppSidebarProps) {
               ))}
             </div>
           </div>
+
+          {/* Live Global Blooms Counter */}
+          <LiveBloomCounter bloomVersion={bloomVersion} collapsed={collapsed} />
         </div>
       </Sidebar>
 
@@ -271,6 +276,32 @@ function AnalyticsContent({
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+function LiveBloomCounter({ bloomVersion, collapsed }: { bloomVersion: number; collapsed: boolean }) {
+  const [globalBlooms, setGlobalBlooms] = useState(0);
+
+  useEffect(() => {
+    fetchGlobalBlooms().then(setGlobalBlooms);
+  }, [bloomVersion]);
+
+  return (
+    <div className={cn(
+      "px-3 pb-4 pt-2 flex items-center justify-center gap-1.5",
+      collapsed && "md:px-1"
+    )}>
+      {/* Glowing dot */}
+      <span className="relative flex h-2 w-2 shrink-0">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/60 opacity-75" />
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-primary shadow-[0_0_6px_hsl(var(--primary)/0.6)]" />
+      </span>
+      {!collapsed && (
+        <span className="text-[10px] text-muted-foreground font-body tracking-wider uppercase">
+          {globalBlooms.toLocaleString()} blooms
+        </span>
+      )}
     </div>
   );
 }
