@@ -14,13 +14,68 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      global_stats: {
+        Row: {
+          id: number
+          total_blooms: number
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          total_blooms?: number
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          total_blooms?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_flower_history: {
+        Row: {
+          created_at: string
+          flower_color: string
+          flower_type: string
+          id: string
+          message: string
+          sender_name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          flower_color: string
+          flower_type: string
+          id?: string
+          message?: string
+          sender_name?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          flower_color?: string
+          flower_type?: string
+          id?: string
+          message?: string
+          sender_name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      record_bloom: {
+        Args: {
+          p_flower_color: string
+          p_flower_type: string
+          p_message?: string
+          p_sender_name?: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
