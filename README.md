@@ -45,8 +45,8 @@ As a student specializing in **Artificial Intelligence and Data Science**, I wan
 ---
 
 ## 📄 License
-This project is licensed under the **GNU General Public License v3.0**. 
-> This ensures that the code remains open-source. Anyone is free to study and build upon this work, provided that their derived projects are also shared openly under the same license.
+This project is licensed under the **CC0 1.0 Universal** - see the [LICENSE](LICENSE) file for details. 
+> As part of the Creative Commons Zero (CC0) license, this project is dedicated to the public domain. Anyone is free to use, study, modify, or distribute this work, without any restriction or credit, for any purpose.
 
 ---
 
