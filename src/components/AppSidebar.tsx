@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Eye, BarChart3, Mail, Linkedin, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { supabase } from '@/integrations/supabase/client';
 import type { BloomCard } from '@/types/bloom';
 import {
   Sidebar,
@@ -283,14 +284,34 @@ function AnalyticsContent({
 function LiveBloomCounter({ bloomVersion, collapsed }: { bloomVersion: number; collapsed: boolean }) {
   const [globalBlooms, setGlobalBlooms] = useState(0);
 
+  // Fetch on mount and when bloomVersion changes
   useEffect(() => {
     fetchGlobalBlooms().then(setGlobalBlooms);
   }, [bloomVersion]);
 
+  // Real-time subscription to global_stats
+  useEffect(() => {
+    const channel = supabase
+      .channel('global-blooms-realtime')
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'global_stats', filter: 'id=eq.1' },
+        (payload) => {
+          const newCount = Number(payload.new?.total_blooms ?? 0);
+          if (newCount > 0) setGlobalBlooms(newCount);
+        }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
   return (
-    <div className="px-3 pb-4 pt-2 flex flex-col items-center justify-center gap-1">
+    <div className="px-3 pb-6 pt-3 flex flex-col items-center justify-center gap-1.5 w-full">
+      <p className="text-[9px] text-muted-foreground/70 font-sans tracking-[0.2em] uppercase">
+        Global Blooms
+      </p>
       <div className="flex items-center gap-1.5">
-        {/* Glowing dot */}
         <span className="relative flex h-2 w-2 shrink-0">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/60 opacity-75" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-primary shadow-[0_0_6px_hsl(var(--primary)/0.6)]" />
@@ -299,11 +320,9 @@ function LiveBloomCounter({ bloomVersion, collapsed }: { bloomVersion: number; c
           {globalBlooms.toLocaleString()}
         </span>
       </div>
-      {!collapsed && (
-        <span className="text-[9px] text-muted-foreground font-body tracking-widest uppercase">
-          Total Blooms Worldwide
-        </span>
-      )}
+      <span className="text-[8px] text-muted-foreground/50 font-body tracking-widest uppercase">
+        Total Blooms Worldwide
+      </span>
     </div>
   );
 }
