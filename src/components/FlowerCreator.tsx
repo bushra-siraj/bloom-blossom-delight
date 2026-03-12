@@ -154,14 +154,16 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
               {bouquetSizes.map(b => (
                 <OptionButton key={b} selected={card.bouquetSize === b} onClick={() => update({ bouquetSize: b })}>
                   <div className="flex flex-col items-center gap-1">
-                    <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} bouquetSize={b} size={36} />
+                    <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} bouquetSize={b} size={36}
+                      customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
                     <span className="text-[10px] text-foreground/60">{b === 'small' ? '3 flowers' : b === 'large' ? '5 flowers' : 'Single'}</span>
                   </div>
                 </OptionButton>
               ))}
             </div>
             <div className="flex justify-center pt-1 overflow-hidden">
-              <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} bouquetSize={card.bouquetSize} size={75} />
+              <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} bouquetSize={card.bouquetSize} size={75}
+                customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
             </div>
           </div>
         );
