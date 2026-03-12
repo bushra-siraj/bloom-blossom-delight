@@ -7,13 +7,20 @@ export function useAnonAuth() {
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log('[AnonAuth] state change:', _event, session?.user?.id);
       setUserId(session?.user?.id ?? null);
-      setReady(true);
+      setReady(!!session);
     });
 
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        supabase.auth.signInAnonymously().catch(console.error);
+      if (session) {
+        setUserId(session.user.id);
+        setReady(true);
+      } else {
+        supabase.auth.signInAnonymously().then(({ data, error }) => {
+          if (error) console.error('[AnonAuth] sign-in error:', error);
+          else console.log('[AnonAuth] signed in:', data.user?.id);
+        });
       }
     });
 
