@@ -245,15 +245,50 @@ function AnalyticsContent({
   const [globalBlooms, setGlobalBlooms] = useState(0);
   const [myBlooms, setMyBlooms] = useState(0);
 
+  // Fetch on mount and when bloomVersion changes
   useEffect(() => {
     fetchGlobalBlooms().then(setGlobalBlooms);
     fetchMyBlooms().then(setMyBlooms);
   }, [bloomVersion]);
 
+  // Real-time subscription for personal blooms
+  useEffect(() => {
+    const channel = supabase
+      .channel('my-blooms-realtime')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'user_flower_history' },
+        () => {
+          // Re-fetch personal count on any insert (RLS filters to own rows)
+          fetchMyBlooms().then(setMyBlooms);
+        }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
+  // Real-time subscription for global blooms
+  useEffect(() => {
+    const channel = supabase
+      .channel('analytics-global-realtime')
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'global_stats', filter: 'id=eq.1' },
+        (payload) => {
+          const newCount = Number(payload.new?.total_blooms ?? 0);
+          if (newCount > 0) setGlobalBlooms(newCount);
+        }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
   const stats = [
     { label: 'Total Blooms Worldwide', value: globalBlooms.toLocaleString() },
     { label: 'My Total Blooms', value: myBlooms.toLocaleString() },
-    { label: 'Current Flowers', value: flowerCount },
+    { label: 'Flowers in This Bouquet', value: flowerCount },
     { label: 'Flower Type', value: flowerType === 'cherry-blossom' ? 'Sakura' : flowerType },
     { label: 'Style', value: bouquetStyle },
   ];
@@ -307,20 +342,20 @@ function LiveBloomCounter({ bloomVersion, collapsed }: { bloomVersion: number; c
   }, []);
 
   return (
-    <div className="px-3 pb-6 pt-3 flex flex-col items-center justify-center gap-1.5 w-full">
-      <p className="text-[9px] text-muted-foreground/70 font-sans tracking-[0.2em] uppercase">
+    <div className="px-4 pb-8 pt-4 flex flex-col items-center justify-center gap-1.5 w-full border-t border-border/20">
+      <p className="text-[9px] text-muted-foreground font-sans tracking-[0.2em] uppercase">
         Global Blooms
       </p>
-      <div className="flex items-center gap-1.5">
-        <span className="relative flex h-2 w-2 shrink-0">
+      <div className="flex items-center gap-2">
+        <span className="relative flex h-2.5 w-2.5 shrink-0">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/60 opacity-75" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-primary shadow-[0_0_6px_hsl(var(--primary)/0.6)]" />
+          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_6px_hsl(var(--primary)/0.6)]" />
         </span>
-        <span className="text-sm font-display text-primary tabular-nums">
+        <span className="text-base font-display text-primary tabular-nums">
           {globalBlooms.toLocaleString()}
         </span>
       </div>
-      <span className="text-[8px] text-muted-foreground/50 font-body tracking-widest uppercase">
+      <span className="text-[8px] text-muted-foreground/50 font-sans tracking-[0.15em] uppercase">
         Total Blooms Worldwide
       </span>
     </div>
