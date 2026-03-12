@@ -342,20 +342,20 @@ function LiveBloomCounter({ bloomVersion, collapsed }: { bloomVersion: number; c
   }, []);
 
   return (
-    <div className="px-3 pb-6 pt-3 flex flex-col items-center justify-center gap-1.5 w-full">
-      <p className="text-[9px] text-muted-foreground/70 font-sans tracking-[0.2em] uppercase">
+    <div className="px-4 pb-8 pt-4 flex flex-col items-center justify-center gap-1.5 w-full border-t border-border/20">
+      <p className="text-[9px] text-muted-foreground font-sans tracking-[0.2em] uppercase">
         Global Blooms
       </p>
-      <div className="flex items-center gap-1.5">
-        <span className="relative flex h-2 w-2 shrink-0">
+      <div className="flex items-center gap-2">
+        <span className="relative flex h-2.5 w-2.5 shrink-0">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/60 opacity-75" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-primary shadow-[0_0_6px_hsl(var(--primary)/0.6)]" />
+          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_6px_hsl(var(--primary)/0.6)]" />
         </span>
-        <span className="text-sm font-display text-primary tabular-nums">
+        <span className="text-base font-display text-primary tabular-nums">
           {globalBlooms.toLocaleString()}
         </span>
       </div>
-      <span className="text-[8px] text-muted-foreground/50 font-body tracking-widest uppercase">
+      <span className="text-[8px] text-muted-foreground/50 font-sans tracking-[0.15em] uppercase">
         Total Blooms Worldwide
       </span>
     </div>
