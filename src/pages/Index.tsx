@@ -10,6 +10,7 @@ import type { BloomCard } from '@/types/bloom';
 import { defaultCard } from '@/types/bloom';
 import { useAnonAuth } from '@/hooks/useAnonAuth';
 import { recordBloom } from '@/lib/bloomService';
+import { supabase } from '@/integrations/supabase/client';
 
 // Compact encoding: pipe-delimited values with single-char enum codes
 const ENUM_CODES: Record<string, Record<string, string>> = {
