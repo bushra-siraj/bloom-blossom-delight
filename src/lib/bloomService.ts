@@ -1,13 +1,20 @@
 import { supabase } from '@/integrations/supabase/client';
 
 export async function recordBloom(flowerType: string, flowerColor: string, message: string, senderName: string) {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) {
+    console.error('[recordBloom] No active session');
+    return;
+  }
+  console.log('[recordBloom] calling RPC as user:', session.user.id);
   const { error } = await supabase.rpc('record_bloom', {
     p_flower_type: flowerType,
     p_flower_color: flowerColor,
     p_message: message,
     p_sender_name: senderName,
   });
-  if (error) console.error('recordBloom error:', error);
+  if (error) console.error('[recordBloom] RPC error:', error);
+  else console.log('[recordBloom] success');
 }
 
 export async function fetchGlobalBlooms(): Promise<number> {
