@@ -45,8 +45,9 @@ As a student specializing in **Artificial Intelligence and Data Science**, I wan
 ---
 
 ## 📄 License
-This project is licensed under the **CC0 1.0 Universal** - see the [LICENSE](LICENSE) file for details. 
-> As part of the Creative Commons Zero (CC0) license, this project is dedicated to the public domain. Anyone is free to use, study, modify, or distribute this work, without any restriction or credit, for any purpose.
+
+This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0)**. See the [LICENSE](LICENSE) file for details.
+> This license permits anyone to share and adapt this work, provided that the original author (**Bushra Siraj**) is given appropriate credit. However, this work cannot be used for commercial purposes.
 
 ---
 
