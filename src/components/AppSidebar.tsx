@@ -245,15 +245,50 @@ function AnalyticsContent({
   const [globalBlooms, setGlobalBlooms] = useState(0);
   const [myBlooms, setMyBlooms] = useState(0);
 
+  // Fetch on mount and when bloomVersion changes
   useEffect(() => {
     fetchGlobalBlooms().then(setGlobalBlooms);
     fetchMyBlooms().then(setMyBlooms);
   }, [bloomVersion]);
 
+  // Real-time subscription for personal blooms
+  useEffect(() => {
+    const channel = supabase
+      .channel('my-blooms-realtime')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'user_flower_history' },
+        () => {
+          // Re-fetch personal count on any insert (RLS filters to own rows)
+          fetchMyBlooms().then(setMyBlooms);
+        }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
+  // Real-time subscription for global blooms
+  useEffect(() => {
+    const channel = supabase
+      .channel('analytics-global-realtime')
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'global_stats', filter: 'id=eq.1' },
+        (payload) => {
+          const newCount = Number(payload.new?.total_blooms ?? 0);
+          if (newCount > 0) setGlobalBlooms(newCount);
+        }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
   const stats = [
     { label: 'Total Blooms Worldwide', value: globalBlooms.toLocaleString() },
     { label: 'My Total Blooms', value: myBlooms.toLocaleString() },
-    { label: 'Current Flowers', value: flowerCount },
+    { label: 'Flowers in This Bouquet', value: flowerCount },
     { label: 'Flower Type', value: flowerType === 'cherry-blossom' ? 'Sakura' : flowerType },
     { label: 'Style', value: bouquetStyle },
   ];
