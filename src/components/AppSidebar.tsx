@@ -288,18 +288,20 @@ function LiveBloomCounter({ bloomVersion, collapsed }: { bloomVersion: number; c
   }, [bloomVersion]);
 
   return (
-    <div className={cn(
-      "px-3 pb-4 pt-2 flex items-center justify-center gap-1.5",
-      collapsed && "md:px-1"
-    )}>
-      {/* Glowing dot */}
-      <span className="relative flex h-2 w-2 shrink-0">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/60 opacity-75" />
-        <span className="relative inline-flex h-2 w-2 rounded-full bg-primary shadow-[0_0_6px_hsl(var(--primary)/0.6)]" />
-      </span>
+    <div className="px-3 pb-4 pt-2 flex flex-col items-center justify-center gap-1">
+      <div className="flex items-center gap-1.5">
+        {/* Glowing dot */}
+        <span className="relative flex h-2 w-2 shrink-0">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/60 opacity-75" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-primary shadow-[0_0_6px_hsl(var(--primary)/0.6)]" />
+        </span>
+        <span className="text-sm font-display text-primary tabular-nums">
+          {globalBlooms.toLocaleString()}
+        </span>
+      </div>
       {!collapsed && (
-        <span className="text-[10px] text-muted-foreground font-body tracking-wider uppercase">
-          {globalBlooms.toLocaleString()} blooms
+        <span className="text-[9px] text-muted-foreground font-body tracking-widest uppercase">
+          Total Blooms Worldwide
         </span>
       )}
     </div>
