@@ -89,9 +89,17 @@ const Index = () => {
     setMode('preview');
     const encoded = encodeCard(c);
     window.history.replaceState(null, '', `#${encoded}`);
-    if (ready) {
+    // Always attempt to record — if not ready yet, sign in first
+    try {
+      if (!ready) {
+        const { error } = await supabase.auth.signInAnonymously();
+        if (error) throw error;
+      }
       await recordBloom(c.flowerType, c.flowerColor, c.message, c.senderName);
       setBloomVersion(v => v + 1);
+      console.log('[Bloom] recorded successfully');
+    } catch (err) {
+      console.error('[Bloom] record failed:', err);
     }
   };
 
