@@ -362,9 +362,7 @@ function LiveBloomCounter({ bloomVersion, collapsed }: { bloomVersion: number; c
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/60 opacity-75" />
           <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_6px_hsl(var(--primary)/0.6)]" />
         </span>
-        <span className="text-base font-display text-primary tabular-nums">
-          {globalBlooms.toLocaleString()}
-        </span>
+        <AnimatedNumber value={globalBlooms} className="text-base font-display text-primary tabular-nums" />
       </div>
       <span className="text-[8px] text-muted-foreground/50 font-sans tracking-[0.15em] uppercase">
         Total Blooms Worldwide
