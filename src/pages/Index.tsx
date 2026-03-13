@@ -9,7 +9,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import type { BloomCard } from '@/types/bloom';
 import { defaultCard } from '@/types/bloom';
 import { useAnonAuth } from '@/hooks/useAnonAuth';
-import { recordBloom } from '@/lib/bloomService';
+import { supabase } from '@/integrations/supabase/client';
 
 // Compact encoding: pipe-delimited values with single-char enum codes
 const ENUM_CODES: Record<string, Record<string, string>> = {
@@ -91,11 +91,52 @@ const Index = () => {
     window.history.replaceState(null, '', `#${encoded}`);
 
     try {
-      const updatedTotal = await recordBloom(c.flowerType, c.flowerColor, c.message, c.senderName);
+      let { data: { session } } = await supabase.auth.getSession();
+
+      if (!session) {
+        const { data, error: anonError } = await supabase.auth.signInAnonymously();
+        if (anonError) throw anonError;
+        session = data.session ?? null;
+      }
+
+      const userId = session?.user?.id;
+      if (!userId) throw new Error('Missing user_id for bloom insert');
+
+      const { error: insertError } = await supabase.from('user_flower_history').insert({
+        user_id: userId,
+        flower_type: c.flowerType,
+        flower_color: c.flowerColor,
+        message: c.message || '',
+        sender_name: c.senderName || '',
+      });
+      if (insertError) throw insertError;
+
+      const { data: currentStats, error: currentStatsError } = await supabase
+        .from('global_stats')
+        .select('total_blooms')
+        .eq('id', 1)
+        .single();
+      if (currentStatsError) throw currentStatsError;
+
+      const nextTotal = Number(currentStats?.total_blooms ?? 0) + 1;
+
+      const { error: updateError } = await supabase
+        .from('global_stats')
+        .update({ total_blooms: nextTotal, updated_at: new Date().toISOString() })
+        .eq('id', 1);
+      if (updateError) throw updateError;
+
+      const { data: updatedStats, error: updatedStatsError } = await supabase
+        .from('global_stats')
+        .select('total_blooms')
+        .eq('id', 1)
+        .single();
+      if (updatedStatsError) throw updatedStatsError;
+
       setBloomVersion(v => v + 1);
-      console.log('[Bloom] recorded successfully. Updated total_blooms:', updatedTotal);
+      console.log('[Bloom] direct insert/update succeeded. Updated total_blooms:', Number(updatedStats?.total_blooms ?? 0));
     } catch (err) {
-      console.error('[Bloom] record failed:', err);
+      console.error('[Bloom] direct insert/update failed:', err);
     }
   };
 
