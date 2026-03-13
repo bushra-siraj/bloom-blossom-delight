@@ -287,11 +287,11 @@ function AnalyticsContent({
   }, []);
 
   const stats = [
-    { label: 'Total Blooms Worldwide', value: globalBlooms.toLocaleString() },
-    { label: 'My Total Blooms', value: myBlooms.toLocaleString() },
-    { label: 'Flowers in This Bouquet', value: flowerCount },
-    { label: 'Flower Type', value: flowerType === 'cherry-blossom' ? 'Sakura' : flowerType },
-    { label: 'Style', value: bouquetStyle },
+    { label: 'Total Blooms Worldwide', value: globalBlooms.toLocaleString(), animated: true, rawValue: globalBlooms },
+    { label: 'My Total Blooms', value: myBlooms.toLocaleString(), animated: true, rawValue: myBlooms },
+    { label: 'Flowers in This Bouquet', value: String(flowerCount), animated: false, rawValue: 0 },
+    { label: 'Flower Type', value: flowerType === 'cherry-blossom' ? 'Sakura' : flowerType, animated: false, rawValue: 0 },
+    { label: 'Style', value: bouquetStyle, animated: false, rawValue: 0 },
   ];
 
   return (
