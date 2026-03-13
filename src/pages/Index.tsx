@@ -70,6 +70,7 @@ const Index = () => {
   const [mode, setMode] = useState<'create' | 'preview'>('create');
   const [card, setCard] = useState<BloomCard | null>(null);
   const [liveCard, setLiveCard] = useState<BloomCard>(defaultCard);
+  const [bloomVersion, setBloomVersion] = useState(0);
   useAnonAuth();
 
   useEffect(() => {
