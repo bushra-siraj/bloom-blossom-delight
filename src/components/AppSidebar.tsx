@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Eye, BarChart3, Mail, Linkedin, Globe } from 'lucide-react';
+import { AnimatedNumber } from './AnimatedNumber';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import type { BloomCard } from '@/types/bloom';
@@ -286,11 +287,11 @@ function AnalyticsContent({
   }, []);
 
   const stats = [
-    { label: 'Total Blooms Worldwide', value: globalBlooms.toLocaleString() },
-    { label: 'My Total Blooms', value: myBlooms.toLocaleString() },
-    { label: 'Flowers in This Bouquet', value: flowerCount },
-    { label: 'Flower Type', value: flowerType === 'cherry-blossom' ? 'Sakura' : flowerType },
-    { label: 'Style', value: bouquetStyle },
+    { label: 'Total Blooms Worldwide', value: globalBlooms.toLocaleString(), animated: true, rawValue: globalBlooms },
+    { label: 'My Total Blooms', value: myBlooms.toLocaleString(), animated: true, rawValue: myBlooms },
+    { label: 'Flowers in This Bouquet', value: String(flowerCount), animated: false, rawValue: 0 },
+    { label: 'Flower Type', value: flowerType === 'cherry-blossom' ? 'Sakura' : flowerType, animated: false, rawValue: 0 },
+    { label: 'Style', value: bouquetStyle, animated: false, rawValue: 0 },
   ];
 
   return (
@@ -299,17 +300,27 @@ function AnalyticsContent({
       <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-6 font-body">Live Dashboard</p>
 
       <div className="space-y-3">
-        {stats.map((stat) => (
-          <div
+        {stats.map((stat, i) => (
+          <motion.div
             key={stat.label}
-            className="flex items-center justify-between p-4 rounded-xl border border-border/20"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.06, duration: 0.3 }}
+            className="flex items-center justify-between p-4 rounded-xl border border-primary/10"
             style={{
               background: 'hsl(var(--glass-bg))',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              boxShadow: '0 4px 20px hsl(var(--primary) / 0.06), inset 0 1px 0 hsl(var(--foreground) / 0.04)',
             }}
           >
-            <span className="text-xs text-muted-foreground font-body uppercase tracking-wider">{stat.label}</span>
-            <span className="text-sm font-display text-primary capitalize">{stat.value}</span>
-          </div>
+            <span className="text-[10px] text-muted-foreground font-body uppercase tracking-wider">{stat.label}</span>
+            {stat.animated ? (
+              <AnimatedNumber value={Number(stat.rawValue)} className="text-sm font-display text-primary tabular-nums" />
+            ) : (
+              <span className="text-sm font-display text-primary capitalize">{stat.value}</span>
+            )}
+          </motion.div>
         ))}
       </div>
     </div>
@@ -351,9 +362,7 @@ function LiveBloomCounter({ bloomVersion, collapsed }: { bloomVersion: number; c
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/60 opacity-75" />
           <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_6px_hsl(var(--primary)/0.6)]" />
         </span>
-        <span className="text-base font-display text-primary tabular-nums">
-          {globalBlooms.toLocaleString()}
-        </span>
+        <AnimatedNumber value={globalBlooms} className="text-base font-display text-primary tabular-nums" />
       </div>
       <span className="text-[8px] text-muted-foreground/50 font-sans tracking-[0.15em] uppercase">
         Total Blooms Worldwide
