@@ -300,17 +300,27 @@ function AnalyticsContent({
       <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-6 font-body">Live Dashboard</p>
 
       <div className="space-y-3">
-        {stats.map((stat) => (
-          <div
+        {stats.map((stat, i) => (
+          <motion.div
             key={stat.label}
-            className="flex items-center justify-between p-4 rounded-xl border border-border/20"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.06, duration: 0.3 }}
+            className="flex items-center justify-between p-4 rounded-xl border border-primary/10"
             style={{
               background: 'hsl(var(--glass-bg))',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              boxShadow: '0 4px 20px hsl(var(--primary) / 0.06), inset 0 1px 0 hsl(var(--foreground) / 0.04)',
             }}
           >
-            <span className="text-xs text-muted-foreground font-body uppercase tracking-wider">{stat.label}</span>
-            <span className="text-sm font-display text-primary capitalize">{stat.value}</span>
-          </div>
+            <span className="text-[10px] text-muted-foreground font-body uppercase tracking-wider">{stat.label}</span>
+            {stat.animated ? (
+              <AnimatedNumber value={Number(stat.rawValue)} className="text-sm font-display text-primary tabular-nums" />
+            ) : (
+              <span className="text-sm font-display text-primary capitalize">{stat.value}</span>
+            )}
+          </motion.div>
         ))}
       </div>
     </div>
