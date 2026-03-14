@@ -199,6 +199,7 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
               ))}
             </div>
             <ColorPicker label="Card color" value={card.cardColor} onChange={v => update({ cardColor: v })} />
+            <ColorPicker label="Font color" value={card.fontColor} onChange={v => update({ fontColor: v })} />
           </div>
         );
 

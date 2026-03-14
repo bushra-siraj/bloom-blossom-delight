@@ -39,32 +39,39 @@ const DecoRow = ({ card, size }: { card: BloomCard; size: number }) =>
     </div>
   ) : null;
 
-const Msg = ({ card, mini }: { card: BloomCard; mini: boolean }) => (
-  <div className="text-center space-y-1.5">
-    <DecoRow card={card} size={mini ? 16 : 26} />
-    <p
-      className={`leading-relaxed ${mini ? 'text-[10px]' : 'text-sm'} ${fontClasses(card.fontStyle)}`}
-      style={{
-        color: 'hsl(0 0% 15%)',
-        textShadow: '0 1px 3px hsl(0 0% 100% / 0.5)',
-      }}
-    >
-      {card.message || 'Your message...'}
-    </p>
-    {card.senderName && (
+const Msg = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
+  const textColor = card.fontColor || 'hsl(0 0% 15%)';
+  const senderColor = card.fontColor
+    ? card.fontColor
+    : 'hsl(0 0% 30%)';
+
+  return (
+    <div className="text-center space-y-1.5">
+      <DecoRow card={card} size={mini ? 16 : 26} />
       <p
-        className={`font-body ${mini ? 'text-[8px]' : 'text-xs'}`}
+        className={`leading-relaxed ${mini ? 'text-[10px]' : 'text-sm'} ${fontClasses(card.fontStyle)}`}
         style={{
-          color: 'hsl(0 0% 30%)',
-          textShadow: '0 1px 2px hsl(0 0% 100% / 0.4)',
+          color: textColor,
+          textShadow: '0 1px 3px hsl(0 0% 100% / 0.5)',
         }}
       >
-        — {card.senderName}
+        {card.message || 'Your message...'}
       </p>
-    )}
-    <DecoRow card={card} size={mini ? 12 : 18} />
-  </div>
-);
+      {card.senderName && (
+        <p
+          className={`font-body ${mini ? 'text-[8px]' : 'text-xs'}`}
+          style={{
+            color: senderColor,
+            textShadow: '0 1px 2px hsl(0 0% 100% / 0.4)',
+          }}
+        >
+          — {card.senderName}
+        </p>
+      )}
+      <DecoRow card={card} size={mini ? 12 : 18} />
+    </div>
+  );
+};
 
 /* ── 1. Polaroid Card ── */
 const PolaroidCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => (
@@ -76,14 +83,12 @@ const PolaroidCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => (
       className={`bg-foreground/95 shadow-2xl ${mini ? 'p-1.5 pb-4 max-w-[180px]' : 'p-3 pb-10 max-w-xs'}`}
       style={{ borderRadius: '2px' }}
     >
-      {/* Photo area */}
       <div
         className={`${mini ? 'h-16' : 'h-28'} flex items-center justify-center`}
         style={{ backgroundColor: `${card.cardColor}ee`, borderRadius: '1px' }}
       >
         <Msg card={{ ...card, fontStyle: card.fontStyle }} mini={mini} />
       </div>
-      {/* Bottom strip (classic polaroid) */}
       <div className={`text-center ${mini ? 'mt-1' : 'mt-2'}`}>
         {card.senderName && (
           <p className={`text-background/60 font-body ${mini ? 'text-[7px]' : 'text-[10px]'}`}>
@@ -92,7 +97,6 @@ const PolaroidCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => (
         )}
       </div>
     </div>
-    {/* Tape effect */}
     <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-10 h-3 bg-foreground/15 rounded-sm rotate-1" />
   </div>
 );
@@ -103,12 +107,10 @@ const EnvelopeCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
 
   return (
     <div className={`relative ${mini ? 'max-w-[180px]' : 'max-w-xs w-full'}`}>
-      {/* Envelope body */}
       <div
         className={`relative overflow-hidden border border-foreground/10 ${mini ? 'rounded-md' : 'rounded-lg'}`}
         style={{ backgroundColor: `${card.cardColor}dd` }}
       >
-        {/* Flap */}
         <motion.div
           className="absolute top-0 left-0 right-0 z-10 origin-top"
           style={{ backgroundColor: `${card.cardColor}bb` }}
@@ -121,7 +123,6 @@ const EnvelopeCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
           </svg>
         </motion.div>
 
-        {/* Inner "paper" that slides out */}
         <motion.div
           className={`relative z-0 ${mini ? 'p-2 pt-6' : 'p-4 pt-10'}`}
           initial={mini ? {} : { y: 30, opacity: 0 }}
@@ -136,7 +137,6 @@ const EnvelopeCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
           </div>
         </motion.div>
 
-        {/* Decorative stamp */}
         <div className={`absolute ${mini ? 'top-1 right-1 w-4 h-5' : 'top-2 right-2 w-6 h-7'} border border-foreground/10 rounded-sm flex items-center justify-center`}>
           <span className={mini ? 'text-[6px]' : 'text-[8px]'}>♡</span>
         </div>
@@ -148,7 +148,6 @@ const EnvelopeCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
 /* ── 3. Glass Card ── */
 const GlassCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => (
   <div className={`relative ${mini ? 'max-w-[180px]' : 'max-w-xs w-full'}`}>
-    {/* Glow behind */}
     <div className="absolute -inset-1 rounded-2xl opacity-40 blur-xl"
       style={{ background: `radial-gradient(circle, ${card.glowColor}66, transparent 70%)` }} />
     <div
@@ -158,7 +157,6 @@ const GlassCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => (
         border: `1px solid ${card.glowColor}22`,
       }}
     >
-      {/* Shimmer line */}
       <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
       <Msg card={card} mini={mini} />
     </div>
@@ -175,7 +173,6 @@ const ClassicCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
       style={{ perspective: '800px' }}
       onClick={() => !isOpen && setIsOpen(true)}
     >
-      {/* Card base (back) */}
       <div
         className={`border border-foreground/10 ${mini ? 'rounded-lg p-2' : 'rounded-xl p-5'}`}
         style={{ backgroundColor: `${card.cardColor}dd`, minHeight: mini ? '80px' : '140px' }}
@@ -193,7 +190,6 @@ const ClassicCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
         </AnimatePresence>
       </div>
 
-      {/* Front cover (folds open) */}
       <motion.div
         className={`absolute inset-0 border border-foreground/10 origin-left ${mini ? 'rounded-lg' : 'rounded-xl'}`}
         style={{ backgroundColor: `${card.cardColor}ee`, backfaceVisibility: 'hidden' }}
