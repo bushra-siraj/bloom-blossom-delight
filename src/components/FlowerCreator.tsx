@@ -150,12 +150,12 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
         return (
           <div className="space-y-5">
             <SectionTitle>Bouquet size</SectionTitle>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-2">
               {bouquetSizes.map(b => {
                 const selected = card.bouquetSize === b;
                 const label = b === 'small' ? '3 Flowers' : b === 'large' ? '5 Flowers' : 'Single';
                 const subtitle = b === 'small' ? 'Ribbon Tie' : b === 'large' ? 'Full Wrap' : 'Elegant';
-                const svgSize = b === 'single' ? 44 : b === 'small' ? 48 : 52;
+                const svgSize = b === 'single' ? 36 : b === 'small' ? 38 : 40;
                 return (
                   <motion.button
                     key={b}
@@ -163,7 +163,7 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
                     whileTap={{ scale: 0.96 }}
                     animate={selected ? { scale: 1, y: -2 } : { scale: 1, y: 0 }}
                     transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                    className={`relative flex flex-col items-center gap-2 p-4 pb-3 rounded-xl border transition-all duration-300 ${
+                    className={`relative flex flex-col items-center gap-1.5 p-3 pb-2.5 rounded-xl border transition-all duration-300 min-w-0 overflow-hidden ${
                       selected
                         ? 'border-primary/40 shadow-[0_0_24px_hsl(330_60%_65%/0.2)]'
                         : 'border-border/20 hover:border-foreground/10'
@@ -185,12 +185,12 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
                         <span className="text-[9px] text-primary-foreground">✓</span>
                       </motion.div>
                     )}
-                    <div className="h-16 flex items-center justify-center">
+                    <div className="h-14 flex items-center justify-center overflow-hidden">
                       <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} bouquetSize={b} size={svgSize}
                         customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
                     </div>
-                    <span className="text-xs font-body text-foreground/80 font-semibold">{label}</span>
-                    <span className="text-[9px] text-muted-foreground tracking-wider uppercase">{subtitle}</span>
+                    <span className="text-[11px] font-body text-foreground/80 font-semibold truncate w-full text-center">{label}</span>
+                    <span className="text-[9px] text-muted-foreground tracking-wider uppercase truncate w-full text-center">{subtitle}</span>
                   </motion.button>
                 );
               })}
