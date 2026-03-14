@@ -198,16 +198,29 @@ function VisionContent() {
       <h2 className="font-display text-xl text-primary mb-1">Our Vision</h2>
       <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-6 font-body">About BloomForYou</p>
 
-      <div className="space-y-4">
-        <p className="text-sm leading-relaxed text-foreground/70 font-body">
-          Made by a DS & AI Student. BloomForYou is for those who love the art of giving.
-        </p>
-        <p className="text-sm leading-relaxed text-foreground/70 font-body">
-          It was born from a simple idea: everyone deserves a bouquet that never fades. Whether you're a flower lover or looking for that perfect 'just because' gift, I built this space to make digital gifting feel as personal as a hand-picked bunch.
-        </p>
-        <p className="text-sm leading-relaxed text-foreground/70 font-body">
-          Every petal, face, and leaf is a product of my journey in AI and digital design.
-        </p>
+      <div className="space-y-3">
+        {[
+          'Made by a DS & AI Student. BloomForYou is for those who love the art of giving.',
+          "It was born from a simple idea: everyone deserves a bouquet that never fades. Whether you're a flower lover or looking for that perfect 'just because' gift, I built this space to make digital gifting feel as personal as a hand-picked bunch.",
+          'Every petal, face, and leaf is a product of my journey in AI and digital design.',
+        ].map((text, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.06, duration: 0.3 }}
+            className="p-4 rounded-xl"
+            style={{
+              background: 'rgba(255, 255, 255, 0.07)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(200, 100, 150, 0.2)',
+            }}
+          >
+            <p className="text-sm leading-relaxed text-foreground/70 font-body">{text}</p>
+          </motion.div>
+        ))}
       </div>
 
       {/* Let's Connect Footer */}

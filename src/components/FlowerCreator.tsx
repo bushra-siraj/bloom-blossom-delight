@@ -195,24 +195,16 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
                 );
               })}
             </div>
-            {/* Large preview */}
+            {/* Large preview - no card wrapper */}
             <motion.div
               key={card.bouquetSize}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="flex justify-center pt-2"
+              className="flex justify-center pt-4"
             >
-              <div className="relative p-5 rounded-2xl border border-primary/10"
-                style={{
-                  background: 'hsl(var(--glass-bg))',
-                  backdropFilter: 'blur(12px)',
-                  boxShadow: '0 8px 32px hsl(var(--primary) / 0.08)',
-                }}
-              >
-                <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} bouquetSize={card.bouquetSize} size={90}
-                  customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
-              </div>
+              <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} bouquetSize={card.bouquetSize} size={100}
+                customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
             </motion.div>
           </div>
         );
