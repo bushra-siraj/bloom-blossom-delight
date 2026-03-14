@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Eye, BarChart3, Mail, Linkedin, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -34,6 +34,68 @@ interface AppSidebarProps {
 }
 
 type OverlayType = 'vision' | 'analytics' | null;
+
+/* ── Animated counter with tick-up effect ── */
+function AnimatedCounter({ value, className }: { value: number; className?: string }) {
+  const [display, setDisplay] = useState(value);
+  const prevRef = useRef(value);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    const prev = prevRef.current;
+    prevRef.current = value;
+    if (prev === value) { setDisplay(value); return; }
+
+    setIsAnimating(true);
+    const diff = value - prev;
+    const steps = Math.min(Math.abs(diff), 20);
+    const stepDuration = Math.max(40, 600 / steps);
+    let current = 0;
+
+    const timer = setInterval(() => {
+      current++;
+      const progress = current / steps;
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplay(Math.round(prev + diff * eased));
+      if (current >= steps) {
+        clearInterval(timer);
+        setDisplay(value);
+        setTimeout(() => setIsAnimating(false), 200);
+      }
+    }, stepDuration);
+
+    return () => clearInterval(timer);
+  }, [value]);
+
+  return (
+    <motion.span
+      className={className}
+      animate={isAnimating ? { scale: [1, 1.15, 1] } : {}}
+      transition={{ duration: 0.3 }}
+    >
+      {display.toLocaleString()}
+    </motion.span>
+  );
+}
+
+/* ── Glassmorphic stat card ── */
+function GlassStatCard({ label, value, isNumeric = false }: { label: string; value: React.ReactNode; isNumeric?: boolean }) {
+  return (
+    <div
+      className="flex items-center justify-between p-4 rounded-xl border"
+      style={{
+        background: 'rgba(255, 255, 255, 0.07)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderColor: 'rgba(200, 100, 150, 0.2)',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25), 0 0 20px rgba(200, 100, 150, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+      }}
+    >
+      <span className="text-xs text-muted-foreground font-body uppercase tracking-wider">{label}</span>
+      <span className="text-sm font-display text-primary capitalize">{value}</span>
+    </div>
+  );
+}
 
 export function AppSidebar({ card, bloomVersion = 0 }: AppSidebarProps) {
   const { state } = useSidebar();
@@ -197,16 +259,26 @@ function VisionContent() {
       <h2 className="font-display text-xl text-primary mb-1">Our Vision</h2>
       <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-6 font-body">About BloomForYou</p>
 
-      <div className="space-y-4">
-        <p className="text-sm leading-relaxed text-foreground/70 font-body">
-          Made by a DS & AI Student. BloomForYou is for those who love the art of giving.
-        </p>
-        <p className="text-sm leading-relaxed text-foreground/70 font-body">
-          It was born from a simple idea: everyone deserves a bouquet that never fades. Whether you're a flower lover or looking for that perfect 'just because' gift, I built this space to make digital gifting feel as personal as a hand-picked bunch.
-        </p>
-        <p className="text-sm leading-relaxed text-foreground/70 font-body">
-          Every petal, face, and leaf is a product of my journey in AI and digital design.
-        </p>
+      <div className="space-y-3">
+        {[
+          'Made by a DS & AI Student. BloomForYou is for those who love the art of giving.',
+          "It was born from a simple idea: everyone deserves a bouquet that never fades. Whether you're a flower lover or looking for that perfect 'just because' gift, I built this space to make digital gifting feel as personal as a hand-picked bunch.",
+          'Every petal, face, and leaf is a product of my journey in AI and digital design.',
+        ].map((text, i) => (
+          <div
+            key={i}
+            className="p-4 rounded-xl border"
+            style={{
+              background: 'rgba(255, 255, 255, 0.07)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              borderColor: 'rgba(200, 100, 150, 0.2)',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25), 0 0 20px rgba(200, 100, 150, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+            }}
+          >
+            <p className="text-sm leading-relaxed text-foreground/70 font-body">{text}</p>
+          </div>
+        ))}
       </div>
 
       {/* Let's Connect Footer */}
@@ -245,13 +317,11 @@ function AnalyticsContent({
   const [globalBlooms, setGlobalBlooms] = useState(0);
   const [myBlooms, setMyBlooms] = useState(0);
 
-  // Fetch on mount and when bloomVersion changes
   useEffect(() => {
     fetchGlobalBlooms().then(setGlobalBlooms);
     fetchMyBlooms().then(setMyBlooms);
   }, [bloomVersion]);
 
-  // Real-time subscription for personal blooms
   useEffect(() => {
     const channel = supabase
       .channel('my-blooms-realtime')
@@ -259,7 +329,6 @@ function AnalyticsContent({
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'user_flower_history' },
         () => {
-          // Re-fetch personal count on any insert (RLS filters to own rows)
           fetchMyBlooms().then(setMyBlooms);
         }
       )
@@ -268,7 +337,6 @@ function AnalyticsContent({
     return () => { supabase.removeChannel(channel); };
   }, []);
 
-  // Real-time subscription for global blooms
   useEffect(() => {
     const channel = supabase
       .channel('analytics-global-realtime')
@@ -285,32 +353,17 @@ function AnalyticsContent({
     return () => { supabase.removeChannel(channel); };
   }, []);
 
-  const stats = [
-    { label: 'Total Blooms Worldwide', value: globalBlooms.toLocaleString() },
-    { label: 'My Total Blooms', value: myBlooms.toLocaleString() },
-    { label: 'Flowers in This Bouquet', value: flowerCount },
-    { label: 'Flower Type', value: flowerType === 'cherry-blossom' ? 'Sakura' : flowerType },
-    { label: 'Style', value: bouquetStyle },
-  ];
-
   return (
     <div className="pr-6">
       <h2 className="font-display text-xl text-primary mb-1">Bouquet Analytics</h2>
       <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-6 font-body">Live Dashboard</p>
 
       <div className="space-y-3">
-        {stats.map((stat) => (
-          <div
-            key={stat.label}
-            className="flex items-center justify-between p-4 rounded-xl border border-border/20"
-            style={{
-              background: 'hsl(var(--glass-bg))',
-            }}
-          >
-            <span className="text-xs text-muted-foreground font-body uppercase tracking-wider">{stat.label}</span>
-            <span className="text-sm font-display text-primary capitalize">{stat.value}</span>
-          </div>
-        ))}
+        <GlassStatCard label="Total Blooms Worldwide" value={<AnimatedCounter value={globalBlooms} className="text-sm font-display text-primary tabular-nums" />} />
+        <GlassStatCard label="My Total Blooms" value={<AnimatedCounter value={myBlooms} className="text-sm font-display text-primary tabular-nums" />} />
+        <GlassStatCard label="Flowers in This Bouquet" value={flowerCount} />
+        <GlassStatCard label="Flower Type" value={flowerType === 'cherry-blossom' ? 'Sakura' : flowerType} />
+        <GlassStatCard label="Style" value={bouquetStyle} />
       </div>
     </div>
   );
@@ -319,12 +372,10 @@ function AnalyticsContent({
 function LiveBloomCounter({ bloomVersion, collapsed }: { bloomVersion: number; collapsed: boolean }) {
   const [globalBlooms, setGlobalBlooms] = useState(0);
 
-  // Fetch on mount and when bloomVersion changes
   useEffect(() => {
     fetchGlobalBlooms().then(setGlobalBlooms);
   }, [bloomVersion]);
 
-  // Real-time subscription to global_stats
   useEffect(() => {
     const channel = supabase
       .channel('global-blooms-realtime')
@@ -351,9 +402,7 @@ function LiveBloomCounter({ bloomVersion, collapsed }: { bloomVersion: number; c
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/60 opacity-75" />
           <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_6px_hsl(var(--primary)/0.6)]" />
         </span>
-        <span className="text-base font-display text-primary tabular-nums">
-          {globalBlooms.toLocaleString()}
-        </span>
+        <AnimatedCounter value={globalBlooms} className="text-base font-display text-primary tabular-nums" />
       </div>
       <span className="text-[8px] text-muted-foreground/50 font-sans tracking-[0.15em] uppercase">
         Total Blooms Worldwide

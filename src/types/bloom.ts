@@ -26,6 +26,7 @@ export interface BloomCard {
   glowColor: string;
   particleColor: string;
   cardColor: string;
+  fontColor: string;
 }
 
 export const defaultCard: BloomCard = {
@@ -45,4 +46,5 @@ export const defaultCard: BloomCard = {
   glowColor: '#e8729a',
   particleColor: '#f5e066',
   cardColor: '#1a1025',
+  fontColor: '#1a1a26',
 };
