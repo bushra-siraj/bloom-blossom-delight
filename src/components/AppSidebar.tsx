@@ -306,12 +306,13 @@ function AnalyticsContent({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.06, duration: 0.3 }}
-            className="flex items-center justify-between p-4 rounded-xl border border-primary/10"
+            className="flex items-center justify-between p-4 rounded-xl"
             style={{
-              background: 'hsl(var(--glass-bg))',
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
-              boxShadow: '0 4px 20px hsl(var(--primary) / 0.06), inset 0 1px 0 hsl(var(--foreground) / 0.04)',
+              background: 'rgba(255, 255, 255, 0.07)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(200, 100, 150, 0.2)',
             }}
           >
             <span className="text-[10px] text-muted-foreground font-body uppercase tracking-wider">{stat.label}</span>
