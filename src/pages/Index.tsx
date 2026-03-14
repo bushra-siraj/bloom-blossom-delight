@@ -35,7 +35,7 @@ for (const [field, map] of Object.entries(ENUM_CODES)) {
 const FIELDS = [
   'flowerType', 'flowerColor', 'leafStyle', 'bouquetSize', 'environment',
   'cardStyle', 'fontStyle', 'decoration', 'character', 'animation',
-  'petalColor', 'glowColor', 'particleColor', 'cardColor', 'message', 'senderName',
+  'petalColor', 'glowColor', 'particleColor', 'cardColor', 'fontColor', 'message', 'senderName',
 ] as const;
 
 function encodeCard(card: BloomCard): string {
