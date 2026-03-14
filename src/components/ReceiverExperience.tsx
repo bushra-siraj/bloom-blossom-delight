@@ -117,13 +117,13 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
         <AnimatePresence>
           {phaseIndex >= 5 && (
             <motion.div
-              initial={{ y: -100, opacity: 0, scale: 0.3 }}
+              initial={{ y: -100, opacity: 0, scale: 0 }}
               animate={{
                 y: phaseIndex >= 6 ? 0 : -50,
                 opacity: 1,
                 scale: phaseIndex >= 7 ? 1 : 0.5,
               }}
-              transition={{ duration: 1.2, type: 'spring', stiffness: 120, damping: 14 }}
+              transition={{ duration: 0.8, type: 'spring', bounce: 0.3 }}
               className="absolute bottom-[20%]"
             >
               <FlowerSVG type={card.flowerType} color={card.flowerColor}
