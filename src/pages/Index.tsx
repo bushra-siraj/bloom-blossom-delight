@@ -102,12 +102,14 @@ const Index = () => {
       const userId = session?.user?.id;
       if (!userId) throw new Error('Missing user_id for bloom insert');
 
+      const sanitize = (s: string) => s.replace(/<[^>]*>/g, '').trim();
+
       const { error: insertError } = await supabase.from('user_flower_history').insert({
         user_id: userId,
         flower_type: c.flowerType,
         flower_color: c.flowerColor,
-        message: c.message || '',
-        sender_name: c.senderName || '',
+        message: sanitize(c.message || ''),
+        sender_name: sanitize(c.senderName || ''),
       });
       if (insertError) throw insertError;
 
