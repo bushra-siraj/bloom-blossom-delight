@@ -268,7 +268,7 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
             <SectionTitle>Your message</SectionTitle>
             <textarea
               value={card.message}
-              onChange={e => update({ message: e.target.value })}
+              onChange={e => update({ message: e.target.value.replace(/<[^>]*>/g, '') })}
               className="w-full h-28 glass-card p-4 text-foreground bg-transparent resize-none focus:outline-none focus:ring-1 focus:ring-primary/50 font-body text-sm"
               placeholder="Write something beautiful..."
               maxLength={200}
@@ -277,7 +277,7 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
             <SectionTitle>Your name (optional)</SectionTitle>
             <input
               value={card.senderName}
-              onChange={e => update({ senderName: e.target.value })}
+              onChange={e => update({ senderName: e.target.value.replace(/<[^>]*>/g, '') })}
               className="w-full glass-card p-3 text-foreground bg-transparent focus:outline-none focus:ring-1 focus:ring-primary/50 font-body text-sm"
               placeholder="From..."
               maxLength={30}
