@@ -228,7 +228,7 @@ export function AppSidebar({ card, bloomVersion = 0 }: AppSidebarProps) {
                 <X className="h-4 w-4" />
               </button>
 
-              <div className="overflow-y-auto flex-1 p-6 md:p-8">
+              <div className="overflow-y-auto flex-1 p-6 md:p-8 scroll-smooth" style={{ scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}>
                 {overlay === 'vision' && <VisionContent />}
                 {overlay === 'analytics' && (
                   <AnalyticsContent
