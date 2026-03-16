@@ -255,7 +255,7 @@ const contactLinks = [
 
 function VisionContent() {
   return (
-    <div className="pr-2"
+    <div className="pr-2">
       <h2 className="font-display text-xl text-primary mb-1">Our Vision</h2>
       <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-6 font-body">About BloomForYou</p>
 
