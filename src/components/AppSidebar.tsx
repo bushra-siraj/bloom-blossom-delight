@@ -84,7 +84,7 @@ function GlassStatCard({ label, value, isNumeric = false }: { label: string; val
     <div
       className="flex items-center justify-between p-4 rounded-xl border"
       style={{
-        background: 'rgba(255, 255, 255, 0.01)',
+        background: 'rgba(255, 255, 255, 0.00)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
         borderColor: 'rgba(200, 100, 150, 0.2)',
@@ -269,7 +269,7 @@ function VisionContent() {
             key={i}
             className="p-4 rounded-xl border"
             style={{
-              background: 'rgba(255, 255, 255, 0.01)',
+              background: 'rgba(255, 255, 255, 0.00)',
               backdropFilter: 'blur(12px)',
               WebkitBackdropFilter: 'blur(12px)',
               borderColor: 'rgba(200, 100, 150, 0.2)',
