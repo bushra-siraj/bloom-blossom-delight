@@ -228,7 +228,7 @@ export function AppSidebar({ card, bloomVersion = 0 }: AppSidebarProps) {
                 <X className="h-4 w-4" />
               </button>
 
-              <div className="overflow-y-auto flex-1 p-6 md:p-8 scroll-smooth" style={{ scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}>
+              <div className="overflow-y-auto flex-1 p-4 md:p-6" style={{ scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}>
                 {overlay === 'vision' && <VisionContent />}
                 {overlay === 'analytics' && (
                   <AnalyticsContent
@@ -255,7 +255,7 @@ const contactLinks = [
 
 function VisionContent() {
   return (
-    <div className="pr-6">
+    <div className="pr-2"
       <h2 className="font-display text-xl text-primary mb-1">Our Vision</h2>
       <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-6 font-body">About BloomForYou</p>
 
@@ -354,7 +354,7 @@ function AnalyticsContent({
   }, []);
 
   return (
-    <div className="pr-6">
+    <div className="pr-2">
       <h2 className="font-display text-xl text-primary mb-1">Bouquet Analytics</h2>
       <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-6 font-body">Live Dashboard</p>
 
