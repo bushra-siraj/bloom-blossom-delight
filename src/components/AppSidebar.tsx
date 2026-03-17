@@ -87,8 +87,8 @@ function GlassStatCard({ label, value, isNumeric = false }: { label: string; val
         background: 'rgba(255, 255, 255, 0.00)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
-        borderColor: 'rgba(200, 100, 150, 0.2)',
-        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25), 0 0 20px rgba(200, 100, 150, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+        borderColor: 'rgba(200, 100, 150, 0.4)',
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25), 0 0 30px rgba(200, 100, 150, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
       }}
     >
       <span className="text-xs text-muted-foreground font-body uppercase tracking-wider">{label}</span>
@@ -272,8 +272,8 @@ function VisionContent() {
               background: 'rgba(255, 255, 255, 0.00)',
               backdropFilter: 'blur(12px)',
               WebkitBackdropFilter: 'blur(12px)',
-              borderColor: 'rgba(200, 100, 150, 0.2)',
-              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25), 0 0 20px rgba(200, 100, 150, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+              borderColor: 'rgba(200, 100, 150, 0.4)',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25), 0 0 30px rgba(200, 100, 150, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
             }}
           >
             <p className="text-sm leading-relaxed text-foreground/70 font-body">{text}</p>
