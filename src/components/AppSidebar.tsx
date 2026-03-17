@@ -250,7 +250,7 @@ export function AppSidebar({ card, bloomVersion = 0 }: AppSidebarProps) {
 const contactLinks = [
   { label: 'Email', icon: Mail, href: 'mailto:BushraSiraj586@gmail.com', target: '_self' as const },
   { label: 'LinkedIn', icon: Linkedin, href: 'https://www.linkedin.com/in/bushrasiraj/', target: '_blank' as const },
-  { label: 'Portfolio', icon: Globe, href: 'https://bushrasiraj-portfolio.lovable.app/', target: '_blank' as const },
+  { label: 'Portfolio', icon: Globe, href: 'https://bushra-siraj.github.io/bushrasiraj-portfolio/', target: '_blank' as const },
 ];
 
 function VisionContent() {
