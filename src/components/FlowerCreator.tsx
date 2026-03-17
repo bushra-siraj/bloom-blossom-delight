@@ -262,28 +262,35 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
           </div>
         );
 
-      case 7: // Message
-        return (
-          <div className="space-y-4">
-            <SectionTitle>Your message</SectionTitle>
-            <textarea
-              value={card.message}
-              onChange={e => update({ message: e.target.value.replace(/<[^>]*>/g, '') })}
-              className="w-full h-28 glass-card p-4 text-foreground bg-transparent resize-none focus:outline-none focus:ring-1 focus:ring-primary/50 font-body text-sm"
-              placeholder="Write something beautiful..."
-              maxLength={200}
-            />
-            <p className="text-[10px] text-muted-foreground">{card.message.length}/200</p>
-            <SectionTitle>Your name (optional)</SectionTitle>
-            <input
-              value={card.senderName}
-              onChange={e => update({ senderName: e.target.value.replace(/<[^>]*>/g, '') })}
-              className="w-full glass-card p-3 text-foreground bg-transparent focus:outline-none focus:ring-1 focus:ring-primary/50 font-body text-sm"
-              placeholder="From..."
-              maxLength={30}
-            />
-          </div>
-        );
+   case 7: // Message
+     const wordCount = card.message.trim() === '' ? 0 : card.message.trim().split(/\s+/).length;
+     const overLimit = wordCount > 250;
+     return (
+       <div className="space-y-4">
+        <SectionTitle>Your message</SectionTitle>
+        <textarea
+          value={card.message}
+          onChange={e => {
+            const val = e.target.value.replace(/<[^>]*>/g, '');
+            const words = val.trim() === '' ? 0 : val.trim().split(/\s+/).length;
+            if (words <= 250) update({ message: val });
+          }}
+          className="w-full h-28 glass-card p-4 text-foreground bg-transparent resize-none focus:outline-none focus:ring-1 focus:ring-primary/50 font-body text-sm"
+          placeholder="Write something beautiful..."
+        />
+        <p className={`text-[10px] ${overLimit ? 'text-red-400' : 'text-muted-foreground'}`}>
+           {wordCount}/250 words
+         </p>
+         <SectionTitle>Your name (optional)</SectionTitle>
+         <input
+           value={card.senderName}
+           onChange={e => update({ senderName: e.target.value.replace(/<[^>]*>/g, '') })}
+           className="w-full glass-card p-3 text-foreground bg-transparent focus:outline-none focus:ring-1 focus:ring-primary/50 font-body text-sm"
+           placeholder="From..."
+           maxLength={30}
+         />
+       </div>
+     );
 
       case 8: // Preview
         return (
