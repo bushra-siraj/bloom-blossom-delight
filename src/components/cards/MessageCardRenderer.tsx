@@ -84,7 +84,7 @@ const PolaroidCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => (
       style={{ borderRadius: '2px' }}
     >
       <div
-        className={`${mini ? 'h-16' : 'h-40'} flex items-center justify-center overflow-hidden`}
+        className={`${mini ? 'h-16' : 'h-45'} flex items-center justify-center overflow-hidden`}
         style={{ backgroundColor: `${card.cardColor}ee`, borderRadius: '1px' }}
       >
         <Msg card={{ ...card, fontStyle: card.fontStyle }} mini={mini} />
