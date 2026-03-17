@@ -47,12 +47,12 @@ function encodeCard(card: BloomCard): string {
   });
   // Trim trailing empty parts
   while (parts.length && !parts[parts.length - 1]) parts.pop();
-  return btoa(parts.join('|'));
+  return btoa(unescape(encodeURIComponent(parts.join('|'))));
 }
 
 function decodeCard(hash: string): BloomCard | null {
   try {
-    const parts = atob(hash).split('|');
+    const parts = decodeURIComponent(escape(atob(hash))).split('|');
     const card: any = { ...defaultCard };
     FIELDS.forEach((f, i) => {
       if (i >= parts.length || !parts[i]) return;
