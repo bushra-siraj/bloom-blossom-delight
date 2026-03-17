@@ -49,7 +49,7 @@ const Msg = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
     <div className="text-center space-y-1.5">
       <DecoRow card={card} size={mini ? 16 : 26} />
       <p
-        className={`leading-relaxed ${mini ? 'text-[10px]' : 'text-sm'} ${fontClasses(card.fontStyle)}`}
+        className={`leading-relaxed ${mini ? 'text-[10px]' : 'text-sm'} ${fontClasses(card.fontStyle)} ${!mini ? 'max-h-36 overflow-y-auto' : ''}`}
         style={{
           color: textColor,
           textShadow: '0 1px 3px hsl(0 0% 100% / 0.5)',
