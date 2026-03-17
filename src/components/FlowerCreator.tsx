@@ -264,7 +264,7 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
 
    case 7: // Message
      const wordCount = card.message.trim() === '' ? 0 : card.message.trim().split(/\s+/).length;
-     const overLimit = wordCount > 250;
+     const overLimit = wordCount > 150;
      return (
        <div className="space-y-4">
         <SectionTitle>Your message</SectionTitle>
@@ -273,13 +273,13 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
           onChange={e => {
             const val = e.target.value.replace(/<[^>]*>/g, '');
             const words = val.trim() === '' ? 0 : val.trim().split(/\s+/).length;
-            if (words <= 250) update({ message: val });
+            if (words <= 150) update({ message: val });
           }}
           className="w-full h-28 glass-card p-4 text-foreground bg-transparent resize-none focus:outline-none focus:ring-1 focus:ring-primary/50 font-body text-sm"
           placeholder="Write something beautiful..."
         />
         <p className={`text-[10px] ${overLimit ? 'text-red-400' : 'text-muted-foreground'}`}>
-           {wordCount}/250 words
+           {wordCount}/150 words
          </p>
          <SectionTitle>Your name (optional)</SectionTitle>
          <input
