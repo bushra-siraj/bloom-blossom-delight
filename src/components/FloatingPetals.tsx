@@ -13,6 +13,8 @@ interface Petal {
 }
 
 export const FloatingPetals = ({ count = 15, color }: { count?: number; color?: string }) => {
+  const isMobile = window.innerWidth < 768;
+  const mobileCount = isMobile ? Math.min(count, 6) : count;
   const [petals, setPetals] = useState<Petal[]>([]);
   const generatedRef = useRef(false);
 
@@ -21,8 +23,8 @@ export const FloatingPetals = ({ count = 15, color }: { count?: number; color?: 
     generatedRef.current = true;
 
     // Evenly distribute petals across the width with slight jitter
-    const p: Petal[] = Array.from({ length: count }, (_, i) => {
-      const segment = 100 / count;
+    const p: Petal[] = Array.from({ length: mobileCount }, (_, i) => {
+      const segment = 100 / mobileCount;
       const baseX = segment * i + segment * 0.5;
       const jitter = (Math.random() - 0.5) * segment * 0.8;
       return {
@@ -84,8 +86,8 @@ export const FloatingPetals = ({ count = 15, color }: { count?: number; color?: 
         </motion.div>
       ))}
       {/* Sparkle particles - distributed evenly */}
-      {Array.from({ length: 6 }).map((_, i) => {
-        const segment = 80 / 6;
+      {Array.from({ length: isMobile ? 3 : 6 }).map((_, i) => {
+        const segment = 80 / (isMobile ? 3 : 6);
         return (
           <motion.div
             key={`sparkle-${i}`}
