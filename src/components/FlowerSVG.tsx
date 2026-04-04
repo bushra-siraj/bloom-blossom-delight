@@ -35,9 +35,15 @@ export const FlowerSVG = ({
   const h = bouquetSize === 'large' ? size * 3 : bouquetSize === 'small' ? size * 2.2 : size + 20;
 
   return (
-    <Wrapper {...wrapperProps as any} style={{ width: w, height: h, background: 'transparent' }}
+    <Wrapper {...wrapperProps as any}
+      style={{
+        width: w, height: h, background: 'transparent',
+        contain: 'layout style paint',
+        willChange: 'transform',
+        isolation: 'isolate',
+      } as React.CSSProperties}
       className="relative flex items-center justify-center">
-      <svg viewBox={vb} width={w} height={h} style={{ background: 'transparent', overflow: 'visible', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.15))' }}>
+      <svg viewBox={vb} width={w} height={h} style={{ background: 'transparent', overflow: 'visible' }}>
         {bouquetSize === 'single' && <BouquetSingle type={type} c={c} leafStyle={leafStyle} customColor={customPetalColor} />}
         {bouquetSize === 'small' && <BouquetSmall type={type} c={c} leafStyle={leafStyle} customColor={customPetalColor} />}
         {bouquetSize === 'large' && <BouquetLarge type={type} c={c} leafStyle={leafStyle} customColor={customPetalColor} />}
