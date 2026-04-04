@@ -167,7 +167,9 @@ const Index = () => {
 
           <SidebarTrigger className="fixed top-4 left-4 z-50 glass-card p-2 rounded-full text-foreground/50 hover:text-primary transition-colors h-8 w-8" />
 
-          <div className="relative z-10 w-full">
+          {/* Solid layer to prevent backdrop-blur from processing animated petals underneath — fixes mobile flickering */}
+          <div className="relative z-10 w-full" style={{ isolation: 'isolate' }}>
+            <div className="absolute inset-0 bg-background/80 -z-10" />
             <motion.div
               initial={{ opacity: 0, y: -15 }}
               animate={{ opacity: 1, y: 0 }}
