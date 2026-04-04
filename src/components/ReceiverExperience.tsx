@@ -23,6 +23,7 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
   const [phase, setPhase] = useState<Phase>('env');
   const [copied, setCopied] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  const messageCardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const timers = [
@@ -39,16 +40,29 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
   }, []);
 
   const handleSaveImage = async () => {
-    const el = cardRef.current;
-    if (!el) return;
+    // Capture only the message card, not the full animated scene
+    const el = messageCardRef.current;
+    if (!el) {
+      // Fallback: copy text
+      const text = `${card.message}${card.senderName ? ` — ${card.senderName}` : ''}`;
+      navigator.clipboard.writeText(text);
+      alert('Message copied to clipboard!');
+      return;
+    }
     try {
       const { default: html2canvas } = await import('html2canvas');
-      const canvas = await html2canvas(el, { backgroundColor: null, scale: 2 });
+      const canvas = await html2canvas(el, {
+        backgroundColor: '#1a1020',
+        scale: window.devicePixelRatio || 2,
+        useCORS: true,
+        logging: false,
+      });
       const link = document.createElement('a');
       link.download = 'bloom-for-you.png';
-      link.href = canvas.toDataURL();
+      link.href = canvas.toDataURL('image/png');
       link.click();
-    } catch {
+    } catch (err) {
+      console.error('Save image failed:', err);
       const text = `${card.message}${card.senderName ? ` — ${card.senderName}` : ''}`;
       navigator.clipboard.writeText(text);
       alert('Message copied to clipboard!');
@@ -67,7 +81,7 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
   return (
     <div className="fixed inset-0 overflow-hidden" ref={cardRef}>
       <EnvironmentBg environment={card.environment} particleColor={card.particleColor} glowColor={card.glowColor} />
-      {phaseIndex >= 7 && <FloatingPetals count={20} color={card.petalColor} />}
+      {phaseIndex >= 7 && <FloatingPetals count={12} color={card.petalColor} />}
 
       <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 safe-area-inset">
         {/* "Someone sent you a flower" text */}
@@ -140,7 +154,7 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
             <motion.div initial={{ opacity: 0, y: 50, scale: 0.85 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
-              className="w-full max-w-xs z-20">
+              className="w-full max-w-xs z-20" ref={messageCardRef}>
               <MessageCardRenderer card={card} />
             </motion.div>
           )}
