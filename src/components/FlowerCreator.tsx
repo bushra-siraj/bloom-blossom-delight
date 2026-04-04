@@ -146,11 +146,11 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
           </div>
         );
 
-      case 2: // Bouquet
+      case 2: // Bouquet — isolated rendering to prevent background glitch
         return (
           <div className="space-y-5">
             <SectionTitle>Bouquet size</SectionTitle>
-            <div className="grid grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-3 gap-2.5" style={{ contain: 'layout style paint', isolation: 'isolate' }}>
               {bouquetSizes.map(b => (
                 <OptionButton key={b} selected={card.bouquetSize === b} onClick={() => update({ bouquetSize: b })}>
                   <div className="flex flex-col items-center gap-1">
@@ -161,7 +161,7 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
                 </OptionButton>
               ))}
             </div>
-            <div className="flex justify-center pt-1 overflow-hidden">
+            <div className="flex justify-center pt-1 overflow-hidden" style={{ contain: 'layout style paint', isolation: 'isolate' }}>
               <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} bouquetSize={card.bouquetSize} size={75}
                 customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
             </div>

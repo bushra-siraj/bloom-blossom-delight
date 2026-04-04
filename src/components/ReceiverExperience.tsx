@@ -127,7 +127,7 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
           )}
         </AnimatePresence>
 
-        {/* Flower drops + blooms */}
+        {/* Flower drops + blooms — isolated layer to prevent background crash */}
         <AnimatePresence>
           {phaseIndex >= 5 && (
             <motion.div
@@ -139,6 +139,7 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
               }}
               transition={{ duration: 0.8, type: 'spring', bounce: 0.3 }}
               className="absolute bottom-[20%]"
+              style={{ isolation: 'isolate', contain: 'layout style paint', willChange: 'transform' }}
             >
               <FlowerSVG type={card.flowerType} color={card.flowerColor}
                 leafStyle={card.leafStyle} bouquetSize={card.bouquetSize}
