@@ -23,6 +23,7 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
   const [phase, setPhase] = useState<Phase>('env');
   const [copied, setCopied] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  const messageCardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const timers = [
