@@ -39,16 +39,29 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
   }, []);
 
   const handleSaveImage = async () => {
-    const el = cardRef.current;
-    if (!el) return;
+    // Capture only the message card, not the full animated scene
+    const el = messageCardRef.current;
+    if (!el) {
+      // Fallback: copy text
+      const text = `${card.message}${card.senderName ? ` — ${card.senderName}` : ''}`;
+      navigator.clipboard.writeText(text);
+      alert('Message copied to clipboard!');
+      return;
+    }
     try {
       const { default: html2canvas } = await import('html2canvas');
-      const canvas = await html2canvas(el, { backgroundColor: null, scale: 2 });
+      const canvas = await html2canvas(el, {
+        backgroundColor: '#1a1020',
+        scale: window.devicePixelRatio || 2,
+        useCORS: true,
+        logging: false,
+      });
       const link = document.createElement('a');
       link.download = 'bloom-for-you.png';
-      link.href = canvas.toDataURL();
+      link.href = canvas.toDataURL('image/png');
       link.click();
-    } catch {
+    } catch (err) {
+      console.error('Save image failed:', err);
       const text = `${card.message}${card.senderName ? ` — ${card.senderName}` : ''}`;
       navigator.clipboard.writeText(text);
       alert('Message copied to clipboard!');
