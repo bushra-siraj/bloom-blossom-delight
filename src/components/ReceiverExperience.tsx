@@ -81,7 +81,7 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
   return (
     <div className="fixed inset-0 overflow-hidden" ref={cardRef}>
       <EnvironmentBg environment={card.environment} particleColor={card.particleColor} glowColor={card.glowColor} />
-      {phaseIndex >= 7 && <FloatingPetals count={20} color={card.petalColor} />}
+      {phaseIndex >= 7 && <FloatingPetals count={12} color={card.petalColor} />}
 
       <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 safe-area-inset">
         {/* "Someone sent you a flower" text */}
