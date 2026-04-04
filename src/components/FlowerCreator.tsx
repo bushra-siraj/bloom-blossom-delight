@@ -161,9 +161,20 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
                 </OptionButton>
               ))}
             </div>
-            <div className="flex justify-center pt-1 overflow-hidden" style={{ contain: 'layout style paint', isolation: 'isolate' }}>
-              <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} bouquetSize={card.bouquetSize} size={75}
-                customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
+            <div className="flex justify-center pt-2 pb-4" style={{ contain: 'layout style paint', isolation: 'isolate', minHeight: card.bouquetSize === 'large' ? 260 : card.bouquetSize === 'small' ? 200 : 140 }}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={card.bouquetSize}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                  className="flex items-center justify-center"
+                >
+                  <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} bouquetSize={card.bouquetSize} size={75}
+                    customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
         );
