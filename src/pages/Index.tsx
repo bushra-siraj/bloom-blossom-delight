@@ -40,9 +40,9 @@ const Index = () => {
 
       // Generate short ID and save bloom data
       const shortId = generateShortId();
-      const { error: shareError } = await supabase.from('shared_blooms').insert({
+      const { error: shareError } = await (supabase as any).from('shared_blooms').insert({
         id: shortId,
-        card_data: c as unknown as Record<string, unknown>,
+        card_data: c,
       });
       if (shareError) throw shareError;
 
