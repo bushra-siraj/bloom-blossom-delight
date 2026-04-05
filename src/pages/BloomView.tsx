@@ -17,7 +17,7 @@ const BloomView = () => {
     if (!id) { setError(true); setLoading(false); return; }
 
     const fetchBloom = async () => {
-      const { data, error: fetchErr } = await supabase
+      const { data, error: fetchErr } = await (supabase as any)
         .from('shared_blooms')
         .select('card_data')
         .eq('id', id)
