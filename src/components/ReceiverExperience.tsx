@@ -18,7 +18,7 @@ interface ReceiverExperienceProps {
 
 export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperienceProps) => {
 
-export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) => {
+// Component body starts here (export moved above)
   const [phase, setPhase] = useState<Phase>('env');
   const [copied, setCopied] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
