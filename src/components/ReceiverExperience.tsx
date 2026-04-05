@@ -70,7 +70,8 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
   };
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(getShareUrl());
+    const url = shareUrl || window.location.href;
+    navigator.clipboard.writeText(url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
