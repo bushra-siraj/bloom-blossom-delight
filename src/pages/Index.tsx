@@ -73,22 +73,26 @@ const Index = () => {
   const [bloomVersion, setBloomVersion] = useState(0);
   useAnonAuth();
 
+  const [searchParams] = useSearchParams();
   useEffect(() => {
+    // Check query param ?d= first, then legacy hash
+    const dParam = searchParams.get('d');
     const hash = window.location.hash.slice(1);
-    if (hash) {
-      const decoded = decodeCard(hash);
+    const encoded = dParam || hash;
+    if (encoded) {
+      const decoded = decodeCard(encoded);
       if (decoded) {
         setCard(decoded);
         setMode('preview');
       }
     }
-  }, []);
+  }, [searchParams]);
 
   const handleComplete = async (c: BloomCard) => {
     setCard(c);
     setMode('preview');
     const encoded = encodeCard(c);
-    window.history.replaceState(null, '', `#${encoded}`);
+    window.history.replaceState(null, '', `?d=${encoded}`);
 
     try {
       let { data: { session } } = await supabase.auth.getSession();
