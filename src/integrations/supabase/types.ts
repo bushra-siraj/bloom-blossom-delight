@@ -32,6 +32,24 @@ export type Database = {
         }
         Relationships: []
       }
+      shared_blooms: {
+        Row: {
+          card_data: Json
+          created_at: string
+          id: string
+        }
+        Insert: {
+          card_data: Json
+          created_at?: string
+          id: string
+        }
+        Update: {
+          card_data?: Json
+          created_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
       user_flower_history: {
         Row: {
           created_at: string

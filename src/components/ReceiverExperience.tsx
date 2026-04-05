@@ -13,13 +13,12 @@ type Phase = 'env' | 'intro' | 'walk' | 'pause' | 'action' | 'drop' | 'land' | '
 interface ReceiverExperienceProps {
   card: BloomCard;
   onReset: () => void;
+  shareUrl?: string;
 }
 
-function getShareUrl(): string {
-  return window.location.href;
-}
+export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperienceProps) => {
 
-export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) => {
+// Component body starts here (export moved above)
   const [phase, setPhase] = useState<Phase>('env');
   const [copied, setCopied] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -71,7 +70,8 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
   };
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(getShareUrl());
+    const url = shareUrl || window.location.href;
+    navigator.clipboard.writeText(url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
