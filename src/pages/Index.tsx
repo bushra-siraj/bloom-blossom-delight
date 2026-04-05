@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import LZString from 'lz-string';
 import { FloatingPetals } from '@/components/FloatingPetals';
 import { FlowerCreator } from '@/components/FlowerCreator';
 import { ReceiverExperience } from '@/components/ReceiverExperience';
@@ -11,56 +13,15 @@ import { defaultCard } from '@/types/bloom';
 import { useAnonAuth } from '@/hooks/useAnonAuth';
 import { supabase } from '@/integrations/supabase/client';
 
-// Compact encoding: pipe-delimited values with single-char enum codes
-const ENUM_CODES: Record<string, Record<string, string>> = {
-  flowerType:  { rose: 'r', tulip: 't', daisy: 'd', lily: 'l', sunflower: 's', 'cherry-blossom': 'c' },
-  flowerColor: { rose: 'r', lavender: 'l', mint: 'm', peach: 'p', sky: 's', gold: 'g' },
-  leafStyle:   { classic: 'c', round: 'r', pointed: 'p', none: 'n' },
-  bouquetSize: { single: 's', small: 'm', large: 'l' },
-  environment: { midnight: 'm', sunset: 's', forest: 'f', clouds: 'c' },
-  cardStyle:   { classic: 'c', polaroid: 'p', envelope: 'e', glass: 'g' },
-  fontStyle:   { romantic: 'r', handwritten: 'h', modern: 'm' },
-  decoration:  { bow: 'b', sparkles: 's', hearts: 'h', butterflies: 'u', vines: 'v', none: 'n' },
-  character:   { girl: 'g', boy: 'b', cat: 'c', robot: 'r', ghost: 'h', butterfly: 'u' },
-  animation:   { wink: 'w', wave: 'v', 'drop-flower': 'd', 'present-flower': 'p' },
-};
-
-// Reverse lookup
-const REV_ENUM: Record<string, Record<string, string>> = {};
-for (const [field, map] of Object.entries(ENUM_CODES)) {
-  REV_ENUM[field] = Object.fromEntries(Object.entries(map).map(([k, v]) => [v, k]));
-}
-
-// Encode order (fixed) — colors stored as short hex without #
-const FIELDS = [
-  'flowerType', 'flowerColor', 'leafStyle', 'bouquetSize', 'environment',
-  'cardStyle', 'fontStyle', 'decoration', 'character', 'animation',
-  'petalColor', 'glowColor', 'particleColor', 'cardColor', 'fontColor', 'message', 'senderName',
-] as const;
-
 function encodeCard(card: BloomCard): string {
-  const parts = FIELDS.map(f => {
-    const val = (card as any)[f] as string;
-    if (ENUM_CODES[f]) return ENUM_CODES[f][val] || val;
-    if (f.endsWith('Color')) return val.replace('#', '');
-    return val;
-  });
-  // Trim trailing empty parts
-  while (parts.length && !parts[parts.length - 1]) parts.pop();
-  return btoa(unescape(encodeURIComponent(parts.join('|'))));
+  return LZString.compressToEncodedURIComponent(JSON.stringify(card));
 }
 
-function decodeCard(hash: string): BloomCard | null {
+function decodeCard(encoded: string): BloomCard | null {
   try {
-    const parts = decodeURIComponent(escape(atob(hash))).split('|');
-    const card: any = { ...defaultCard };
-    FIELDS.forEach((f, i) => {
-      if (i >= parts.length || !parts[i]) return;
-      if (REV_ENUM[f]) card[f] = REV_ENUM[f][parts[i]] || parts[i];
-      else if (f.endsWith('Color')) card[f] = '#' + parts[i];
-      else card[f] = parts[i];
-    });
-    return card as BloomCard;
+    const json = LZString.decompressFromEncodedURIComponent(encoded);
+    if (!json) return null;
+    return { ...defaultCard, ...JSON.parse(json) } as BloomCard;
   } catch {
     return null;
   }
@@ -71,24 +32,28 @@ const Index = () => {
   const [card, setCard] = useState<BloomCard | null>(null);
   const [liveCard, setLiveCard] = useState<BloomCard>(defaultCard);
   const [bloomVersion, setBloomVersion] = useState(0);
+  const [searchParams] = useSearchParams();
   useAnonAuth();
 
   useEffect(() => {
+    // Check query param ?d= first, then legacy hash for backwards compat
+    const dParam = searchParams.get('d');
     const hash = window.location.hash.slice(1);
-    if (hash) {
-      const decoded = decodeCard(hash);
+    const encoded = dParam || hash;
+    if (encoded) {
+      const decoded = decodeCard(encoded);
       if (decoded) {
         setCard(decoded);
         setMode('preview');
       }
     }
-  }, []);
+  }, [searchParams]);
 
   const handleComplete = async (c: BloomCard) => {
     setCard(c);
     setMode('preview');
     const encoded = encodeCard(c);
-    window.history.replaceState(null, '', `#${encoded}`);
+    window.history.replaceState(null, '', `?d=${encoded}`);
 
     try {
       let { data: { session } } = await supabase.auth.getSession();

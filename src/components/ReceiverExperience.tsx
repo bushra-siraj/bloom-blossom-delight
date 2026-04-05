@@ -40,10 +40,9 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
   }, []);
 
   const handleSaveImage = async () => {
-    // Capture only the message card, not the full animated scene
-    const el = messageCardRef.current;
+    // Capture the ENTIRE receiver screen, not just the card
+    const el = cardRef.current;
     if (!el) {
-      // Fallback: copy text
       const text = `${card.message}${card.senderName ? ` — ${card.senderName}` : ''}`;
       navigator.clipboard.writeText(text);
       alert('Message copied to clipboard!');
@@ -53,9 +52,11 @@ export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) =
       const { default: html2canvas } = await import('html2canvas');
       const canvas = await html2canvas(el, {
         backgroundColor: '#1a1020',
-        scale: window.devicePixelRatio || 2,
+        scale: Math.max(window.devicePixelRatio || 2, 2),
         useCORS: true,
         logging: false,
+        width: el.scrollWidth,
+        height: el.scrollHeight,
       });
       const link = document.createElement('a');
       link.download = 'bloom-for-you.png';
