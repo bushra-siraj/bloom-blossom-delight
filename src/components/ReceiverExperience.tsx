@@ -13,11 +13,10 @@ type Phase = 'env' | 'intro' | 'walk' | 'pause' | 'action' | 'drop' | 'land' | '
 interface ReceiverExperienceProps {
   card: BloomCard;
   onReset: () => void;
+  shareUrl?: string;
 }
 
-function getShareUrl(): string {
-  return window.location.href;
-}
+export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperienceProps) => {
 
 export const ReceiverExperience = ({ card, onReset }: ReceiverExperienceProps) => {
   const [phase, setPhase] = useState<Phase>('env');
