@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import LZString from 'lz-string';
 import { FloatingPetals } from '@/components/FloatingPetals';
 import { FlowerCreator } from '@/components/FlowerCreator';
 import { ReceiverExperience } from '@/components/ReceiverExperience';
@@ -12,48 +10,19 @@ import type { BloomCard } from '@/types/bloom';
 import { defaultCard } from '@/types/bloom';
 import { useAnonAuth } from '@/hooks/useAnonAuth';
 import { supabase } from '@/integrations/supabase/client';
-
-function encodeCard(card: BloomCard): string {
-  return LZString.compressToEncodedURIComponent(JSON.stringify(card));
-}
-
-function decodeCard(encoded: string): BloomCard | null {
-  try {
-    const json = LZString.decompressFromEncodedURIComponent(encoded);
-    if (!json) return null;
-    return { ...defaultCard, ...JSON.parse(json) } as BloomCard;
-  } catch {
-    return null;
-  }
-}
+import { generateShortId } from '@/lib/shortId';
 
 const Index = () => {
   const [mode, setMode] = useState<'create' | 'preview'>('create');
   const [card, setCard] = useState<BloomCard | null>(null);
+  const [shareUrl, setShareUrl] = useState<string>('');
   const [liveCard, setLiveCard] = useState<BloomCard>(defaultCard);
   const [bloomVersion, setBloomVersion] = useState(0);
-  const [searchParams] = useSearchParams();
   useAnonAuth();
-
-  useEffect(() => {
-    // Check query param ?d= first, then legacy hash for backwards compat
-    const dParam = searchParams.get('d');
-    const hash = window.location.hash.slice(1);
-    const encoded = dParam || hash;
-    if (encoded) {
-      const decoded = decodeCard(encoded);
-      if (decoded) {
-        setCard(decoded);
-        setMode('preview');
-      }
-    }
-  }, [searchParams]);
 
   const handleComplete = async (c: BloomCard) => {
     setCard(c);
     setMode('preview');
-    const encoded = encodeCard(c);
-    window.history.replaceState(null, '', `?d=${encoded}`);
 
     try {
       let { data: { session } } = await supabase.auth.getSession();
@@ -69,6 +38,21 @@ const Index = () => {
 
       const sanitize = (s: string) => s.replace(/<[^>]*>/g, '').trim();
 
+      // Generate short ID and save bloom data
+      const shortId = generateShortId();
+      const { error: shareError } = await supabase.from('shared_blooms').insert({
+        id: shortId,
+        card_data: c as unknown as Record<string, unknown>,
+      });
+      if (shareError) throw shareError;
+
+      // Build the clean short URL
+      const origin = window.location.origin;
+      const base = import.meta.env.BASE_URL?.replace(/\/$/, '') || '';
+      const url = `${origin}${base}/b/${shortId}`;
+      setShareUrl(url);
+
+      // Insert flower history
       const { error: insertError } = await supabase.from('user_flower_history').insert({
         user_id: userId,
         flower_type: c.flowerType,
@@ -78,6 +62,7 @@ const Index = () => {
       });
       if (insertError) throw insertError;
 
+      // Increment global counter
       const { data: currentStats, error: currentStatsError } = await supabase
         .from('global_stats')
         .select('total_blooms')
@@ -93,22 +78,17 @@ const Index = () => {
         .eq('id', 1);
       if (updateError) throw updateError;
 
-      const { data: updatedStats, error: updatedStatsError } = await supabase
-        .from('global_stats')
-        .select('total_blooms')
-        .eq('id', 1)
-        .single();
-      if (updatedStatsError) throw updatedStatsError;
-
       setBloomVersion(v => v + 1);
-      console.log('[Bloom] direct insert/update succeeded. Updated total_blooms:', Number(updatedStats?.total_blooms ?? 0));
+      console.log('[Bloom] saved with short ID:', shortId);
     } catch (err) {
-      console.error('[Bloom] direct insert/update failed:', err);
+      console.error('[Bloom] save failed:', err);
+      // Fallback: still show preview even if DB save fails
     }
   };
 
   const handleReset = () => {
     setCard(null);
+    setShareUrl('');
     setMode('create');
     window.history.replaceState(null, '', window.location.pathname);
   };
@@ -117,7 +97,7 @@ const Index = () => {
     return (
       <>
         <Watermark />
-        <ReceiverExperience card={card} onReset={handleReset} />
+        <ReceiverExperience card={card} onReset={handleReset} shareUrl={shareUrl} />
       </>
     );
   }
