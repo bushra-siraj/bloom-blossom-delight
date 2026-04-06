@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Eye, BarChart3, Mail, Linkedin, Globe } from 'lucide-react';
+import { X, Eye, BarChart3, Mail, Linkedin, Instagram } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import type { BloomCard } from '@/types/bloom';
@@ -250,7 +250,7 @@ export function AppSidebar({ card, bloomVersion = 0 }: AppSidebarProps) {
 const contactLinks = [
   { label: 'Email', icon: Mail, href: 'mailto:BushraSiraj586@gmail.com', target: '_self' as const },
   { label: 'LinkedIn', icon: Linkedin, href: 'https://www.linkedin.com/in/bushrasiraj/', target: '_blank' as const },
-  { label: 'Portfolio', icon: Globe, href: 'https://bushra-siraj.github.io/bushrasiraj-portfolio/', target: '_blank' as const },
+  { label: 'Instagram', icon: Instagram, href: 'https://www.instagram.com/bloomforyou_1?igsh=MWpkcTdpZTFrY3Btag==', target: '_blank' as const },
 ];
 
 function VisionContent() {
