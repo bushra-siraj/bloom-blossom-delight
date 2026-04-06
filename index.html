@@ -25,6 +25,18 @@
   </head>
 
   <body>
+    <script type="text/javascript">
+      // GitHub Pages SPA support — rewrite ?/path back to /path BEFORE React mounts
+      (function() {
+        var search = window.location.search;
+        if (search.indexOf('?/') !== 0) return;
+        var parts = search.slice(2).split('&');
+        var routePath = (parts.shift() || '').replace(/~and~/g, '&');
+        var restQuery = parts.length ? '?' + parts.join('&').replace(/~and~/g, '&') : '';
+        var nextPath = ('/' + routePath).replace(/\/\//g, '/');
+        window.history.replaceState(null, '', nextPath + restQuery + window.location.hash);
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
