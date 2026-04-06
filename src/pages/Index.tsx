@@ -40,16 +40,16 @@ const Index = () => {
 
       // Generate short ID and save bloom data
       const shortId = generateShortId();
+      console.log('[SendBloom] saving bloom with ID:', shortId);
       const { error: shareError } = await (supabase as any).from('shared_blooms').insert({
         id: shortId,
         card_data: c,
       });
       if (shareError) throw shareError;
+      console.log('[SendBloom] bloom saved successfully:', shortId);
 
       // Build the clean short URL
-      const origin = window.location.origin;
-      const base = import.meta.env.BASE_URL?.replace(/\/$/, '') || '';
-      const url = `${origin}${base}/b/${shortId}`;
+      const url = `${window.location.origin}/b/${shortId}`;
       setShareUrl(url);
 
       // Insert flower history
