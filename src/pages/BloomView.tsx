@@ -17,11 +17,18 @@ const BloomView = () => {
     if (!id) { setError(true); setLoading(false); return; }
 
     const fetchBloom = async () => {
-      const { data, error: fetchErr } = await (supabase as any)
+      // Ensure we have a session (anonymous auth) before querying
+      let { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        const { error: anonErr } = await supabase.auth.signInAnonymously();
+        if (anonErr) console.warn('[BloomView] anon auth failed:', anonErr);
+      }
+
+      const { data, error: fetchErr } = await supabase
         .from('shared_blooms')
         .select('card_data')
         .eq('id', id)
-        .single();
+        .maybeSingle();
 
       if (fetchErr || !data) {
         console.error('[BloomView] fetch error:', fetchErr);
@@ -35,6 +42,7 @@ const BloomView = () => {
     fetchBloom();
   }, [id]);
 
+  const shareUrl = `${window.location.origin}/b/${id}`;
   const handleReset = () => navigate('/');
 
   if (loading) {
@@ -53,7 +61,7 @@ const BloomView = () => {
       <div className="fixed inset-0 flex items-center justify-center bg-background">
         <div className="text-center px-6">
           <div className="text-4xl mb-4">🥀</div>
-          <p className="text-foreground/70 text-sm font-body mb-4">This bloom could not be found</p>
+          <p className="text-foreground/70 text-sm font-body mb-4">This bloom has expired or doesn't exist 🌸</p>
           <button onClick={handleReset}
             className="glass-card px-6 py-3 text-sm font-body text-primary glow-border">
             🌸 Create your own bloom
@@ -66,7 +74,7 @@ const BloomView = () => {
   return (
     <>
       <Watermark />
-      <ReceiverExperience card={card} onReset={handleReset} />
+      <ReceiverExperience card={card} onReset={handleReset} shareUrl={shareUrl} />
     </>
   );
 };
