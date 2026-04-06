@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { supabase } from '@/integrations/supabase/client';
 import { ReceiverExperience } from '@/components/ReceiverExperience';
 import { Watermark } from '@/components/Watermark';
@@ -24,6 +25,8 @@ const BloomView = () => {
         if (anonErr) console.warn('[BloomView] anon auth failed:', anonErr);
       }
 
+      console.log('[BloomView] fetching bloom:', id);
+
       const { data, error: fetchErr } = await supabase
         .from('shared_blooms')
         .select('card_data')
@@ -31,9 +34,10 @@ const BloomView = () => {
         .maybeSingle();
 
       if (fetchErr || !data) {
-        console.error('[BloomView] fetch error:', fetchErr);
+        console.error('[BloomView] fetch error:', fetchErr, 'data:', data);
         setError(true);
       } else {
+        console.log('[BloomView] bloom loaded successfully');
         setCard({ ...defaultCard, ...(data.card_data as Record<string, unknown>) } as BloomCard);
       }
       setLoading(false);
@@ -42,17 +46,32 @@ const BloomView = () => {
     fetchBloom();
   }, [id]);
 
-  const shareUrl = `${window.location.origin}/b/${id}`;
+  const shareUrl = `https://bloomforyou.me/b/${id}`;
+  const ogImage = 'https://bloomforyou.me/og-image.png';
   const handleReset = () => navigate('/');
 
   if (loading) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-background">
-        <div className="text-center">
-          <div className="text-4xl mb-4 animate-pulse">🌸</div>
-          <p className="text-foreground/50 text-sm font-body">Loading your bloom...</p>
+      <>
+        <Helmet>
+          <title>Someone sent you a flower 🌸 — BloomForYou</title>
+          <meta property="og:title" content="Someone sent you a flower 🌸" />
+          <meta property="og:description" content="Open to see your special bloom" />
+          <meta property="og:image" content={ogImage} />
+          <meta property="og:url" content={shareUrl} />
+          <meta property="og:type" content="website" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="Someone sent you a flower 🌸" />
+          <meta name="twitter:description" content="Open to see your special bloom" />
+          <meta name="twitter:image" content={ogImage} />
+        </Helmet>
+        <div className="fixed inset-0 flex items-center justify-center bg-background">
+          <div className="text-center">
+            <div className="text-4xl mb-4 animate-pulse">🌸</div>
+            <p className="text-foreground/50 text-sm font-body">Loading your bloom...</p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -73,6 +92,18 @@ const BloomView = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Someone sent you a flower 🌸 — BloomForYou</title>
+        <meta property="og:title" content="Someone sent you a flower 🌸" />
+        <meta property="og:description" content="Open to see your special bloom" />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:url" content={shareUrl} />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Someone sent you a flower 🌸" />
+        <meta name="twitter:description" content="Open to see your special bloom" />
+        <meta name="twitter:image" content={ogImage} />
+      </Helmet>
       <Watermark />
       <ReceiverExperience card={card} onReset={handleReset} shareUrl={shareUrl} />
     </>
