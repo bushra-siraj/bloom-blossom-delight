@@ -21,6 +21,8 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
 // Component body starts here (export moved above)
   const [phase, setPhase] = useState<Phase>('env');
   const [copied, setCopied] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const messageCardRef = useRef<HTMLDivElement>(null);
 
@@ -39,12 +41,14 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
   }, []);
 
   const handleSaveImage = async () => {
-    // Capture the ENTIRE receiver screen, not just the card
+    if (saving) return;
+    setSaving(true);
+    setSaveError(false);
     const el = cardRef.current;
     if (!el) {
-      const text = `${card.message}${card.senderName ? ` — ${card.senderName}` : ''}`;
-      navigator.clipboard.writeText(text);
-      alert('Message copied to clipboard!');
+      setSaving(false);
+      setSaveError(true);
+      setTimeout(() => setSaveError(false), 3000);
       return;
     }
     try {
@@ -63,9 +67,10 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
       link.click();
     } catch (err) {
       console.error('Save image failed:', err);
-      const text = `${card.message}${card.senderName ? ` — ${card.senderName}` : ''}`;
-      navigator.clipboard.writeText(text);
-      alert('Message copied to clipboard!');
+      setSaveError(true);
+      setTimeout(() => setSaveError(false), 3000);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -175,14 +180,25 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
                 </svg>
                 {copied ? 'Copied!' : 'Copy Link'}
               </button>
-              <button onClick={handleSaveImage}
-                className="glass-card px-5 py-3 min-h-[44px] text-xs font-body text-foreground/70 hover:text-foreground transition-all flex items-center gap-2 hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)] active:scale-95">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                  <polyline points="7 10 12 15 17 10" />
-                  <line x1="12" y1="15" x2="12" y2="3" />
-                </svg>
-                Save Image
+              <button onClick={handleSaveImage} disabled={saving}
+                className={`glass-card px-5 py-3 min-h-[44px] text-xs font-body transition-all flex items-center gap-2 active:scale-95 ${saving ? 'text-foreground/40 cursor-wait' : saveError ? 'text-red-400' : 'text-foreground/70 hover:text-foreground hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)]'}`}>
+                {saving ? (
+                  <>
+                    <motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="inline-block">🌸</motion.span>
+                    Saving...
+                  </>
+                ) : saveError ? (
+                  "Couldn't save, try again 🌸"
+                ) : (
+                  <>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    Save Image
+                  </>
+                )}
               </button>
             </motion.div>
           )}
