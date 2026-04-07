@@ -165,10 +165,10 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
               <AnimatePresence mode="wait">
                 <motion.div
                   key={card.bouquetSize}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                  initial={{ opacity: 0, scale: 0.85, filter: 'blur(4px)' }}
+                  animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, scale: 0.85, filter: 'blur(4px)' }}
+                  transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
                   className="flex items-center justify-center"
                 >
                   <FlowerSVG type={card.flowerType} color={card.flowerColor} leafStyle={card.leafStyle} bouquetSize={card.bouquetSize} size={75}
