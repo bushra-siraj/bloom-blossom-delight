@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { supabase } from '@/integrations/supabase/client';
 import { ReceiverExperience } from '@/components/ReceiverExperience';
 import { Watermark } from '@/components/Watermark';
+import { BloomLoader } from '@/components/BloomLoader';
 import type { BloomCard } from '@/types/bloom';
 import { defaultCard } from '@/types/bloom';
 
@@ -65,12 +66,7 @@ const BloomView = () => {
           <meta name="twitter:description" content="Open to see your special bloom" />
           <meta name="twitter:image" content={ogImage} />
         </Helmet>
-        <div className="fixed inset-0 flex items-center justify-center bg-background">
-          <div className="text-center">
-            <div className="text-4xl mb-4 animate-pulse">🌸</div>
-            <p className="text-foreground/50 text-sm font-body">Loading your bloom...</p>
-          </div>
-        </div>
+        <BloomLoader message="Loading your bloom..." />
       </>
     );
   }
