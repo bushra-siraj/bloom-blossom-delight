@@ -67,7 +67,7 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
       onClick={onClick}
       className={`glass-card p-3 text-center text-sm font-body transition-all duration-300 hover:scale-[1.02] ${
         selected
-          ? 'ring-2 ring-primary/60 shadow-[0_0_20px_hsl(330_60%_65%/0.2)]'
+          ? 'ring-2 ring-primary/60 shadow-[0_0_20px_hsl(330_60%_65%/0.2)] overflow-visible'
           : 'hover:ring-1 hover:ring-foreground/10'
       } ${className}`}
     >
@@ -150,7 +150,7 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
         return (
           <div className="space-y-5">
             <SectionTitle>Bouquet size</SectionTitle>
-            <div className="grid grid-cols-3 gap-2.5 px-1" style={{ contain: 'layout style paint', isolation: 'isolate' }}>
+            <div className="grid grid-cols-3 gap-2.5 px-2 overflow-visible" style={{ contain: 'layout style paint', isolation: 'isolate' }}>
               {bouquetSizes.map(b => (
                 <OptionButton key={b} selected={card.bouquetSize === b} onClick={() => update({ bouquetSize: b })}>
                   <div className="flex flex-col items-center gap-1">
