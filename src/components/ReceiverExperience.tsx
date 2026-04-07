@@ -89,12 +89,12 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
       <EnvironmentBg environment={card.environment} particleColor={card.particleColor} glowColor={card.glowColor} />
       {phaseIndex >= 7 && <FloatingPetals count={12} color={card.petalColor} />}
 
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 safe-area-inset">
+      <div className="relative z-10 flex flex-col items-center justify-end h-full px-4 pb-6 safe-area-inset overflow-hidden">
         {/* "Someone sent you a flower" text */}
         <AnimatePresence>
           {phase === 'intro' && (
             <motion.div initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.8 }} className="text-center">
+              exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.8 }} className="text-center absolute top-1/2 -translate-y-1/2">
               <motion.p className="text-2xl md:text-3xl font-display text-glow text-foreground leading-relaxed"
                 animate={{ opacity: [0.7, 1, 0.7] }} transition={{ duration: 3, repeat: Infinity }}>
                 Someone sent you a flower
@@ -133,9 +133,9 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
           )}
         </AnimatePresence>
 
-        {/* Flower drops + blooms — isolated layer to prevent background crash */}
+        {/* Flower drops + blooms — isolated, scaled to fit */}
         <AnimatePresence>
-          {phaseIndex >= 5 && (
+          {phaseIndex >= 5 && phase !== 'card' && (
             <motion.div
               initial={{ y: -100, opacity: 0, scale: 0 }}
               animate={{
@@ -149,69 +149,71 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
             >
               <FlowerSVG type={card.flowerType} color={card.flowerColor}
                 leafStyle={card.leafStyle} bouquetSize={card.bouquetSize}
-                size={phaseIndex >= 7 ? 130 : 70} animate={phaseIndex === 7}
+                size={phaseIndex >= 7 ? 100 : 60} animate={phaseIndex === 7}
                 customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Message card */}
+        {/* Card phase: bouquet + card + buttons stacked vertically */}
         <AnimatePresence>
           {phase === 'card' && (
-            <motion.div initial={{ opacity: 0, y: 50, scale: 0.85 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
-              className="w-full max-w-xs z-20" ref={messageCardRef}>
-              <MessageCardRenderer card={card} />
-            </motion.div>
-          )}
-        </AnimatePresence>
+              className="w-full flex flex-col items-center z-20 gap-3 max-w-xs mx-auto"
+            >
+              {/* Compact bouquet above card */}
+              <div className="flex-shrink-0" style={{ isolation: 'isolate', contain: 'layout style paint' }}>
+                <FlowerSVG type={card.flowerType} color={card.flowerColor}
+                  leafStyle={card.leafStyle} bouquetSize={card.bouquetSize}
+                  size={card.bouquetSize === 'large' ? 55 : card.bouquetSize === 'small' ? 50 : 45}
+                  customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
+              </div>
 
-        {/* Share & Viral buttons */}
-        <AnimatePresence>
-          {phase === 'card' && (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}
-              className="flex gap-2.5 mt-5 z-20 flex-wrap justify-center">
-              <button onClick={handleCopyLink}
-                className="glass-card px-5 py-3 min-h-[44px] text-xs font-body text-foreground/70 hover:text-foreground transition-all flex items-center gap-2 hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)] active:scale-95">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                </svg>
-                {copied ? 'Copied!' : 'Copy Link'}
-              </button>
-              <button onClick={handleSaveImage} disabled={saving}
-                className={`glass-card px-5 py-3 min-h-[44px] text-xs font-body transition-all flex items-center gap-2 active:scale-95 ${saving ? 'text-foreground/40 cursor-wait' : saveError ? 'text-red-400' : 'text-foreground/70 hover:text-foreground hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)]'}`}>
-                {saving ? (
-                  <>
-                    <motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="inline-block">🌸</motion.span>
-                    Saving...
-                  </>
-                ) : saveError ? (
-                  "Couldn't save, try again 🌸"
-                ) : (
-                  <>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                      <polyline points="7 10 12 15 17 10" />
-                      <line x1="12" y1="15" x2="12" y2="3" />
-                    </svg>
-                    Save Image
-                  </>
-                )}
+              {/* Message card */}
+              <div ref={messageCardRef} className="w-full">
+                <MessageCardRenderer card={card} />
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-2.5 flex-wrap justify-center">
+                <button onClick={handleCopyLink}
+                  className="glass-card px-5 py-3 min-h-[44px] text-xs font-body text-foreground/70 hover:text-foreground transition-all flex items-center gap-2 hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)] active:scale-95">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                  </svg>
+                  {copied ? 'Copied!' : 'Copy Link'}
+                </button>
+                <button onClick={handleSaveImage} disabled={saving}
+                  className={`glass-card px-5 py-3 min-h-[44px] text-xs font-body transition-all flex items-center gap-2 active:scale-95 ${saving ? 'text-foreground/40 cursor-wait' : saveError ? 'text-red-400' : 'text-foreground/70 hover:text-foreground hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)]'}`}>
+                  {saving ? (
+                    <>
+                      <motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="inline-block">🌸</motion.span>
+                      Saving...
+                    </>
+                  ) : saveError ? (
+                    "Couldn't save, try again 🌸"
+                  ) : (
+                    <>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                      Save Image
+                    </>
+                  )}
+                </button>
+              </div>
+
+              <button onClick={onReset}
+                className="glass-card px-6 py-3 min-h-[44px] text-sm font-body text-primary transition-all glow-border hover:shadow-[0_0_25px_hsl(330_60%_65%/0.3)] active:scale-95">
+                🌸 Create your own bloom
               </button>
             </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Create your own - viral loop CTA */}
-        <AnimatePresence>
-          {phase === 'card' && (
-            <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}
-              onClick={onReset}
-              className="mt-5 glass-card px-6 py-3 min-h-[44px] text-sm font-body text-primary transition-all z-20 glow-border hover:shadow-[0_0_25px_hsl(330_60%_65%/0.3)] active:scale-95">
-              🌸 Create your own bloom
-            </motion.button>
           )}
         </AnimatePresence>
       </div>
