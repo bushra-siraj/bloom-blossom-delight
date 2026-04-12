@@ -50,7 +50,7 @@ const BloomView = () => {
   const origin = window.location.origin;
   const receiverUrl = `${origin}/b/${id}`;
   const shareUrl = `${origin}/?b=${id}`;
-  const ogImage = 'https://bloomforyou.me/preview.png';
+  const ogImage = 'https://bloomforyou.me/preview-og.jpg';
   const handleReset = () => navigate('/');
 
   if (loading) {
