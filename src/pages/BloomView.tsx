@@ -47,8 +47,10 @@ const BloomView = () => {
     fetchBloom();
   }, [id]);
 
-  const shareUrl = `https://bloomforyou.me/b/${id}`;
-  const ogImage = 'https://bloomforyou.me/og-image.png';
+  const origin = window.location.origin;
+  const receiverUrl = `${origin}/b/${id}`;
+  const shareUrl = `${origin}/?b=${id}`;
+  const ogImage = 'https://bloomforyou.me/preview.png';
   const handleReset = () => navigate('/');
 
   if (loading) {
@@ -59,7 +61,7 @@ const BloomView = () => {
           <meta property="og:title" content="Someone sent you a flower 🌸" />
           <meta property="og:description" content="Open to see your special bloom" />
           <meta property="og:image" content={ogImage} />
-          <meta property="og:url" content={shareUrl} />
+          <meta property="og:url" content={receiverUrl} />
           <meta property="og:type" content="website" />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content="Someone sent you a flower 🌸" />
@@ -93,7 +95,7 @@ const BloomView = () => {
         <meta property="og:title" content="Someone sent you a flower 🌸" />
         <meta property="og:description" content="Open to see your special bloom" />
         <meta property="og:image" content={ogImage} />
-        <meta property="og:url" content={shareUrl} />
+        <meta property="og:url" content={receiverUrl} />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Someone sent you a flower 🌸" />
