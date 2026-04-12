@@ -150,7 +150,7 @@ export const FlowerCreator = ({ onComplete, onCardChange }: FlowerCreatorProps) 
         return (
           <div className="space-y-5">
             <SectionTitle>Bouquet size</SectionTitle>
-            <div className="grid grid-cols-3 gap-2.5 px-2 overflow-visible" style={{ contain: 'layout style paint', isolation: 'isolate' }}>
+            <div className="grid grid-cols-3 gap-3 px-1 overflow-visible" style={{ isolation: 'isolate' }}>
               {bouquetSizes.map(b => (
                 <OptionButton key={b} selected={card.bouquetSize === b} onClick={() => update({ bouquetSize: b })}>
                   <div className="flex flex-col items-center gap-1">
