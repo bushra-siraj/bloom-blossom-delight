@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { FloatingPetals } from '@/components/FloatingPetals';
 import { FlowerCreator } from '@/components/FlowerCreator';
 import { ReceiverExperience } from '@/components/ReceiverExperience';
 import { AppSidebar } from '@/components/AppSidebar';
 import { Watermark } from '@/components/Watermark';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { BloomLoader } from '@/components/BloomLoader';
 import type { BloomCard } from '@/types/bloom';
 import { defaultCard } from '@/types/bloom';
 import { useAnonAuth } from '@/hooks/useAnonAuth';
@@ -13,12 +15,20 @@ import { supabase } from '@/integrations/supabase/client';
 import { generateShortId } from '@/lib/shortId';
 
 const Index = () => {
+  const navigate = useNavigate();
   const [mode, setMode] = useState<'create' | 'preview'>('create');
   const [card, setCard] = useState<BloomCard | null>(null);
   const [shareUrl, setShareUrl] = useState<string>('');
   const [liveCard, setLiveCard] = useState<BloomCard>(defaultCard);
   const [bloomVersion, setBloomVersion] = useState(0);
+  const sharedBloomId = new URLSearchParams(window.location.search).get('b');
   useAnonAuth();
+
+  useEffect(() => {
+    if (sharedBloomId) {
+      navigate(`/b/${sharedBloomId}`, { replace: true });
+    }
+  }, [navigate, sharedBloomId]);
 
   const handleComplete = async (c: BloomCard) => {
     setCard(c);
@@ -49,7 +59,7 @@ const Index = () => {
       console.log('[SendBloom] bloom saved successfully:', shortId);
 
       // Build the clean short URL
-      const url = `${window.location.origin}/b/${shortId}`;
+      const url = `${window.location.origin}/?b=${shortId}`;
       setShareUrl(url);
 
       // Insert flower history
@@ -100,6 +110,10 @@ const Index = () => {
         <ReceiverExperience card={card} onReset={handleReset} shareUrl={shareUrl} />
       </>
     );
+  }
+
+  if (sharedBloomId) {
+    return <BloomLoader message="Loading your bloom..." />;
   }
 
   return (
