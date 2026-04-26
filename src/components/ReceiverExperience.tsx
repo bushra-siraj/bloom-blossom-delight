@@ -88,42 +88,53 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
       // Try Web Share API with file first — works on iOS Safari, Chrome Android, AND inside Instagram in-app browser
       const file = new File([blob], fileName, { type: 'image/png' });
       const navAny = navigator as Navigator & { canShare?: (data: { files: File[] }) => boolean; share?: (data: { files: File[]; title?: string }) => Promise<void> };
+      let succeeded = false;
       if (navAny.canShare && navAny.canShare({ files: [file] }) && navAny.share) {
         try {
           await navAny.share({ files: [file], title: 'Your bloom 🌸' });
-          return;
+          succeeded = true;
         } catch (shareErr) {
-          // User cancelled or share failed → fall through to other methods
-          if ((shareErr as Error)?.name === 'AbortError') return;
+          // User cancelled → silently exit (no success, no error)
+          if ((shareErr as Error)?.name === 'AbortError') {
+            return;
+          }
+          // Otherwise fall through to other methods
         }
       }
 
-      const blobUrl = URL.createObjectURL(blob);
+      if (!succeeded) {
+        const blobUrl = URL.createObjectURL(blob);
 
-      if (isInAppBrowser) {
-        // In-app browsers block downloads → open the image in a new tab so the user can long-press → "Save image"
-        const win = window.open(blobUrl, '_blank');
-        if (!win) {
-          // Popup blocked → navigate same tab as last resort
-          window.location.href = blobUrl;
+        if (isInAppBrowser) {
+          // In-app browsers block downloads → open the image in a new tab so the user can long-press → "Save image"
+          const win = window.open(blobUrl, '_blank');
+          if (!win) {
+            window.location.href = blobUrl;
+          }
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+        } else {
+          // Standard browsers → use anchor download
+          const link = document.createElement('a');
+          link.download = fileName;
+          link.href = blobUrl;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 10_000);
         }
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
-        return;
+        succeeded = true;
       }
 
-      // Standard browsers → use anchor download
-      const link = document.createElement('a');
-      link.download = fileName;
-      link.href = blobUrl;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setTimeout(() => URL.revokeObjectURL(blobUrl), 10_000);
+      if (succeeded) {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2500);
+      }
     } catch (err) {
       console.error('Save image failed:', err);
       setSaveError(true);
       setTimeout(() => setSaveError(false), 3000);
     } finally {
+      // Smoothly return the screen to its pre-capture state
       setCaptureMode(false);
       setSaving(false);
     }
