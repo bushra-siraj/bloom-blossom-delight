@@ -6,20 +6,21 @@ import type { BloomCard, CardStyle, FontStyle } from '@/types/bloom';
 interface MessageCardRendererProps {
   card: BloomCard;
   mini?: boolean;
+  expanded?: boolean;
 }
 
-export const MessageCardRenderer = ({ card, mini = false }: MessageCardRendererProps) => {
+export const MessageCardRenderer = ({ card, mini = false, expanded = false }: MessageCardRendererProps) => {
   switch (card.cardStyle) {
     case 'polaroid':
-      return <PolaroidCard card={card} mini={mini} />;
+      return <PolaroidCard card={card} mini={mini} expanded={expanded} />;
     case 'envelope':
-      return <EnvelopeCard card={card} mini={mini} />;
+      return <EnvelopeCard card={card} mini={mini} expanded={expanded} />;
     case 'glass':
-      return <GlassCard card={card} mini={mini} />;
+      return <GlassCard card={card} mini={mini} expanded={expanded} />;
     case 'classic':
-      return <ClassicCard card={card} mini={mini} />;
+      return <ClassicCard card={card} mini={mini} expanded={expanded} />;
     default:
-      return <GlassCard card={card} mini={mini} />;
+      return <GlassCard card={card} mini={mini} expanded={expanded} />;
   }
 };
 
@@ -39,7 +40,7 @@ const DecoRow = ({ card, size }: { card: BloomCard; size: number }) =>
     </div>
   ) : null;
 
-const Msg = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
+const Msg = ({ card, mini, expanded = false }: { card: BloomCard; mini: boolean; expanded?: boolean }) => {
   const textColor = card.fontColor || 'hsl(0 0% 15%)';
   const senderColor = card.fontColor
     ? card.fontColor
@@ -49,7 +50,7 @@ const Msg = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
     <div className="text-center space-y-1.5">
       <DecoRow card={card} size={mini ? 16 : 26} />
       <p
-        className={`leading-relaxed ${mini ? 'text-[10px]' : 'text-sm'} ${fontClasses(card.fontStyle)} ${!mini ? 'max-h-36 overflow-y-auto' : ''}`}
+        className={`leading-relaxed ${mini ? 'text-[10px]' : 'text-sm'} ${fontClasses(card.fontStyle)} ${!mini && !expanded ? 'max-h-36 overflow-y-auto' : ''} whitespace-pre-wrap break-words`}
         style={{
           color: textColor,
           textShadow: '0 1px 3px hsl(0 0% 100% / 0.5)',
