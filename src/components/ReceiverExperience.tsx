@@ -22,6 +22,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
   const [phase, setPhase] = useState<Phase>('env');
   const [copied, setCopied] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [saveError, setSaveError] = useState(false);
   const [captureMode, setCaptureMode] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
