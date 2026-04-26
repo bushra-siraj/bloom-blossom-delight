@@ -72,10 +72,51 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
         windowWidth: el.scrollWidth,
         windowHeight: el.scrollHeight,
       });
+
+      // Detect in-app browsers (Instagram, Facebook, TikTok, etc.) where <a download> is blocked
+      const ua = navigator.userAgent || '';
+      const isInAppBrowser = /Instagram|FBAN|FBAV|FB_IAB|Messenger|Line|TikTok|Snapchat|Pinterest|LinkedInApp/i.test(ua);
+      const fileName = 'bloom-for-you.png';
+
+      // Convert canvas → blob (more reliable than data URL on mobile / large images)
+      const blob: Blob = await new Promise((resolve, reject) => {
+        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), 'image/png');
+      });
+
+      // Try Web Share API with file first — works on iOS Safari, Chrome Android, AND inside Instagram in-app browser
+      const file = new File([blob], fileName, { type: 'image/png' });
+      const navAny = navigator as Navigator & { canShare?: (data: { files: File[] }) => boolean; share?: (data: { files: File[]; title?: string }) => Promise<void> };
+      if (navAny.canShare && navAny.canShare({ files: [file] }) && navAny.share) {
+        try {
+          await navAny.share({ files: [file], title: 'Your bloom 🌸' });
+          return;
+        } catch (shareErr) {
+          // User cancelled or share failed → fall through to other methods
+          if ((shareErr as Error)?.name === 'AbortError') return;
+        }
+      }
+
+      const blobUrl = URL.createObjectURL(blob);
+
+      if (isInAppBrowser) {
+        // In-app browsers block downloads → open the image in a new tab so the user can long-press → "Save image"
+        const win = window.open(blobUrl, '_blank');
+        if (!win) {
+          // Popup blocked → navigate same tab as last resort
+          window.location.href = blobUrl;
+        }
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+        return;
+      }
+
+      // Standard browsers → use anchor download
       const link = document.createElement('a');
-      link.download = 'bloom-for-you.png';
-      link.href = canvas.toDataURL('image/png');
+      link.download = fileName;
+      link.href = blobUrl;
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 10_000);
     } catch (err) {
       console.error('Save image failed:', err);
       setSaveError(true);
