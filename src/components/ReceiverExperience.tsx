@@ -207,14 +207,16 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
                       {copied ? 'Copied!' : 'Copy Link'}
                     </button>
                     <button onClick={handleSaveImage} disabled={saving}
-                      className={`glass-card px-5 py-3 min-h-[44px] text-xs font-body transition-all flex items-center gap-2 active:scale-95 ${saving ? 'text-foreground/40 cursor-wait' : saveError ? 'text-red-400' : 'text-foreground/70 hover:text-foreground hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)]'}`}>
+                      className={`glass-card px-5 py-3 min-h-[44px] text-xs font-body transition-all flex items-center gap-2 active:scale-95 ${saving ? 'text-foreground/50 cursor-wait' : saveError ? 'text-red-400' : 'text-foreground/70 hover:text-foreground hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)]'}`}>
                       {saving ? (
                         <>
-                          <motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="inline-block">🌸</motion.span>
-                          Saving your bloom...
+                          <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                          </svg>
+                          Saving...
                         </>
                       ) : saveError ? (
-                        "Couldn't save, try again 🌸"
+                        "Couldn't save, try again"
                       ) : (
                         <>
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
