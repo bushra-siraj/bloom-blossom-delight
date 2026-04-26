@@ -238,10 +238,15 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
                   customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined} />
               </div>
 
-              {/* Message card */}
-              <div ref={messageCardRef} className="w-full">
+              {/* Message card — animates layout smoothly when expanding/collapsing for capture */}
+              <motion.div
+                ref={messageCardRef}
+                layout
+                transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
+                className="w-full"
+              >
                 <MessageCardRenderer card={card} expanded={captureMode} />
-              </div>
+              </motion.div>
 
               {/* Buttons (hidden in saved image) */}
               {!captureMode && (
