@@ -75,7 +75,7 @@ const Msg = ({ card, mini, expanded = false }: { card: BloomCard; mini: boolean;
 };
 
 /* ── 1. Polaroid Card ── */
-const PolaroidCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => (
+const PolaroidCard = ({ card, mini, expanded = false }: { card: BloomCard; mini: boolean; expanded?: boolean }) => (
   <div
     className="relative"
     style={{ transform: 'rotate(-2deg)' }}
@@ -85,10 +85,10 @@ const PolaroidCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => (
       style={{ borderRadius: '2px' }}
     >
       <div
-        className={`${mini ? 'h-16' : 'h-45'} flex items-center justify-center overflow-hidden`}
+        className={`${mini ? 'h-16' : expanded ? 'min-h-[180px]' : 'h-45'} flex items-center justify-center ${expanded ? '' : 'overflow-hidden'}`}
         style={{ backgroundColor: `${card.cardColor}ee`, borderRadius: '1px' }}
       >
-        <Msg card={{ ...card, fontStyle: card.fontStyle }} mini={mini} />
+        <Msg card={{ ...card, fontStyle: card.fontStyle }} mini={mini} expanded={expanded} />
       </div>
       <div className={`text-center ${mini ? 'mt-1' : 'mt-2'}`}>
         {card.senderName && (
@@ -103,7 +103,7 @@ const PolaroidCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => (
 );
 
 /* ── 2. Envelope Card ── */
-const EnvelopeCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
+const EnvelopeCard = ({ card, mini, expanded = false }: { card: BloomCard; mini: boolean; expanded?: boolean }) => {
   const [opened, setOpened] = useState(!mini);
 
   return (
@@ -134,7 +134,7 @@ const EnvelopeCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
           <div
             className={`bg-foreground/5 border border-foreground/5 ${mini ? 'p-2 rounded-sm' : 'p-4 rounded-md'}`}
           >
-            <Msg card={card} mini={mini} />
+            <Msg card={card} mini={mini} expanded={expanded} />
           </div>
         </motion.div>
 
@@ -147,7 +147,7 @@ const EnvelopeCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
 };
 
 /* ── 3. Glass Card ── */
-const GlassCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => (
+const GlassCard = ({ card, mini, expanded = false }: { card: BloomCard; mini: boolean; expanded?: boolean }) => (
   <div className={`relative ${mini ? 'max-w-[180px]' : 'max-w-xs w-full'}`}>
     <div className="absolute -inset-1 rounded-2xl opacity-40 blur-xl"
       style={{ background: `radial-gradient(circle, ${card.glowColor}66, transparent 70%)` }} />
@@ -159,13 +159,13 @@ const GlassCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => (
       }}
     >
       <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
-      <Msg card={card} mini={mini} />
+      <Msg card={card} mini={mini} expanded={expanded} />
     </div>
   </div>
 );
 
 /* ── 4. Classic Greeting Card ── */
-const ClassicCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
+const ClassicCard = ({ card, mini, expanded = false }: { card: BloomCard; mini: boolean; expanded?: boolean }) => {
   const [isOpen, setIsOpen] = useState(!mini);
 
   return (
@@ -185,7 +185,7 @@ const ClassicCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.4 }}
             >
-              <Msg card={card} mini={mini} />
+              <Msg card={card} mini={mini} expanded={expanded} />
             </motion.div>
           )}
         </AnimatePresence>
