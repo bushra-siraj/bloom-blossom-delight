@@ -249,54 +249,63 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
               </motion.div>
 
               {/* Buttons (hidden in saved image) */}
-              {!captureMode && (
-                <>
-                  <div className="flex gap-2.5 flex-wrap justify-center">
-                    <button onClick={handleCopyLink}
-                      className="glass-card px-5 py-3 min-h-[44px] text-xs font-body text-foreground/70 hover:text-foreground transition-all flex items-center gap-2 hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)] active:scale-95">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                      </svg>
-                      {copied ? 'Copied!' : 'Copy Link'}
-                    </button>
-                    <button onClick={handleSaveImage} disabled={saving}
-                      className={`glass-card px-5 py-3 min-h-[44px] text-xs font-body transition-all flex items-center gap-2 active:scale-95 ${saving ? 'text-foreground/50 cursor-wait' : saved ? 'text-primary' : saveError ? 'text-red-400' : 'text-foreground/70 hover:text-foreground hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)]'}`}>
-                      {saving ? (
-                        <>
-                          <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-                          </svg>
-                          Saving...
-                        </>
-                      ) : saved ? (
-                        <>
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                          Image saved ✨
-                        </>
-                      ) : saveError ? (
-                        "Couldn't save, try again"
-                      ) : (
-                        <>
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                            <polyline points="7 10 12 15 17 10" />
-                            <line x1="12" y1="15" x2="12" y2="3" />
-                          </svg>
-                          Save Image
-                        </>
-                      )}
-                    </button>
-                  </div>
+              <AnimatePresence>
+                {!captureMode && (
+                  <motion.div
+                    key="actions"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 4 }}
+                    transition={{ duration: 0.35, ease: 'easeOut' }}
+                    className="w-full flex flex-col items-center gap-3"
+                  >
+                    <div className="flex gap-2.5 flex-wrap justify-center">
+                      <button onClick={handleCopyLink}
+                        className="glass-card px-5 py-3 min-h-[44px] text-xs font-body text-foreground/70 hover:text-foreground transition-all flex items-center gap-2 hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)] active:scale-95">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                        </svg>
+                        {copied ? 'Copied!' : 'Copy Link'}
+                      </button>
+                      <button onClick={handleSaveImage} disabled={saving}
+                        className={`glass-card px-5 py-3 min-h-[44px] text-xs font-body transition-all flex items-center gap-2 active:scale-95 ${saving ? 'text-foreground/50 cursor-wait' : saved ? 'text-primary' : saveError ? 'text-red-400' : 'text-foreground/70 hover:text-foreground hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)]'}`}>
+                        {saving ? (
+                          <>
+                            <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                            </svg>
+                            Saving...
+                          </>
+                        ) : saved ? (
+                          <>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Image saved ✨
+                          </>
+                        ) : saveError ? (
+                          "Couldn't save, try again"
+                        ) : (
+                          <>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                              <polyline points="7 10 12 15 17 10" />
+                              <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Save Image
+                          </>
+                        )}
+                      </button>
+                    </div>
 
-                  <button onClick={onReset}
-                    className="glass-card px-6 py-3 min-h-[44px] text-sm font-body text-primary transition-all glow-border hover:shadow-[0_0_25px_hsl(330_60%_65%/0.3)] active:scale-95">
-                    🌸 Create your own bloom
-                  </button>
-                </>
-              )}
+                    <button onClick={onReset}
+                      className="glass-card px-6 py-3 min-h-[44px] text-sm font-body text-primary transition-all glow-border hover:shadow-[0_0_25px_hsl(330_60%_65%/0.3)] active:scale-95">
+                      🌸 Create your own bloom
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           )}
         </AnimatePresence>
