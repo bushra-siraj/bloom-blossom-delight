@@ -23,6 +23,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
   const [copied, setCopied] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState(false);
+  const [captureMode, setCaptureMode] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const messageCardRef = useRef<HTMLDivElement>(null);
 
@@ -44,8 +45,16 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
     if (saving) return;
     setSaving(true);
     setSaveError(false);
+
+    // Switch to expanded capture mode so the message card shows full text (no scroll clipping)
+    setCaptureMode(true);
+    // Give React a frame to apply the expanded layout before snapshot
+    await new Promise(requestAnimationFrame);
+    await new Promise(requestAnimationFrame);
+
     const el = cardRef.current;
     if (!el) {
+      setCaptureMode(false);
       setSaving(false);
       setSaveError(true);
       setTimeout(() => setSaveError(false), 3000);
@@ -60,9 +69,16 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
         logging: false,
         width: el.scrollWidth,
         height: el.scrollHeight,
+        windowWidth: el.scrollWidth,
+        windowHeight: el.scrollHeight,
       });
+      const senderSlug = (card.senderName || 'someone')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 24) || 'someone';
       const link = document.createElement('a');
-      link.download = 'bloom-for-you.png';
+      link.download = `bloom-from-${senderSlug}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
     } catch (err) {
@@ -70,6 +86,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
       setSaveError(true);
       setTimeout(() => setSaveError(false), 3000);
     } finally {
+      setCaptureMode(false);
       setSaving(false);
     }
   };
