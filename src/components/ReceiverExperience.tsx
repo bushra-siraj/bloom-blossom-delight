@@ -45,6 +45,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
   const handleSaveImage = async () => {
     if (saving) return;
     setSaving(true);
+    setSaved(false);
     setSaveError(false);
 
     // Switch to expanded capture mode so the message card shows full text (no scroll clipping)
