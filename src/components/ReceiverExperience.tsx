@@ -72,13 +72,8 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
         windowWidth: el.scrollWidth,
         windowHeight: el.scrollHeight,
       });
-      const senderSlug = (card.senderName || 'someone')
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '')
-        .slice(0, 24) || 'someone';
       const link = document.createElement('a');
-      link.download = `bloom-from-${senderSlug}.png`;
+      link.download = 'bloom-for-you.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
     } catch (err) {
