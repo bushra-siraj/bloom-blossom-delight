@@ -274,9 +274,29 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
       <EnvironmentBg environment={card.environment} particleColor={card.particleColor} glowColor={card.glowColor} />
       {phaseIndex >= 7 && <FloatingPetals count={12} color={card.petalColor} />}
 
-      <div className="fixed -left-[9999px] top-0 pointer-events-none opacity-0" aria-hidden="true">
+      <div className="fixed left-0 top-0 -z-10 pointer-events-none" aria-hidden="true">
         <ExportScene ref={exportRef} card={card} width={exportSize.width} height={exportSize.height} />
       </div>
+
+      <AnimatePresence>
+        {exportPreviewUrl && (
+          <motion.div
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-background/90 px-5 backdrop-blur-md"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <img src={exportPreviewUrl} alt="Saved bloom preview" className="max-h-[78vh] w-auto max-w-full rounded-lg shadow-2xl" />
+            <p className="text-center text-sm text-foreground/80">Press and hold the image to save it</p>
+            <button
+              onClick={() => setExportPreviewUrl(null)}
+              className="glass-card min-h-[44px] px-6 py-3 text-sm font-body text-primary transition-all active:scale-95"
+            >
+              Done
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="relative z-10 flex flex-col items-center justify-end h-full px-4 pb-6 safe-area-inset overflow-hidden">
         {/* "Someone sent you a flower" text */}
@@ -386,11 +406,11 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
                       <Switch
                         checked={highQuality}
                         onCheckedChange={setHighQuality}
-                        disabled={saving}
+                        disabled={saving || isInAppBrowser}
                         aria-label="High quality export"
                         className="scale-90"
                       />
-                      High quality
+                      {isInAppBrowser ? 'Instagram safe quality' : 'High quality'}
                     </label>
 
                     <div className="flex gap-2.5 flex-wrap justify-center">
