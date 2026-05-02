@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 import { FlowerSVG } from './FlowerSVG';
 import { CharacterSVG } from './CharacterSVG';
 import { EnvironmentBg } from './EnvironmentBg';
@@ -48,20 +49,32 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
     setSaved(false);
     setSaveError(false);
 
+    // Detect in-app browsers (Instagram, Facebook, TikTok, etc.) where <a download> is blocked
+    const ua = navigator.userAgent || '';
+    const isInAppBrowser = /Instagram|FBAN|FBAV|FB_IAB|Messenger|Line|TikTok|Snapchat|Pinterest|LinkedInApp/i.test(ua);
+    const fileName = 'bloom-for-you.png';
+
+    // Helper that ALWAYS restores the screen smoothly — call from every exit path
+    const restore = () => {
+      setCaptureMode(false);
+      setSaving(false);
+    };
+
     // Switch to expanded capture mode so the message card shows full text (no scroll clipping)
     setCaptureMode(true);
-    // Give React a frame to apply the expanded layout before snapshot
+    // Give React a couple frames to apply the expanded layout before snapshot
     await new Promise(requestAnimationFrame);
     await new Promise(requestAnimationFrame);
+    await new Promise((r) => setTimeout(r, 50));
 
     const el = cardRef.current;
     if (!el) {
-      setCaptureMode(false);
-      setSaving(false);
+      restore();
       setSaveError(true);
       setTimeout(() => setSaveError(false), 3000);
       return;
     }
+
     try {
       const { default: html2canvas } = await import('html2canvas');
       const canvas = await html2canvas(el, {
@@ -75,30 +88,39 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
         windowHeight: el.scrollHeight,
       });
 
-      // Detect in-app browsers (Instagram, Facebook, TikTok, etc.) where <a download> is blocked
-      const ua = navigator.userAgent || '';
-      const isInAppBrowser = /Instagram|FBAN|FBAV|FB_IAB|Messenger|Line|TikTok|Snapchat|Pinterest|LinkedInApp/i.test(ua);
-      const fileName = 'bloom-for-you.png';
-
-      // Convert canvas → blob (more reliable than data URL on mobile / large images)
+      // Convert canvas → blob
       const blob: Blob = await new Promise((resolve, reject) => {
         canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), 'image/png');
       });
 
-      // Try Web Share API with file first — works on iOS Safari, Chrome Android, AND inside Instagram in-app browser
+      // CRITICAL FIX for Instagram freeze:
+      // Restore the UI BEFORE invoking share/open. Inside Instagram's webview,
+      // window.open / navigator.share suspend the JS event loop until the user
+      // dismisses the native sheet — which leaves the page visually stuck in
+      // "capture mode" (cropped/expanded). Restoring first guarantees the
+      // user always returns to a clean view immediately.
+      restore();
+      // Let React paint the restored layout before we hand off to the OS
+      await new Promise(requestAnimationFrame);
+
       const file = new File([blob], fileName, { type: 'image/png' });
-      const navAny = navigator as Navigator & { canShare?: (data: { files: File[] }) => boolean; share?: (data: { files: File[]; title?: string }) => Promise<void> };
+      const navAny = navigator as Navigator & {
+        canShare?: (data: { files: File[] }) => boolean;
+        share?: (data: { files: File[]; title?: string }) => Promise<void>;
+      };
+
       let succeeded = false;
+
       if (navAny.canShare && navAny.canShare({ files: [file] }) && navAny.share) {
         try {
           await navAny.share({ files: [file], title: 'Your bloom 🌸' });
           succeeded = true;
         } catch (shareErr) {
-          // User cancelled → silently exit (no success, no error)
           if ((shareErr as Error)?.name === 'AbortError') {
+            // User cancelled — silent exit, screen already restored
             return;
           }
-          // Otherwise fall through to other methods
+          // fall through to fallback
         }
       }
 
@@ -106,14 +128,15 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
         const blobUrl = URL.createObjectURL(blob);
 
         if (isInAppBrowser) {
-          // In-app browsers block downloads → open the image in a new tab so the user can long-press → "Save image"
+          // In Instagram/FB webview, programmatic downloads are blocked.
+          // Open the image in a new tab so the user can long-press → "Save image".
           const win = window.open(blobUrl, '_blank');
           if (!win) {
+            // Popup blocked → navigate same-tab as last resort
             window.location.href = blobUrl;
           }
           setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
         } else {
-          // Standard browsers → use anchor download
           const link = document.createElement('a');
           link.download = fileName;
           link.href = blobUrl;
@@ -127,16 +150,15 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
 
       if (succeeded) {
         setSaved(true);
+        toast.success('Image saved ✨', { duration: 2500 });
         setTimeout(() => setSaved(false), 2500);
       }
     } catch (err) {
       console.error('Save image failed:', err);
+      restore();
       setSaveError(true);
+      toast.error("Couldn't save image, please try again");
       setTimeout(() => setSaveError(false), 3000);
-    } finally {
-      // Smoothly return the screen to its pre-capture state
-      setCaptureMode(false);
-      setSaving(false);
     }
   };
 
