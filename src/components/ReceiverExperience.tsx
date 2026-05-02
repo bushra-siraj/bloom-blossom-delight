@@ -274,7 +274,11 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
       <EnvironmentBg environment={card.environment} particleColor={card.particleColor} glowColor={card.glowColor} />
       {phaseIndex >= 7 && <FloatingPetals count={12} color={card.petalColor} />}
 
-      <div className="fixed top-0 pointer-events-none" style={{ left: -10000 }} aria-hidden="true">
+      <div
+        className="fixed left-0 top-0 pointer-events-none"
+        style={{ zIndex: -1, transform: 'translateY(-120vh)' }}
+        aria-hidden="true"
+      >
         <ExportScene ref={exportRef} card={card} width={exportSize.width} height={exportSize.height} />
       </div>
 
@@ -391,10 +395,8 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
                 <MessageCardRenderer card={card} />
               </motion.div>
 
-              {/* Buttons (hidden in saved image) */}
               <AnimatePresence>
-                {(
-                  <motion.div
+                <motion.div
                     key="actions"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -457,8 +459,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
                       className="glass-card px-6 py-3 min-h-[44px] text-sm font-body text-primary transition-all glow-border hover:shadow-[0_0_25px_hsl(330_60%_65%/0.3)] active:scale-95">
                       🌸 Create your own bloom
                     </button>
-                  </motion.div>
-                )}
+                </motion.div>
               </AnimatePresence>
             </motion.div>
           )}
