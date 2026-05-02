@@ -121,7 +121,6 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saveError, setSaveError] = useState(false);
-  const [captureMode, setCaptureMode] = useState(false);
   const [highQuality, setHighQuality] = useState(false);
   const [exportSize, setExportSize] = useState(() => getExportSize());
   const [exportPreviewUrl, setExportPreviewUrl] = useState<string | null>(null);
