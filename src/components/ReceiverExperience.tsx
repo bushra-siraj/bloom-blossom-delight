@@ -6,6 +6,7 @@ import { CharacterSVG } from './CharacterSVG';
 import { EnvironmentBg } from './EnvironmentBg';
 import { FloatingPetals } from './FloatingPetals';
 import { MessageCardRenderer } from './cards/MessageCardRenderer';
+import { Switch } from '@/components/ui/switch';
 import { playBloomChime, playPaperUnfold } from '@/lib/sounds';
 import type { BloomCard } from '@/types/bloom';
 
@@ -26,6 +27,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
   const [saved, setSaved] = useState(false);
   const [saveError, setSaveError] = useState(false);
   const [captureMode, setCaptureMode] = useState(false);
+  const [highQuality, setHighQuality] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const messageCardRef = useRef<HTMLDivElement>(null);
 
@@ -49,13 +51,18 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
     setSaved(false);
     setSaveError(false);
 
+    const toastId = toast.loading('Saving image…');
+
     // Detect in-app browsers (Instagram, Facebook, TikTok, etc.) where <a download> is blocked
     const ua = navigator.userAgent || '';
     const isInAppBrowser = /Instagram|FBAN|FBAV|FB_IAB|Messenger|Line|TikTok|Snapchat|Pinterest|LinkedInApp/i.test(ua);
     const fileName = 'bloom-for-you.png';
+    let restored = false;
 
     // Helper that ALWAYS restores the screen smoothly — call from every exit path
     const restore = () => {
+      if (restored) return;
+      restored = true;
       setCaptureMode(false);
       setSaving(false);
     };
@@ -71,37 +78,42 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
     if (!el) {
       restore();
       setSaveError(true);
+      toast.error("Couldn't save image, please try again", { id: toastId, duration: 2500 });
       setTimeout(() => setSaveError(false), 3000);
       return;
     }
 
     try {
       const { default: html2canvas } = await import('html2canvas');
+      const width = Math.ceil(el.scrollWidth || el.clientWidth || window.innerWidth);
+      const height = Math.ceil(el.scrollHeight || el.clientHeight || window.innerHeight);
+      const deviceScale = window.devicePixelRatio || 1;
+      const desiredScale = highQuality
+        ? Math.min(isInAppBrowser ? 1.75 : 2.5, Math.max(2, deviceScale))
+        : Math.min(isInAppBrowser ? 1.25 : 2, Math.max(1.25, deviceScale));
+      const maxPixels = highQuality ? 3_200_000 : 1_800_000;
+      const safeScale = Math.max(1, Math.min(desiredScale, Math.sqrt(maxPixels / Math.max(width * height, 1))));
+
       const canvas = await html2canvas(el, {
         backgroundColor: '#1a1020',
-        scale: Math.max(window.devicePixelRatio || 2, 2),
+        scale: safeScale,
         useCORS: true,
         logging: false,
-        width: el.scrollWidth,
-        height: el.scrollHeight,
-        windowWidth: el.scrollWidth,
-        windowHeight: el.scrollHeight,
+        width,
+        height,
+        windowWidth: width,
+        windowHeight: height,
       });
+
+      // Restore immediately after html2canvas finishes so Instagram's webview
+      // never stays stuck in the expanded capture layout while the share sheet opens.
+      restore();
+      await new Promise(requestAnimationFrame);
 
       // Convert canvas → blob
       const blob: Blob = await new Promise((resolve, reject) => {
         canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), 'image/png');
       });
-
-      // CRITICAL FIX for Instagram freeze:
-      // Restore the UI BEFORE invoking share/open. Inside Instagram's webview,
-      // window.open / navigator.share suspend the JS event loop until the user
-      // dismisses the native sheet — which leaves the page visually stuck in
-      // "capture mode" (cropped/expanded). Restoring first guarantees the
-      // user always returns to a clean view immediately.
-      restore();
-      // Let React paint the restored layout before we hand off to the OS
-      await new Promise(requestAnimationFrame);
 
       const file = new File([blob], fileName, { type: 'image/png' });
       const navAny = navigator as Navigator & {
@@ -118,6 +130,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
         } catch (shareErr) {
           if ((shareErr as Error)?.name === 'AbortError') {
             // User cancelled — silent exit, screen already restored
+            toast.dismiss(toastId);
             return;
           }
           // fall through to fallback
@@ -150,14 +163,14 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
 
       if (succeeded) {
         setSaved(true);
-        toast.success('Image saved ✨', { duration: 2500 });
+        toast.success('Image saved ✨', { id: toastId, duration: 2500 });
         setTimeout(() => setSaved(false), 2500);
       }
     } catch (err) {
       console.error('Save image failed:', err);
       restore();
       setSaveError(true);
-      toast.error("Couldn't save image, please try again");
+      toast.error("Couldn't save image, please try again", { id: toastId, duration: 2500 });
       setTimeout(() => setSaveError(false), 3000);
     }
   };
@@ -281,6 +294,17 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
                     transition={{ duration: 0.35, ease: 'easeOut' }}
                     className="w-full flex flex-col items-center gap-3"
                   >
+                    <label className="glass-card px-4 py-2.5 min-h-[44px] flex items-center gap-3 text-xs font-body text-foreground/70 select-none">
+                      <Switch
+                        checked={highQuality}
+                        onCheckedChange={setHighQuality}
+                        disabled={saving}
+                        aria-label="High quality export"
+                        className="scale-90"
+                      />
+                      High quality
+                    </label>
+
                     <div className="flex gap-2.5 flex-wrap justify-center">
                       <button onClick={handleCopyLink}
                         className="glass-card px-5 py-3 min-h-[44px] text-xs font-body text-foreground/70 hover:text-foreground transition-all flex items-center gap-2 hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)] active:scale-95">
