@@ -238,8 +238,8 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
           link.click();
           document.body.removeChild(link);
           setTimeout(() => URL.revokeObjectURL(blobUrl), 10_000);
+          succeeded = true;
         }
-        succeeded = true;
       }
 
       if (succeeded) {
