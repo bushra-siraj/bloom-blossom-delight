@@ -274,7 +274,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
       <EnvironmentBg environment={card.environment} particleColor={card.particleColor} glowColor={card.glowColor} />
       {phaseIndex >= 7 && <FloatingPetals count={12} color={card.petalColor} />}
 
-      <div className="fixed left-0 top-0 -z-10 pointer-events-none" aria-hidden="true">
+      <div className="fixed top-0 pointer-events-none" style={{ left: -10000 }} aria-hidden="true">
         <ExportScene ref={exportRef} card={card} width={exportSize.width} height={exportSize.height} />
       </div>
 
