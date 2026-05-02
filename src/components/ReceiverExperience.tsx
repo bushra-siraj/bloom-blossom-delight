@@ -294,6 +294,17 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
                     transition={{ duration: 0.35, ease: 'easeOut' }}
                     className="w-full flex flex-col items-center gap-3"
                   >
+                    <label className="glass-card px-4 py-2.5 min-h-[44px] flex items-center gap-3 text-xs font-body text-foreground/70 select-none">
+                      <Switch
+                        checked={highQuality}
+                        onCheckedChange={setHighQuality}
+                        disabled={saving}
+                        aria-label="High quality export"
+                        className="scale-90"
+                      />
+                      High quality
+                    </label>
+
                     <div className="flex gap-2.5 flex-wrap justify-center">
                       <button onClick={handleCopyLink}
                         className="glass-card px-5 py-3 min-h-[44px] text-xs font-body text-foreground/70 hover:text-foreground transition-all flex items-center gap-2 hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)] active:scale-95">
