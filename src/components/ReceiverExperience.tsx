@@ -195,6 +195,9 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
         canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), 'image/png');
       });
 
+      setSaving(false);
+      await waitForPaint();
+
       const file = new File([blob], fileName, { type: 'image/png' });
       const navAny = navigator as Navigator & {
         canShare?: (data: { files: File[] }) => boolean;
@@ -202,6 +205,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
       };
 
       let succeeded = false;
+      let previewed = false;
 
       if (navAny.canShare && navAny.canShare({ files: [file] }) && navAny.share) {
         try {
@@ -225,6 +229,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
             if (previousUrl) URL.revokeObjectURL(previousUrl);
             return blobUrl;
           });
+          previewed = true;
         } else {
           const link = document.createElement('a');
           link.download = fileName;
@@ -241,6 +246,8 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
         setSaved(true);
         toast.success('Image saved ✨', { id: toastId, duration: 2500 });
         setTimeout(() => setSaved(false), 2500);
+      } else if (previewed) {
+        toast.success('Image ready ✨', { id: toastId, description: 'Press and hold to save', duration: 3500 });
       }
     } catch (err) {
       console.error('Save image failed:', err);
