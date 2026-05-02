@@ -155,52 +155,31 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
     setSaving(true);
     setSaved(false);
     setSaveError(false);
-
     const toastId = toast.loading('Saving image…');
 
-    // Detect in-app browsers (Instagram, Facebook, TikTok, etc.) where <a download> is blocked
-    const ua = navigator.userAgent || '';
-    const isInAppBrowser = /Instagram|FBAN|FBAV|FB_IAB|Messenger|Line|TikTok|Snapchat|Pinterest|LinkedInApp/i.test(ua);
+    const nextExportSize = getExportSize();
+    setExportSize(nextExportSize);
     const fileName = 'bloom-for-you.png';
-    let restored = false;
-
-    // Helper that ALWAYS restores the screen smoothly — call from every exit path
-    const restore = () => {
-      if (restored) return;
-      restored = true;
-      setCaptureMode(false);
-      setSaving(false);
-    };
-
-    // Switch to expanded capture mode so the message card shows full text (no scroll clipping)
-    setCaptureMode(true);
-    // Give React a couple frames to apply the expanded layout before snapshot
-    await new Promise(requestAnimationFrame);
-    await new Promise(requestAnimationFrame);
-    await new Promise((r) => setTimeout(r, 50));
-
-    const el = cardRef.current;
-    if (!el) {
-      restore();
-      setSaveError(true);
-      toast.error("Couldn't save image, please try again", { id: toastId, duration: 2500 });
-      setTimeout(() => setSaveError(false), 3000);
-      return;
-    }
 
     try {
+      await waitForPaint();
+      const el = exportRef.current;
+      if (!el) throw new Error('Export view was not ready');
+
       const { default: html2canvas } = await import('html2canvas');
-      const width = Math.ceil(el.scrollWidth || el.clientWidth || window.innerWidth);
-      const height = Math.ceil(el.scrollHeight || el.clientHeight || window.innerHeight);
+      const width = nextExportSize.width;
+      const height = Math.max(nextExportSize.height, Math.ceil(el.scrollHeight || nextExportSize.height));
       const deviceScale = window.devicePixelRatio || 1;
-      const desiredScale = highQuality
-        ? Math.min(isInAppBrowser ? 1.75 : 2.5, Math.max(2, deviceScale))
-        : Math.min(isInAppBrowser ? 1.25 : 2, Math.max(1.25, deviceScale));
-      const maxPixels = highQuality ? 3_200_000 : 1_800_000;
+      const desiredScale = isInAppBrowser
+        ? 1
+        : highQuality
+          ? Math.min(2.25, Math.max(1.75, deviceScale))
+          : Math.min(1.5, Math.max(1.15, deviceScale));
+      const maxPixels = isInAppBrowser ? 900_000 : highQuality ? 2_800_000 : 1_500_000;
       const safeScale = Math.max(1, Math.min(desiredScale, Math.sqrt(maxPixels / Math.max(width * height, 1))));
 
       const canvas = await html2canvas(el, {
-        backgroundColor: '#1a1020',
+        backgroundColor: 'hsl(270 20% 8%)',
         scale: safeScale,
         useCORS: true,
         logging: false,
@@ -208,12 +187,9 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
         height,
         windowWidth: width,
         windowHeight: height,
+        foreignObjectRendering: false,
+        removeContainer: true,
       });
-
-      // Restore immediately after html2canvas finishes so Instagram's webview
-      // never stays stuck in the expanded capture layout while the share sheet opens.
-      restore();
-      await new Promise(requestAnimationFrame);
 
       // Convert canvas → blob
       const blob: Blob = await new Promise((resolve, reject) => {
@@ -246,14 +222,10 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
         const blobUrl = URL.createObjectURL(blob);
 
         if (isInAppBrowser) {
-          // In Instagram/FB webview, programmatic downloads are blocked.
-          // Open the image in a new tab so the user can long-press → "Save image".
-          const win = window.open(blobUrl, '_blank');
-          if (!win) {
-            // Popup blocked → navigate same-tab as last resort
-            window.location.href = blobUrl;
-          }
-          setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+          setExportPreviewUrl((previousUrl) => {
+            if (previousUrl) URL.revokeObjectURL(previousUrl);
+            return blobUrl;
+          });
         } else {
           const link = document.createElement('a');
           link.download = fileName;
@@ -273,10 +245,11 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
       }
     } catch (err) {
       console.error('Save image failed:', err);
-      restore();
       setSaveError(true);
       toast.error("Couldn't save image, please try again", { id: toastId, duration: 2500 });
       setTimeout(() => setSaveError(false), 3000);
+    } finally {
+      setSaving(false);
     }
   };
 
