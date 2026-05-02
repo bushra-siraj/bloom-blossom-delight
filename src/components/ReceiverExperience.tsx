@@ -207,7 +207,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
       let succeeded = false;
       let previewed = false;
 
-      if (navAny.canShare && navAny.canShare({ files: [file] }) && navAny.share) {
+      if (!isInAppBrowser && navAny.canShare && navAny.canShare({ files: [file] }) && navAny.share) {
         try {
           await navAny.share({ files: [file], title: 'Your bloom 🌸' });
           succeeded = true;
