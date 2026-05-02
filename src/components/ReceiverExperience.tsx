@@ -123,8 +123,12 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
   const [saveError, setSaveError] = useState(false);
   const [captureMode, setCaptureMode] = useState(false);
   const [highQuality, setHighQuality] = useState(false);
+  const [exportSize, setExportSize] = useState(() => getExportSize());
+  const [exportPreviewUrl, setExportPreviewUrl] = useState<string | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const messageCardRef = useRef<HTMLDivElement>(null);
+  const exportRef = useRef<HTMLDivElement>(null);
+  const isInAppBrowser = detectInAppBrowser();
 
   useEffect(() => {
     const timers = [
@@ -139,6 +143,12 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
+
+  useEffect(() => {
+    return () => {
+      if (exportPreviewUrl) URL.revokeObjectURL(exportPreviewUrl);
+    };
+  }, [exportPreviewUrl]);
 
   const handleSaveImage = async () => {
     if (saving) return;
