@@ -276,7 +276,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
 
       <div
         className="fixed left-0 top-0 pointer-events-none"
-        style={{ zIndex: -1, transform: 'translateY(-120vh)' }}
+        style={{ zIndex: -1 }}
         aria-hidden="true"
       >
         <ExportScene ref={exportRef} card={card} width={exportSize.width} height={exportSize.height} />
