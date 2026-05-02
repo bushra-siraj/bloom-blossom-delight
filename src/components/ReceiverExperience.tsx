@@ -18,6 +18,101 @@ interface ReceiverExperienceProps {
   shareUrl?: string;
 }
 
+const detectInAppBrowser = () => {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent || '';
+  const hasNativeWebView = typeof window !== 'undefined' && 'ReactNativeWebView' in window;
+  return hasNativeWebView || /Instagram|FBAN|FBAV|FB_IAB|Messenger|Line|TikTok|Snapchat|Pinterest|LinkedInApp/i.test(ua);
+};
+
+const getExportSize = () => {
+  if (typeof window === 'undefined') return { width: 360, height: 640 };
+  return {
+    width: Math.round(Math.max(320, Math.min(window.innerWidth || 360, 430))),
+    height: Math.round(Math.max(568, Math.min(window.innerHeight || 640, 932))),
+  };
+};
+
+const waitForPaint = () => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+
+const ExportBackdrop = ({ card }: { card: BloomCard }) => {
+  const backgrounds: Record<string, string> = {
+    midnight: 'linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--secondary)) 48%, hsl(var(--background)) 100%)',
+    sunset: 'linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--primary) / 0.45) 42%, hsl(var(--accent) / 0.34) 100%)',
+    forest: 'linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--accent) / 0.22) 50%, hsl(var(--background)) 100%)',
+    clouds: 'linear-gradient(180deg, hsl(var(--secondary)) 0%, hsl(var(--accent) / 0.3) 48%, hsl(var(--primary) / 0.24) 100%)',
+  };
+
+  return (
+    <div className="absolute inset-0 overflow-hidden" style={{ background: backgrounds[card.environment] }}>
+      <div
+        className="absolute rounded-full"
+        style={{
+          top: '7%',
+          right: '10%',
+          width: 74,
+          height: 74,
+          background: 'radial-gradient(circle at 38% 35%, hsl(var(--foreground)) 0%, hsl(var(--foreground) / 0.82) 52%, transparent 74%)',
+          boxShadow: `0 0 80px ${card.glowColor}45`,
+        }}
+      />
+      {Array.from({ length: 14 }).map((_, i) => (
+        <span
+          key={i}
+          className="absolute rounded-full"
+          style={{
+            left: `${(i * 19 + 8) % 92}%`,
+            top: `${(i * 29 + 10) % 72}%`,
+            width: 2 + (i % 3),
+            height: 2 + (i % 3),
+            background: i % 4 === 0 ? card.glowColor : card.particleColor,
+            opacity: i % 4 === 0 ? 0.7 : 0.45,
+            boxShadow: `0 0 10px ${card.particleColor}70`,
+          }}
+        />
+      ))}
+      <div
+        className="absolute inset-x-0 bottom-0"
+        style={{
+          height: '24%',
+          background: 'linear-gradient(180deg, transparent 0%, hsl(var(--background) / 0.62) 55%, hsl(var(--background)) 100%)',
+        }}
+      />
+    </div>
+  );
+};
+
+const ExportScene = React.forwardRef<HTMLDivElement, { card: BloomCard; width: number; height: number }>(
+  ({ card, width, height }, ref) => (
+    <div
+      ref={ref}
+      data-bloom-export
+      className="relative font-body text-foreground"
+      style={{ width, minHeight: height, background: 'hsl(var(--background))', isolation: 'isolate' }}
+    >
+      <ExportBackdrop card={card} />
+      <div className="relative z-10 flex min-h-full flex-col items-center justify-end gap-3 px-4 py-7" style={{ minHeight: height }}>
+        <div className="flex-shrink-0" style={{ isolation: 'isolate', contain: 'layout style paint' }}>
+          <FlowerSVG
+            type={card.flowerType}
+            color={card.flowerColor}
+            leafStyle={card.leafStyle}
+            bouquetSize={card.bouquetSize}
+            size={card.bouquetSize === 'large' ? 72 : card.bouquetSize === 'small' ? 64 : 58}
+            animate={false}
+            customPetalColor={card.petalColor !== '#e8729a' ? card.petalColor : undefined}
+          />
+        </div>
+        <div className="w-full max-w-xs">
+          <MessageCardRenderer card={card} expanded />
+        </div>
+      </div>
+    </div>
+  )
+);
+
+ExportScene.displayName = 'ExportScene';
+
 export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperienceProps) => {
 
 // Component body starts here (export moved above)
