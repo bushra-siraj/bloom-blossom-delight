@@ -6,21 +6,20 @@ import type { BloomCard, CardStyle, FontStyle } from '@/types/bloom';
 interface MessageCardRendererProps {
   card: BloomCard;
   mini?: boolean;
-  expanded?: boolean;
 }
 
-export const MessageCardRenderer = ({ card, mini = false, expanded = false }: MessageCardRendererProps) => {
+export const MessageCardRenderer = ({ card, mini = false }: MessageCardRendererProps) => {
   switch (card.cardStyle) {
     case 'polaroid':
-      return <PolaroidCard card={card} mini={mini} expanded={expanded} />;
+      return <PolaroidCard card={card} mini={mini} />;
     case 'envelope':
-      return <EnvelopeCard card={card} mini={mini} expanded={expanded} />;
+      return <EnvelopeCard card={card} mini={mini} />;
     case 'glass':
-      return <GlassCard card={card} mini={mini} expanded={expanded} />;
+      return <GlassCard card={card} mini={mini} />;
     case 'classic':
-      return <ClassicCard card={card} mini={mini} expanded={expanded} />;
+      return <ClassicCard card={card} mini={mini} />;
     default:
-      return <GlassCard card={card} mini={mini} expanded={expanded} />;
+      return <GlassCard card={card} mini={mini} />;
   }
 };
 
@@ -40,7 +39,7 @@ const DecoRow = ({ card, size }: { card: BloomCard; size: number }) =>
     </div>
   ) : null;
 
-const Msg = ({ card, mini, expanded = false }: { card: BloomCard; mini: boolean; expanded?: boolean }) => {
+const Msg = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
   const textColor = card.fontColor || 'hsl(0 0% 15%)';
   const senderColor = card.fontColor
     ? card.fontColor
@@ -50,7 +49,7 @@ const Msg = ({ card, mini, expanded = false }: { card: BloomCard; mini: boolean;
     <div className="text-center space-y-1.5">
       <DecoRow card={card} size={mini ? 16 : 26} />
       <p
-        className={`leading-relaxed ${mini ? 'text-[10px]' : 'text-sm'} ${fontClasses(card.fontStyle)} ${!mini && !expanded ? 'max-h-36 overflow-y-auto' : ''} whitespace-pre-wrap break-words`}
+        className={`leading-relaxed ${mini ? 'text-[10px]' : 'text-sm'} ${fontClasses(card.fontStyle)} ${!mini ? 'max-h-36 overflow-y-auto' : ''}`}
         style={{
           color: textColor,
           textShadow: '0 1px 3px hsl(0 0% 100% / 0.5)',
@@ -75,7 +74,7 @@ const Msg = ({ card, mini, expanded = false }: { card: BloomCard; mini: boolean;
 };
 
 /* ── 1. Polaroid Card ── */
-const PolaroidCard = ({ card, mini, expanded = false }: { card: BloomCard; mini: boolean; expanded?: boolean }) => (
+const PolaroidCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => (
   <div
     className="relative"
     style={{ transform: 'rotate(-2deg)' }}
@@ -85,10 +84,10 @@ const PolaroidCard = ({ card, mini, expanded = false }: { card: BloomCard; mini:
       style={{ borderRadius: '2px' }}
     >
       <div
-        className={`${mini ? 'h-16' : expanded ? 'min-h-[180px]' : 'h-45'} flex items-center justify-center ${expanded ? '' : 'overflow-hidden'}`}
+        className={`${mini ? 'h-16' : 'h-45'} flex items-center justify-center overflow-hidden`}
         style={{ backgroundColor: `${card.cardColor}ee`, borderRadius: '1px' }}
       >
-        <Msg card={{ ...card, fontStyle: card.fontStyle }} mini={mini} expanded={expanded} />
+        <Msg card={{ ...card, fontStyle: card.fontStyle }} mini={mini} />
       </div>
       <div className={`text-center ${mini ? 'mt-1' : 'mt-2'}`}>
         {card.senderName && (
@@ -103,7 +102,7 @@ const PolaroidCard = ({ card, mini, expanded = false }: { card: BloomCard; mini:
 );
 
 /* ── 2. Envelope Card ── */
-const EnvelopeCard = ({ card, mini, expanded = false }: { card: BloomCard; mini: boolean; expanded?: boolean }) => {
+const EnvelopeCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
   const [opened, setOpened] = useState(!mini);
 
   return (
@@ -134,7 +133,7 @@ const EnvelopeCard = ({ card, mini, expanded = false }: { card: BloomCard; mini:
           <div
             className={`bg-foreground/5 border border-foreground/5 ${mini ? 'p-2 rounded-sm' : 'p-4 rounded-md'}`}
           >
-            <Msg card={card} mini={mini} expanded={expanded} />
+            <Msg card={card} mini={mini} />
           </div>
         </motion.div>
 
@@ -147,7 +146,7 @@ const EnvelopeCard = ({ card, mini, expanded = false }: { card: BloomCard; mini:
 };
 
 /* ── 3. Glass Card ── */
-const GlassCard = ({ card, mini, expanded = false }: { card: BloomCard; mini: boolean; expanded?: boolean }) => (
+const GlassCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => (
   <div className={`relative ${mini ? 'max-w-[180px]' : 'max-w-xs w-full'}`}>
     <div className="absolute -inset-1 rounded-2xl opacity-40 blur-xl"
       style={{ background: `radial-gradient(circle, ${card.glowColor}66, transparent 70%)` }} />
@@ -159,13 +158,13 @@ const GlassCard = ({ card, mini, expanded = false }: { card: BloomCard; mini: bo
       }}
     >
       <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
-      <Msg card={card} mini={mini} expanded={expanded} />
+      <Msg card={card} mini={mini} />
     </div>
   </div>
 );
 
 /* ── 4. Classic Greeting Card ── */
-const ClassicCard = ({ card, mini, expanded = false }: { card: BloomCard; mini: boolean; expanded?: boolean }) => {
+const ClassicCard = ({ card, mini }: { card: BloomCard; mini: boolean }) => {
   const [isOpen, setIsOpen] = useState(!mini);
 
   return (
@@ -185,7 +184,7 @@ const ClassicCard = ({ card, mini, expanded = false }: { card: BloomCard; mini: 
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.4 }}
             >
-              <Msg card={card} mini={mini} expanded={expanded} />
+              <Msg card={card} mini={mini} />
             </motion.div>
           )}
         </AnimatePresence>
