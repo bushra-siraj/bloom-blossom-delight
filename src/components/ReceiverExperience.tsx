@@ -267,6 +267,10 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
       <EnvironmentBg environment={card.environment} particleColor={card.particleColor} glowColor={card.glowColor} />
       {phaseIndex >= 7 && <FloatingPetals count={12} color={card.petalColor} />}
 
+      <div className="fixed -left-[9999px] top-0 pointer-events-none opacity-0" aria-hidden="true">
+        <ExportScene ref={exportRef} card={card} width={exportSize.width} height={exportSize.height} />
+      </div>
+
       <div className="relative z-10 flex flex-col items-center justify-end h-full px-4 pb-6 safe-area-inset overflow-hidden">
         {/* "Someone sent you a flower" text */}
         <AnimatePresence>
@@ -357,12 +361,12 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
                 transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
                 className="w-full"
               >
-                <MessageCardRenderer card={card} expanded={captureMode} />
+                <MessageCardRenderer card={card} />
               </motion.div>
 
               {/* Buttons (hidden in saved image) */}
               <AnimatePresence>
-                {!captureMode && (
+                {(
                   <motion.div
                     key="actions"
                     initial={{ opacity: 0, y: 8 }}
