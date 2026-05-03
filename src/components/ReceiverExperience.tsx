@@ -258,6 +258,84 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
     }
   };
 
+  const handleShareImage = async () => {
+    if (saving) return;
+    setSaving(true);
+    setSaved(false);
+    setSaveError(false);
+    const toastId = toast.loading('Preparing image…');
+
+    const nextExportSize = getExportSize();
+    setExportSize(nextExportSize);
+    const fileName = 'bloom-for-you.png';
+
+    try {
+      await waitForPaint();
+      const el = exportRef.current;
+      if (!el) throw new Error('Export view was not ready');
+
+      const { default: html2canvas } = await import('html2canvas');
+      const width = nextExportSize.width;
+      const height = Math.max(nextExportSize.height, Math.ceil(el.scrollHeight || nextExportSize.height));
+
+      const canvas = await html2canvas(el, {
+        backgroundColor: 'hsl(270 20% 8%)',
+        scale: 1,
+        useCORS: true,
+        logging: false,
+        width,
+        height,
+        windowWidth: width,
+        windowHeight: height,
+        foreignObjectRendering: false,
+        removeContainer: true,
+      });
+
+      const blob: Blob = await new Promise((resolve, reject) => {
+        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), 'image/png');
+      });
+
+      setSaving(false);
+      await waitForPaint();
+
+      const file = new File([blob], fileName, { type: 'image/png' });
+      const navAny = navigator as Navigator & {
+        canShare?: (data: { files: File[] }) => boolean;
+        share?: (data: { files: File[]; title?: string }) => Promise<void>;
+      };
+
+      if (navAny.share && navAny.canShare && navAny.canShare({ files: [file] })) {
+        try {
+          await navAny.share({ files: [file], title: 'Your bloom 🌸' });
+          setSaved(true);
+          toast.success('Shared ✨', { id: toastId, duration: 2500 });
+          setTimeout(() => setSaved(false), 2500);
+          return;
+        } catch (shareErr) {
+          if ((shareErr as Error)?.name === 'AbortError') {
+            toast.dismiss(toastId);
+            return;
+          }
+        }
+      }
+
+      // Fallback: long-press preview
+      const blobUrl = URL.createObjectURL(blob);
+      setExportPreviewUrl((prev) => {
+        if (prev) URL.revokeObjectURL(prev);
+        return blobUrl;
+      });
+      toast.success('Image ready ✨', { id: toastId, description: 'Press and hold to save', duration: 3500 });
+    } catch (err) {
+      console.error('Share image failed:', err);
+      setSaveError(true);
+      toast.error("Couldn't share image, please try again", { id: toastId, duration: 2500 });
+      setTimeout(() => setSaveError(false), 3000);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleCopyLink = () => {
     const url = shareUrl || window.location.href;
     navigator.clipboard.writeText(url);
