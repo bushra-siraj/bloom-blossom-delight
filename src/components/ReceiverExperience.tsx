@@ -189,6 +189,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
                   </svg>
                   {copied ? 'Copied!' : 'Copy Link'}
                 </button>
+                {!isInstagram && (
                 <button onClick={handleSaveImage} disabled={saving}
                   className={`glass-card px-5 py-3 min-h-[44px] text-xs font-body transition-all flex items-center gap-2 active:scale-95 ${saving ? 'text-foreground/40 cursor-wait' : saveError ? 'text-red-400' : 'text-foreground/70 hover:text-foreground hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)]'}`}>
                   {saving ? (
@@ -209,6 +210,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
                     </>
                   )}
                 </button>
+                )}
               </div>
 
               <button onClick={onReset}
