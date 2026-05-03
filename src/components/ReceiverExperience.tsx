@@ -116,7 +116,7 @@ ExportScene.displayName = 'ExportScene';
 export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperienceProps) => {
 
 // Component body starts here (export moved above)
-  const [phase, setPhase] = useState<Phase>('env');
+  const [phase, setPhase] = useState<Phase>('intro');
   const [copied, setCopied] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -131,14 +131,13 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
 
   useEffect(() => {
     const timers = [
-      setTimeout(() => setPhase('intro'), 1500),
-      setTimeout(() => setPhase('walk'), 4000),
-      setTimeout(() => setPhase('pause'), 6000),
-      setTimeout(() => setPhase('action'), 7000),
-      setTimeout(() => setPhase('drop'), 8500),
-      setTimeout(() => setPhase('land'), 9500),
-      setTimeout(() => { setPhase('bloom'); playBloomChime(); }, 10500),
-      setTimeout(() => { setPhase('card'); playPaperUnfold(); }, 14500),
+      setTimeout(() => setPhase('walk'), 2500),
+      setTimeout(() => setPhase('pause'), 4500),
+      setTimeout(() => setPhase('action'), 5500),
+      setTimeout(() => setPhase('drop'), 7000),
+      setTimeout(() => setPhase('land'), 8000),
+      setTimeout(() => { setPhase('bloom'); playBloomChime(); }, 9000),
+      setTimeout(() => { setPhase('card'); playPaperUnfold(); }, 13000),
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
