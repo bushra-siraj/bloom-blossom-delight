@@ -131,7 +131,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
 
   useEffect(() => {
     const timers = [
-      setTimeout(() => setPhase('walk'), 2500),
+      setTimeout(() => setPhase('walk'), 3000),
       setTimeout(() => setPhase('pause'), 4500),
       setTimeout(() => setPhase('action'), 5500),
       setTimeout(() => setPhase('drop'), 7000),
