@@ -19,23 +19,25 @@ interface ReceiverExperienceProps {
 export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperienceProps) => {
 
 // Component body starts here (export moved above)
-  const [phase, setPhase] = useState<Phase>('env');
+  const [phase, setPhase] = useState<Phase>('intro');
   const [copied, setCopied] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const messageCardRef = useRef<HTMLDivElement>(null);
 
+  // Detect Instagram in-app browser to hide Save Image (in-app browsers block downloads)
+  const isInstagram = typeof navigator !== 'undefined' && /Instagram/i.test(navigator.userAgent);
+
   useEffect(() => {
     const timers = [
-      setTimeout(() => setPhase('intro'), 1500),
-      setTimeout(() => setPhase('walk'), 4000),
-      setTimeout(() => setPhase('pause'), 6000),
-      setTimeout(() => setPhase('action'), 7000),
-      setTimeout(() => setPhase('drop'), 8500),
-      setTimeout(() => setPhase('land'), 9500),
-      setTimeout(() => { setPhase('bloom'); playBloomChime(); }, 10500),
-      setTimeout(() => { setPhase('card'); playPaperUnfold(); }, 14500),
+      setTimeout(() => setPhase('walk'), 2500),
+      setTimeout(() => setPhase('pause'), 4500),
+      setTimeout(() => setPhase('action'), 5500),
+      setTimeout(() => setPhase('drop'), 7000),
+      setTimeout(() => setPhase('land'), 8000),
+      setTimeout(() => { setPhase('bloom'); playBloomChime(); }, 9000),
+      setTimeout(() => { setPhase('card'); playPaperUnfold(); }, 13000),
     ];
     return () => timers.forEach(clearTimeout);
   }, []);
@@ -187,6 +189,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
                   </svg>
                   {copied ? 'Copied!' : 'Copy Link'}
                 </button>
+                {!isInstagram && (
                 <button onClick={handleSaveImage} disabled={saving}
                   className={`glass-card px-5 py-3 min-h-[44px] text-xs font-body transition-all flex items-center gap-2 active:scale-95 ${saving ? 'text-foreground/40 cursor-wait' : saveError ? 'text-red-400' : 'text-foreground/70 hover:text-foreground hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)]'}`}>
                   {saving ? (
@@ -207,6 +210,7 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
                     </>
                   )}
                 </button>
+                )}
               </div>
 
               <button onClick={onReset}
