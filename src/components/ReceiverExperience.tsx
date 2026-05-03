@@ -258,6 +258,84 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
     }
   };
 
+  const handleShareImage = async () => {
+    if (saving) return;
+    setSaving(true);
+    setSaved(false);
+    setSaveError(false);
+    const toastId = toast.loading('Preparing image…');
+
+    const nextExportSize = getExportSize();
+    setExportSize(nextExportSize);
+    const fileName = 'bloom-for-you.png';
+
+    try {
+      await waitForPaint();
+      const el = exportRef.current;
+      if (!el) throw new Error('Export view was not ready');
+
+      const { default: html2canvas } = await import('html2canvas');
+      const width = nextExportSize.width;
+      const height = Math.max(nextExportSize.height, Math.ceil(el.scrollHeight || nextExportSize.height));
+
+      const canvas = await html2canvas(el, {
+        backgroundColor: 'hsl(270 20% 8%)',
+        scale: 1,
+        useCORS: true,
+        logging: false,
+        width,
+        height,
+        windowWidth: width,
+        windowHeight: height,
+        foreignObjectRendering: false,
+        removeContainer: true,
+      });
+
+      const blob: Blob = await new Promise((resolve, reject) => {
+        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), 'image/png');
+      });
+
+      setSaving(false);
+      await waitForPaint();
+
+      const file = new File([blob], fileName, { type: 'image/png' });
+      const navAny = navigator as Navigator & {
+        canShare?: (data: { files: File[] }) => boolean;
+        share?: (data: { files: File[]; title?: string }) => Promise<void>;
+      };
+
+      if (navAny.share && navAny.canShare && navAny.canShare({ files: [file] })) {
+        try {
+          await navAny.share({ files: [file], title: 'Your bloom 🌸' });
+          setSaved(true);
+          toast.success('Shared ✨', { id: toastId, duration: 2500 });
+          setTimeout(() => setSaved(false), 2500);
+          return;
+        } catch (shareErr) {
+          if ((shareErr as Error)?.name === 'AbortError') {
+            toast.dismiss(toastId);
+            return;
+          }
+        }
+      }
+
+      // Fallback: long-press preview
+      const blobUrl = URL.createObjectURL(blob);
+      setExportPreviewUrl((prev) => {
+        if (prev) URL.revokeObjectURL(prev);
+        return blobUrl;
+      });
+      toast.success('Image ready ✨', { id: toastId, description: 'Press and hold to save', duration: 3500 });
+    } catch (err) {
+      console.error('Share image failed:', err);
+      setSaveError(true);
+      toast.error("Couldn't share image, please try again", { id: toastId, duration: 2500 });
+      setTimeout(() => setSaveError(false), 3000);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleCopyLink = () => {
     const url = shareUrl || window.location.href;
     navigator.clipboard.writeText(url);
@@ -425,7 +503,30 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
                         </svg>
                         {copied ? 'Copied!' : 'Copy Link'}
                       </button>
-                      {!isInAppBrowser && (
+                      {isInAppBrowser ? (
+                        <button onClick={handleShareImage} disabled={saving}
+                          className={`glass-card px-5 py-3 min-h-[44px] text-xs font-body transition-all flex items-center gap-2 active:scale-95 shadow-[0_0_20px_hsl(330_60%_65%/0.35)] hover:shadow-[0_0_28px_hsl(330_60%_65%/0.5)] ${saving ? 'text-foreground/50 cursor-wait' : saved ? 'text-primary' : saveError ? 'text-red-400' : 'text-primary'}`}>
+                          {saving ? (
+                            <>
+                              <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                              </svg>
+                              Preparing...
+                            </>
+                          ) : saved ? (
+                            <>
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                              </svg>
+                              Shared ✨
+                            </>
+                          ) : saveError ? (
+                            "Couldn't share, try again"
+                          ) : (
+                            <>SHARE IMAGE ↗️</>
+                          )}
+                        </button>
+                      ) : (
                         <button onClick={handleSaveImage} disabled={saving}
                           className={`glass-card px-5 py-3 min-h-[44px] text-xs font-body transition-all flex items-center gap-2 active:scale-95 ${saving ? 'text-foreground/50 cursor-wait' : saved ? 'text-primary' : saveError ? 'text-red-400' : 'text-foreground/70 hover:text-foreground hover:shadow-[0_0_15px_hsl(330_60%_65%/0.15)]'}`}>
                           {saving ? (
