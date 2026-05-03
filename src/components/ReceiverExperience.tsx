@@ -274,7 +274,6 @@ export const ReceiverExperience = ({ card, onReset, shareUrl }: ReceiverExperien
       {phaseIndex >= 7 && <FloatingPetals count={12} color={card.petalColor} />}
 
       <div
-      <div
         className="fixed left-0 top-0 pointer-events-none"
         style={{ zIndex: -1, opacity: 0, visibility: saving ? 'visible' : 'hidden' }}
         aria-hidden="true"
